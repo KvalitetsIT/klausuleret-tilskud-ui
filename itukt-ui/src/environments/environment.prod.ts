@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: ''
+  // TODO: Inject this during build time
+  apiBaseUrl: 'http://localhost:8080'
 };
