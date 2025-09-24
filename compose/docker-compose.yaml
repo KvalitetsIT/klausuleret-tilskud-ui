@@ -1,0 +1,70 @@
+services:
+  
+  init:
+    image: local/init
+    user: "101:101"
+    environment:
+    - REACT_APP_API_BASEURL=http://localhost:3030/api
+    - REACT_APP_NODE_ENV=dev
+    - REACT_APP_KEYCLOAK_URL=http://localhost:49152/auth
+    - REACT_APP_KEYCLOAK_REALM=Test
+    - REACT_APP_KEYCLOAK_CLIENTID=klausuleret-tilskud-ui-ui
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    volumes:
+      - init-dockerentrypoint:/temp/docker-entrypoint.d
+      - nginx:/temp/etc/nginx
+      - run:/temp/var/run
+      - cache-nginx:/temp/var/cache/nginx
+  frontend:
+    image: nginxinc/nginx-unprivileged:alpine3.17
+    restart: always
+    volumes:
+      - init-dockerentrypoint:/docker-entrypoint.d
+      - nginx:/etc/nginx
+      - run:/var/run
+      - cache-nginx:/var/cache/nginx
+    ports:
+      - "3000:80"
+    depends_on:
+      - init
+      
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.0
+    environment:
+      - KC_LOG_LEVEL=info
+      - KEYCLOAK_ADMIN=kit
+      - KEYCLOAK_ADMIN_PASSWORD=Test1234
+      - KEYCLOAK_LOGLEVEL=INFO
+    volumes:
+      - ./keycloak-setup:/opt/keycloak/data/import:ro
+    command:
+      - start-dev
+      - --http-relative-path
+      - /auth
+      - --import-realm
+    ports:
+      - "49152:8080"
+      
+volumes:
+  init-dockerentrypoint:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  nginx:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  cache-nginx:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+  run:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs

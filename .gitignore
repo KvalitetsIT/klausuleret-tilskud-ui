@@ -1,0 +1,12 @@
+# IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
+dist/
+
+# Logs
+logs/
+*.log
+npm-debug.log*

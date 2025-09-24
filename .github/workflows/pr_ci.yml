@@ -1,0 +1,20 @@
+name: Pull Request CI
+
+on:
+  pull_request: ~
+
+jobs:
+  prcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+# Set docker image names.
+    - name: Setup env variables
+      run: |
+        echo "DOCKER_SERVICE=kvalitetsit/klausuleret-tilskud-ui" >> $GITHUB_ENV
+        echo "DOCKER_DOCUMENTATION=kvalitetsit/klausuleret-tilskud-ui-documentation" >> $GITHUB_ENV
+# Checkout source code
+    - uses: actions/checkout@v2
+
+    - name: Build and test
+      run: docker build .
