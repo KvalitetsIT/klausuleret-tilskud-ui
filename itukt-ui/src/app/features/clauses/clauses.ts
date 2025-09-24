@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ClausesService } from '../../services/clauses';
-import { ClauseOutput } from '@api/model/clauseOutput'; 
+import { ClauseOutput } from '@api/models/clause-output'; 
 import { DslHighlightPipe } from '../../shared/dsl-highlight-pipe';
 
 import { MatCardModule } from '@angular/material/card';

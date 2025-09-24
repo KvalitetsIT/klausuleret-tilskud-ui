@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "build": "npm run gen:api && ng build",
     "start": "ng serve",
-    "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "gen:api": "rimraf src/app/api-client && ng-openapi-gen -c ng-openapi-gen.json && rimraf api-client/api.ts"
   },
   "prettier": {
     "overrides": [
@@ -42,6 +43,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ng-openapi-gen": "^1.0.1",
+    "rimraf": "^6.0.1",
     "typescript": "~5.8.2"
   }
 }

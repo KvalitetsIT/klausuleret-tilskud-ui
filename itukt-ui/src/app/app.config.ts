@@ -4,9 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 
 import { environment } from '../environments/environment';
-import { BASE_PATH } from '@api/variables';
-
-console.log('BASE_PATH (environment):', environment.apiBaseUrl);
+import { ApiConfiguration } from '@api/api-configuration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +14,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       // tilføj eventuelt withInterceptors(...) senere...
     ),
-    { provide: BASE_PATH, useValue: environment.apiBaseUrl }
+    { provide: ApiConfiguration, useValue: { rootUrl: environment.apiBaseUrl } }
   ]
 };

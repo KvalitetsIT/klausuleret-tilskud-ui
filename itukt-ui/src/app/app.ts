@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ApiConfiguration } from '@api/api-configuration';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,9 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   public readonly title = signal('itukt-ui');
+
+  public constructor(private config: ApiConfiguration) {
+    console.log('App initialized');
+    console.log('API Base URL:', this.config.rootUrl);
+  }
 }
