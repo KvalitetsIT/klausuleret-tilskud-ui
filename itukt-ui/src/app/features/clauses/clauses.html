@@ -5,7 +5,7 @@
 
   @if (clauses()?.length === 0) {
     <mat-card-content>
-      <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter…</p>
+      <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
     </mat-card-content>
   } @else {
     <mat-card-content>
@@ -13,14 +13,13 @@
         <br/>
         <table role="table" aria-label="Liste over klausuler">
           <thead>
-            <tr><th>Klausul</th><th>Regel</th></tr>
+            <tr><th>Regel</th></tr>
           </thead>
           <tbody>
             @for (c of clauses(); track c.uuid) {
               <tr>
-                <td>{{ c.name }}</td>
                 <td>
-                  <code class="dsl" [innerHTML]="(summarize(c.expression) | dslHighlight)"></code>
+                  <code class="dsl" [innerHTML]="(c.dsl | dslHighlight)"></code>
                 </td>
               </tr>
             } @empty {

@@ -1,9 +1,9 @@
 @import './custom-theme.scss';
 
 /* Syntax highlighting DSL */
-code.dsl { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-code.dsl .k  .id { color: #461d8b; font-weight: 600; }    /* keywords */
-code.dsl .op { color: #2563eb; }                      /* operators */
-code.dsl .num{ color: #059669; }                      /* numbers */
-code.dsl .id { color: #111827; }                      /* identifiers */
-code.dsl .p  { color: #6b7280; }                      /* punctuation */
+code.dsl      { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+code.dsl .k   { color: #57011e; font-weight: 600; }    /* keywords */
+code.dsl .op  { color: #2563eb; }                      /* operators */
+code.dsl .num { color: #059669; }                      /* numbers */
+code.dsl .id  { color: #231c91; }                      /* identifiers */
+code.dsl .p   { color: #6b7280; }                      /* punctuation */
