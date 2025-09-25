@@ -1,84 +1,38 @@
-# Intro
-_TODO_
+# Introduktion
+En editor til at redigere regler for klausuleret tilskud.
 
-# Requirements
-The project is installed using ____
+# Forudsætninger
+For at bygge app'en kræves:
+- Node.js (v20+)
+- npm (v10+)
+- Docker (testet med version v27.5.1)
 
-Dependencies:
-_TODO_
+# Installation og kørsel
+Projektet installeres ved først at bygge angular-app'en, og herefter bygge et Docker image.
 
-# Get started
-_TODO_
+```bash
+# Byg angular app
+cd itukt-ui
+npm install
+npm run build
 
-# Run image in kubernetes
-Use the helm-chart https://github.com/KvalitetsIT/helm-kitTyAct-chart . The chart is also used here https://github.com/KvalitetsIT/medcom-sdn-apps/tree/main/medcom-sdn-ui
+# Byg et lokalt Docker image
+docker build -t itukt-ui:local .
 
-The image build from the dockerfile, should be run as a initContainer. This initContainer will create everything that is needed, and copy it over to the /temp folder. The idea is to mount this to a empty dir, and share it with a clean nginx image. This way the initContainer will run root, and the running container will run nonRoot.
-
-__The container will not run if not all the volumes are mounted exactly like the example below.__
-
-The following example is from medcom-sdn-ui where the service-chart is being used
+# Sæt ITUKT_API_BASE_URL og start app op på port 4200
+docker run -e ITUKT_API_BASE_URL="http://localhost:8080" -p 4200:8080 itukt-ui:local
 ```
-service:
-  revisionHistoryLimit: 3
-  image:
-    repository: nginxinc/nginx-unprivileged
-    tag: alpine3.17
-    
 
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-  replicaCount: 1
+Man skal pege på en kørende instans af klausuleret-tilskud-valideringskomponenten, for at der kan vises og redigeres data i app'en. 
+Komponenten findes her: https://github.com/KvalitetsIT/klausuleret-tilskud-valideringskomponent/
 
-  initContainers:
-    init:
-      image:
-        repository: kvalitetsit/medcom-sdn-ui
-        tag: e1aab1b0abd33f1d8f1d5529e64c2ed37a2cb54c
-      extraVolumeMounts:
-        init:
-          mountPath: /temp/docker-entrypoint.d
-        etc:
-          mountPath: /temp/etc/nginx
-        var:
-          mountPath: /temp/var/run
-        nginx-cache:
-          mountPath: /temp/var/cache/nginx
-      env:
-        REACT_APP_DSDN_DOMAIN:
-          value: "dsdn.dk"
-        REACT_APP_NODE_ENV:
-          value: "production"
-        REACT_APP_DISABLE_BUTTONS_NOT_WORKING:
-          value: false
-        REACT_APP_INACTIVITY_MAX_MINUTES:
-          value: "30"
-        REACT_APP_SUPPORT_IPV6:
-          value: "false"
+Angular-app'en kan også startes direkte med `ng serve` via npm, hvilket er praktisk under udvikling.
 
-  deployment:
-    containerport: 80
-    extraVolumes:
-      init: |
-        emptyDir:  {}
-      etc: |
-        emptyDir:  {}
-      var: |
-        emptyDir:  {}
-      nginx-cache: |
-        emptyDir:  {}
-
-    extraVolumeMounts:
-      init:
-        mountPath: /docker-entrypoint.d
-      etc:
-        mountPath: /etc/nginx
-      var:
-        mountPath: /var/run
-      nginx-cache:
-        mountPath: /var/cache/nginx
-     
-    
+```bash
+cd itukt-ui
+npm install
+npm start
 ```
+
+I så fald læses ITUKT_API_BASE_URL fra følgende fil: `itukt-ui/src/environments/environment.ts`.
+
