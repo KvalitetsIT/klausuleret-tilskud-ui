@@ -7,7 +7,7 @@
     "start": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "gen:api": "rimraf src/app/api-client && ng-openapi-gen -c ng-openapi-gen.json && rimraf api-client/api.ts"
+    "gen:api": "rimraf api-client && ng-openapi-gen -c ng-openapi-gen.json && rimraf api-client/api.ts"
   },
   "prettier": {
     "overrides": [
