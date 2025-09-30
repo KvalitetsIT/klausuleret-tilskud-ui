@@ -30,23 +30,6 @@ services:
     depends_on:
       - init
       
-  keycloak:
-    image: quay.io/keycloak/keycloak:22.0.0
-    environment:
-      - KC_LOG_LEVEL=info
-      - KEYCLOAK_ADMIN=kit
-      - KEYCLOAK_ADMIN_PASSWORD=Test1234
-      - KEYCLOAK_LOGLEVEL=INFO
-    volumes:
-      - ./keycloak-setup:/opt/keycloak/data/import:ro
-    command:
-      - start-dev
-      - --http-relative-path
-      - /auth
-      - --import-realm
-    ports:
-      - "49152:8080"
-      
 volumes:
   init-dockerentrypoint:
     driver: local
