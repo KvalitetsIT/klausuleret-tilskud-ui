@@ -1,9 +1,8 @@
 @import './custom-theme.scss';
 
 /* Syntax highlighting DSL */
-code.dsl      { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-code.dsl .k   { color: #57011e; font-weight: 600; }    /* keywords */
-code.dsl .op  { color: #2563eb; }                      /* operators */
-code.dsl .num { color: #059669; }                      /* numbers */
-code.dsl .id  { color: #231c91; }                      /* identifiers */
-code.dsl .p   { color: #6b7280; }                      /* punctuation */
+.dsl-keyword     { color: #57011e; font-weight: 600; }    /* keywords */
+.dsl-operator    { color: #2563eb; }                      /* operators */
+.dsl-number      { color: #059669; }                      /* numbers */
+.dsl-id          { color: #231c91; }                      /* identifiers */
+.dsl-punctuation { color: #6b7280; }                      /* punctuation */
