@@ -1,0 +1,35 @@
+<mat-card class="mat-typography">
+  <mat-card-header>
+    <mat-card-title>Klausuler</mat-card-title>
+  </mat-card-header>
+
+  @if (clauses()?.length === 0) {
+    <mat-card-content>
+      <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
+    </mat-card-content>
+  } @else {
+    <mat-card-content>
+      <div class="table-wrap mat-elevation-z1">
+        <br/>
+        <table role="table" aria-label="Liste over klausuler">
+          <thead>
+            <tr><th>Regel</th></tr>
+          </thead>
+          <tbody>
+            @for (c of clauses(); track c.uuid) {
+              <tr>
+                <td>
+                  <code class="dsl" [innerHTML]="(c.dsl | dslHighlight)"></code>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="2" class="empty">
+                <mat-icon>info</mat-icon> Ingen klausuler.
+              </td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </mat-card-content>
+  }
+</mat-card>

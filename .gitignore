@@ -2,9 +2,12 @@
 .vscode/
 .idea/
 
-# Node
+# Build
 node_modules/
 dist/
+target/
+.angular/
+api-client/
 
 # Logs
 logs/

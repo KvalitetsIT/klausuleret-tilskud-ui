@@ -1,0 +1,377 @@
+openapi: 3.0.1
+info:
+  title: Validation Component
+  description: ""
+  version: "1.0.0"
+  contact:
+    email: "development@kvalitetitsit.dk"
+tags:
+  - name: management
+    description: "the API needed in order to manage clauses"
+servers:
+  - url: '{protocol}://{environment}:{port}'
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+      environment:
+        enum:
+          - localhost # Docker-compose setup
+        default: localhost # Development
+      port:
+        enum:
+          - "8080"
+        default: "8080"
+paths:
+  /2025/08/01/clauses/dsl:
+    post:
+      operationId: createClauseFromDsl_v20250801
+      tags:
+        - management
+      requestBody:
+        description: "A clause in Domain-Specific Language (DSL) format"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DslInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DslOutput'
+        '400':
+          $ref: '#/components/responses/400'
+    get:
+      operationId: getAllClausesDsl_v20250801
+      tags:
+        - management
+      description: "Retrieves all clauses as dsl"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DslOutput'
+        '400':
+          $ref: '#/components/responses/400'
+
+  /2025/08/01/clauses/dsl/{id}:
+    get:
+      operationId: getClauseDslById_v20250801
+      tags:
+        - management
+      summary: "Retrieves the clause associated with the specified id "
+      description: "Retrieves the clause associated with the specified id"
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DslOutput'
+            text/plain:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400'
+
+  /2025/08/01/clauses:
+    post:
+      operationId: createClause_v20250801
+      tags:
+        - management
+      requestBody:
+        description: "A list of expressions"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClauseInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClauseOutput'
+        '400':
+          $ref: '#/components/responses/400'
+
+
+    get:
+      operationId: getAllClauses_v20250801
+      tags:
+        - management
+      summary: "API to test body validation"
+      description: "Retrieves all clauses"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClauseOutput'
+            text/plain:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400'
+
+  /2025/08/01/clauses/{id}:
+    get:
+      operationId: getClauseById_v20250801
+      tags:
+        - management
+      summary: "Retrieves the clause associated with the specified id"
+      description: "Retrieves the clause associated with the specified id"
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClauseOutput'
+            text/plain:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/400'
+
+components:
+  responses:
+    '400':
+      description: "Bad Request. This could be because: * One of the required parameters/properties are missing or is empty <br> * Length of input is exceeding maximum length <br> (See a possible detailed error message in the in the response.)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/detailedError'
+    '401':
+      description: "Unauthorized. This could be because: <br> * The calling system has not been properly authenticated."
+    '403':
+      description: "Forbidden. This could be because: <br> * The requested information does not belong the organisation of the user <br> * The calling user does not have the required roles"
+
+  parameters:
+    id:
+      name: id
+      in: path
+      description: a clause id in uuid format.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    offset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+      description: The zero-based index from which to start returning results
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+      description: The maximum number of items to retrieve. Used together with the 'offset' parameter to control pagination.
+
+  schemas:
+    detailedError:
+      allOf:
+        - $ref: '#/components/schemas/basicError'
+        - type: object
+          required:
+            - detailed_error
+            - detailed_error_code
+          properties:
+            detailed_error:
+              description: Detailed error text. This could be a text describing an validation error.
+              type: string
+            detailed_error_code:
+              description: >-
+                Detailed error code. This could be a code describing an validation error.
+                * 10: Input validation error
+                * 20: Other error.
+              type: string
+              enum:
+                - "10"
+                - "20"
+
+    basicError:
+      type: object
+      required:
+        - timestamp
+        - status
+        - error
+        - path
+      properties:
+        error:
+          description: Error message.
+          type: string
+        path:
+          description: Path
+          type: string
+        status:
+          description: HTTP status code
+          type: integer
+        timestamp:
+          description: Time of error
+          type: string
+          format: date-time
+
+    ClauseInput:
+      type: object
+      required:
+        - name
+        - expression
+      properties:
+        name:
+          type: string
+          description: "The name of the clause"
+          example: "CHOL"
+        expression:
+          $ref: '#/components/schemas/Expression'
+
+    ClauseOutput:
+      allOf:
+        - $ref: "#/components/schemas/ClauseInput"
+        - type: object
+          required:
+            - uuid
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: an unique id which addresses the single clause
+              example: 3d1006d3-3d2a-4361-b9b2-8f255d2aeaae
+
+    Expression:
+      type: object
+      description: "A polymorphic interface that represents an expression. It can be a condition or a binary expression combining other expressions"
+      oneOf:
+        - $ref: '#/components/schemas/StringCondition'
+        - $ref: '#/components/schemas/NumberCondition'
+        - $ref: '#/components/schemas/BinaryExpression'
+      discriminator:
+        propertyName: type
+        mapping:
+          StringCondition: '#/components/schemas/StringCondition'
+          NumberCondition: '#/components/schemas/NumberCondition'
+          BinaryExpression: '#/components/schemas/BinaryExpression'
+
+    Operator:
+      description: "The operator used in a number condition"
+      type: string
+      example: "<="
+      enum:
+        - "="
+        - ">="
+        - "<="
+        - ">"
+        - "<"
+
+    BinaryOperator:
+      description: "The binary operator (e.g., 'AND', 'OR') connecting the two expressions"
+      type: string
+      example: "AND"
+      enum:
+        - "AND"
+        - "OR"
+
+    StringCondition:
+      description: "A basic condition consisting of a field and a string value. This represents the most atomic form of an expression"
+      type: object
+      required: [ type, field, value ]
+      properties:
+        field:
+          description: "The name of the field the condition applies to"
+          type: string
+        value:
+          description: "The value, that the field is compared against"
+          type: string
+        type:
+          type: string
+          description: "Identifies this object as a StringCondition expression"
+
+    NumberCondition:
+      description: "A basic condition consisting of a field, an operation and a number value. This represents the most atomic form of an expression"
+      type: object
+      required: [ type, field, operator, value ]
+      properties:
+        field:
+          description: "The name of the field the condition applies to"
+          type: string
+        operator:
+          $ref: '#/components/schemas/Operator'
+        value:
+          description: "The value, that the field is compared against"
+          type: integer
+        type:
+          type: string
+          description: "Identifies this object as a StringCondition expression"
+
+    BinaryExpression:
+      description: "A compound expression combining two expressions with a binary operator such as AND or OR"
+      type: object
+      required: [ type, left, operator, right ]
+      properties:
+        left:
+          description: "The left-hand side expression"
+          $ref: '#/components/schemas/Expression'
+        operator:
+          $ref: '#/components/schemas/BinaryOperator'
+        right:
+          description: "The right-hand side expression."
+          $ref: '#/components/schemas/Expression'
+        type:
+          type: string
+          description: "Identifies this object as a BinaryExpression"
+
+    DslInput:
+      type: object
+      required:
+        - dsl
+      properties:
+        dsl:
+          $ref: '#/components/schemas/Dsl'
+
+    DslOutput:
+      type: object
+      required:
+        - dsl
+        - uuid
+      properties:
+        uuid:
+          type: string
+          description: An unique id which is used to address a single clause
+          format: uuid
+        dsl:
+          $ref: '#/components/schemas/Dsl'
+
+    Dsl:
+      description: "A clause specified in a domain specific language (DSL)"
+      type: string
+#      pattern: "^\\s*(?:(Klausul|og|eller)|(>=|<=|=|i)|([A-Za-z][A-Za-z0-9]*)|([0-9]+)|([:,()])|(\\S))"
+      example: "Klausul CHOL: (ATC = C10BA03) eller (ATC in C10BA02, C10BA05) og (ALDER >= 13)"
+
+
+
+
+
+
+
+
+
+
+

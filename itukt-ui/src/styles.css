@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import './custom-theme.scss';
+
+/* Syntax highlighting DSL */
+.dsl-keyword     { color: #57011e; font-weight: 600; }    /* keywords */
+.dsl-operator    { color: #2563eb; }                      /* operators */
+.dsl-number      { color: #059669; }                      /* numbers */
+.dsl-id          { color: #231c91; }                      /* identifiers */
+.dsl-punctuation { color: #6b7280; }                      /* punctuation */

@@ -45,5 +45,4 @@ ENV TMPDIR=/usr/share/nginx/html/
 USER 101
 
 # Run our startup script
-# TODO: runtime-js-env skal sandsynligvis lige tweakes til at virke med vores angular-setup
-CMD ["/bin/sh", "-c", "/runtime-js-env -i /usr/share/nginx/html/index.html || true; exec nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "/runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ || true; exec nginx -g 'daemon off;'"]
