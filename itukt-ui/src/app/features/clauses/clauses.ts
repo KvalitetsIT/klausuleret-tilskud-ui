@@ -5,7 +5,7 @@ import { DslHighlightPipe } from '../../shared/dsl-highlight-pipe';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { DslOutput } from '@api/models/dsl-output';
+import { DslOutput } from '@api/model/dslOutput';
 
 // TODO: Det kunne være en idé at skifte til at bruge: https://material.angular.dev/components/table/
 @Component({

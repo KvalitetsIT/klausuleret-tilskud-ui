@@ -5,12 +5,12 @@
     "types": [],
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["./api-client/*"]
+      "@api/*": ["./src/generated/*"]
     }
   },
   "include": [
     "src/**/*.ts",
-    "api-client/**/*.ts"
+    "generated/**/*.ts"
   ],
   "exclude": [
     "src/**/*.spec.ts"
