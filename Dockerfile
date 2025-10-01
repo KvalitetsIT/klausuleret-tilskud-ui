@@ -2,17 +2,21 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
+# Install Java and bash
+RUN apk add --no-cache openjdk21
+ 
 # Copy the angular app
 COPY ./itukt-ui /app
 
-# Build the angular app
+# Install dependencies
 RUN npm install
+ 
+# Build the angular app
 RUN npm run build
 
 # STAGE 2: Download and build our environment injector
 FROM golang:1.24.2-alpine3.21 AS go-downloader
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 RUN go install github.com/KvalitetsIT/runtime-js-env@83fdece6e4a6244909157ab100b091cb611ad481
 
 # STAGE 3: Copy the built application into Nginx for serving

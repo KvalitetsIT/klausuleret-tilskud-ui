@@ -6,6 +6,7 @@ For at bygge app'en kræves:
 - Node.js (v20+)
 - npm (v10+)
 - Docker (testet med version v27.5.1)
+- Java (v21)
 
 # Installation og kørsel
 Projektet installeres ved først at bygge angular-app'en, og herefter bygge et Docker image.

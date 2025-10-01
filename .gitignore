@@ -7,7 +7,7 @@ node_modules/
 dist/
 target/
 .angular/
-api-client/
+itukt-ui/src/generated
 
 # Logs
 logs/

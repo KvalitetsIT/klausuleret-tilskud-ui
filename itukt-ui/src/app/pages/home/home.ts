@@ -12,4 +12,8 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class Home {
   app = inject(App);
+
+    constructor(){
+    console.log("HOME")
+  }
 }

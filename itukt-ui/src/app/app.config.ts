@@ -1,10 +1,10 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 
 import { environment } from '../environments/environment';
-import { ApiConfiguration } from '@api/api-configuration';
+import { Configuration } from '@api/configuration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,6 +14,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       // tilføj eventuelt withInterceptors(...) senere...
     ),
-    { provide: ApiConfiguration, useValue: { rootUrl: environment.apiBaseUrl } }
+    {
+      provide: Configuration,
+      useFactory: () => new Configuration({ basePath: environment.apiBaseUrl }),
+    }
   ]
 };
