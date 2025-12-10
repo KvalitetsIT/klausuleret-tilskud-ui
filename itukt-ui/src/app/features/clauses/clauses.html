@@ -3,33 +3,34 @@
     <mat-card-title>Klausuler</mat-card-title>
   </mat-card-header>
 
-  @if (clauses()?.length === 0) {
-    <mat-card-content>
-      <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
-    </mat-card-content>
+  <br>
+  @if (clauses() === undefined) {
+  <mat-card-content>
+    <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
+  </mat-card-content>
+  } @else if (clauses()?.length === 0) {
+  <mat-card-content>
+    <p><mat-icon>info</mat-icon> Ingen klausuler.</p>
+  </mat-card-content>
   } @else {
-    <mat-card-content>
-      <div class="table-wrap mat-elevation-z1">
-        <br/>
-        <table role="table" aria-label="Liste over klausuler">
-          <thead>
-            <tr><th>Regel</th></tr>
-          </thead>
-          <tbody>
-            @for (c of clauses(); track c.uuid) {
-              <tr>
-                <td>
-                  <code class="dsl" [innerHTML]="(c.dsl | dslHighlight)"></code>
-                </td>
-              </tr>
-            } @empty {
-              <tr><td colspan="2" class="empty">
-                <mat-icon>info</mat-icon> Ingen klausuler.
-              </td></tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </mat-card-content>
+  <mat-card-content>
+    <table class="clauses" mat-table [dataSource]="clauses() ?? []">
+      <ng-container matColumnDef="dsl">
+        <th mat-header-cell *matHeaderCellDef>Klausul</th>
+        <td mat-cell *matCellDef="let clause"> 
+          <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code> 
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="error">
+        <th mat-header-cell *matHeaderCellDef>Fejlbesked</th>
+        <td mat-cell *matCellDef="let clause"> 
+          {{ clause.error }} 
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card-content>
   }
 </mat-card>
