@@ -1,14 +1,8 @@
 services:
   
   init:
-    image: local/init
-    user: "101:101"
     environment:
-    - REACT_APP_API_BASEURL=http://localhost:3030/api
-    - REACT_APP_NODE_ENV=dev
-    - REACT_APP_KEYCLOAK_URL=http://localhost:49152/auth
-    - REACT_APP_KEYCLOAK_REALM=Test
-    - REACT_APP_KEYCLOAK_CLIENTID=klausuleret-tilskud-ui-ui
+    - ITUKT_API_BASE_URL=https://klaus.t1.hosting.kitkube.dk
     build:
       context: ../
       dockerfile: ./Dockerfile
@@ -26,7 +20,7 @@ services:
       - run:/var/run
       - cache-nginx:/var/cache/nginx
     ports:
-      - "3000:80"
+      - "4200:80"
     depends_on:
       - init
       
