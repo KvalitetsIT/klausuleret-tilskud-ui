@@ -31,22 +31,16 @@ COPY --from=build /app/package-lock.json /opt/kvalitetsit/package-lock.json
 COPY --from=go-downloader /go/bin/runtime-js-env /
 
 # Copy custom nginx config
-COPY ./itukt-ui/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./itukt-ui/nginx/mime.types /etc/nginx/mime.types
+COPY ./itukt-ui/nginx/nginx.conf /usr/share/nginx/nginx.conf
+COPY ./itukt-ui/nginx/mime.types /usr/share/nginx/mime.types
 RUN rm /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
 
-# Set permissions
-RUN mkdir -p /var/cache/nginx /var/run && \
-    chown -R 101:101 /usr/share/nginx/html /var/cache/nginx /var/run && \
-    find /usr/share/nginx/html -type d -exec chmod 755 {} \; && \
-    find /usr/share/nginx/html -type f -exec chmod 644 {} \; && \
-    chmod 664 /usr/share/nginx/html/index.html || true
-
-# Set TMPDIR to a writable location
-ENV TMPDIR=/usr/share/nginx/html/
-
-# Use non-root user
-USER 101
+RUN mkdir -p /var/cache/nginx/
+RUN chmod 777 /var/cache/nginx/
 
 # Run our startup script
-CMD ["/bin/sh", "-c", "/runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ || true; exec nginx -g 'daemon off;'"]
+CMD /runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ && \
+    chmod 777 /usr/share/nginx/html/index.html &&\
+    cp -R /usr/share/nginx/* /temp/etc/nginx/ &&\
+    cp -R -p /var/cache/nginx /temp/var/cache/ &&\
+    cp -R /docker-entrypoint.d/* /temp/docker-entrypoint.d/
