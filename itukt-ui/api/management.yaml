@@ -50,7 +50,9 @@ paths:
       operationId: getAllClausesDsl_v20250801
       tags:
         - management
-      description: "Retrieves all clauses as dsl"
+      description: "Retrieves all clauses as dsl matching the specified status"
+      parameters:
+        - $ref: '#/components/parameters/clauseStatus'
       responses:
         '200':
           description: Ok
@@ -112,8 +114,9 @@ paths:
       operationId: getAllClauses_v20250801
       tags:
         - management
-      summary: "API to test body validation"
-      description: "Retrieves all clauses"
+      description: "Retrieves all clauses matching the specified status"
+      parameters:
+        - $ref: '#/components/parameters/clauseStatus'
       responses:
         '200':
           description: Ok
@@ -151,6 +154,31 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
+  /2025/08/01/clauses/{id}/status:
+    put:
+      operationId: updateClauseStatus_v20250801
+      tags:
+        - management
+      summary: "Update status of clause"
+      description:  >-
+        Update status of clause. Allowed transitions are:
+        <ul>
+          <li>DRAFT -> ACTIVE</li>
+        </ul>
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClauseStatusInput'
+      responses:
+        '200':
+          description: Ok
+        '404':
+          $ref: '#/components/responses/404'
+
 components:
   responses:
     '400':
@@ -163,6 +191,8 @@ components:
       description: "Unauthorized. This could be because: <br> * The calling system has not been properly authenticated."
     '403':
       description: "Forbidden. This could be because: <br> * The requested information does not belong the organisation of the user <br> * The calling user does not have the required roles"
+    '404':
+      description: "Not found. The requested resource could not be found."
 
   parameters:
     id:
@@ -185,6 +215,12 @@ components:
       schema:
         type: integer
       description: The maximum number of items to retrieve. Used together with the 'offset' parameter to control pagination.
+    clauseStatus:
+      name: status
+      in: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/ClauseStatus'
 
   schemas:
     detailedError:
@@ -200,13 +236,19 @@ components:
               type: string
             detailed_error_code:
               description: >-
-                Detailed error code. This could be a code describing an validation error.
-                * 10: Input validation error
-                * 20: Other error.
+                Detailed error code. This could be a code describing a validation error.
+                <ul>
+                  <li>1: Bad request</li>
+                  <li>2: Not found</li>
+                </ul>
               type: string
               enum:
-                - "10"
-                - "20"
+                - "1"
+                - "2"
+    
+    ErrorMessage:
+      type: string
+      description: "An error message that is displayed if the clause may result in a validation error"
 
     basicError:
       type: object
@@ -235,6 +277,7 @@ components:
       required:
         - name
         - expression
+        - error
       properties:
         name:
           type: string
@@ -242,6 +285,8 @@ components:
           example: "CHOL"
         expression:
           $ref: '#/components/schemas/Expression'
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
 
     ClauseOutput:
       allOf:
@@ -255,20 +300,26 @@ components:
               format: uuid
               description: an unique id which addresses the single clause
               example: 3d1006d3-3d2a-4361-b9b2-8f255d2aeaae
+            error:
+              $ref: '#/components/schemas/ErrorMessage'
 
     Expression:
       type: object
       description: "A polymorphic interface that represents an expression. It can be a condition or a binary expression combining other expressions"
       oneOf:
-        - $ref: '#/components/schemas/StringCondition'
-        - $ref: '#/components/schemas/NumberCondition'
+        - $ref: '#/components/schemas/IndicationCondition'
+        - $ref: '#/components/schemas/AgeCondition'
+        - $ref: '#/components/schemas/ExistingDrugMedicationCondition'
         - $ref: '#/components/schemas/BinaryExpression'
+        - $ref: '#/components/schemas/DoctorSpecialityCondition'
       discriminator:
         propertyName: type
         mapping:
-          StringCondition: '#/components/schemas/StringCondition'
-          NumberCondition: '#/components/schemas/NumberCondition'
+          IndicationCondition: '#/components/schemas/IndicationCondition'
+          AgeCondition: '#/components/schemas/AgeCondition'
+          ExistingDrugMedicationCondition: '#/components/schemas/ExistingDrugMedicationCondition'
           BinaryExpression: '#/components/schemas/BinaryExpression'
+          DoctorSpecialityCondition: '#/components/schemas/DoctorSpecialityCondition'
 
     Operator:
       description: "The operator used in a number condition"
@@ -289,29 +340,55 @@ components:
         - "AND"
         - "OR"
 
-    StringCondition:
+    ClauseStatus:
+      description: The clause status
+      type: string
+      enum:
+        - "DRAFT"
+        - "ACTIVE"
+
+    ClauseStatusInput:
+      description: Status input for clause transition
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - "ACTIVE"
+
+    IndicationCondition:
       description: "A basic condition consisting of a field and a string value. This represents the most atomic form of an expression"
       type: object
-      required: [ type, field, value ]
+      required: [ type, value ]
       properties:
-        field:
-          description: "The name of the field the condition applies to"
-          type: string
         value:
           description: "The value, that the field is compared against"
           type: string
         type:
           type: string
-          description: "Identifies this object as a StringCondition expression"
+          description: "Identifies this object as a IndicationCondition expression"
+          example: "IndicationCondition"
 
-    NumberCondition:
+    DoctorSpecialityCondition:
+      description: "A basic condition consisting of a field and a string value. This represents the most atomic form of an expression"
+      type: object
+      required: [ type, value ]
+      properties:
+        value:
+          description: "The value that the field is compared against"
+          type: string
+        type:
+          type: string
+          description: "Identifies this object as a DoctorSpecialityCondition expression"
+          example: "DoctorSpecialityCondition"
+
+    AgeCondition:
       description: "A basic condition consisting of a field, an operation and a number value. This represents the most atomic form of an expression"
       type: object
-      required: [ type, field, operator, value ]
+      required: [ type, operator, value ]
       properties:
-        field:
-          description: "The name of the field the condition applies to"
-          type: string
         operator:
           $ref: '#/components/schemas/Operator'
         value:
@@ -319,7 +396,40 @@ components:
           type: integer
         type:
           type: string
-          description: "Identifies this object as a StringCondition expression"
+          description: "Identifies this object as a AgeCondition expression"
+          example: "AgeCondition"
+
+    ExistingDrugMedicationCondition:
+      description: "A condition for existing drug medication"
+      allOf:
+        - $ref: "#/components/schemas/ExistingDrugMedication"
+        - type: object
+          required:
+            - type
+          properties:
+            type:
+              type: string
+              description: "Identifies this object as a ExistingDrugMedicationCondition expression"
+              example: "ExistingDrugMedicationCondition"
+    
+    ExistingDrugMedication:
+      required:
+        - atcCode
+        - formCode
+        - routeOfAdministrationCode
+      properties:
+        atcCode:
+          description: "ATC-kode. Kilde er altid Medicinpriser"
+          type: string
+          example: "J01CE02"
+        formCode:
+          description: "Form code for the ordination. '*' can be used as a wildcard to match any string"
+          type: string
+          example: "TABFILM"
+        routeOfAdministrationCode:
+          description: "Route of administration code for the ordination. '*' can be used as a wildcard to match any string"
+          type: string
+          example: "OK"
 
     BinaryExpression:
       description: "A compound expression combining two expressions with a binary operator such as AND or OR"
@@ -337,41 +447,36 @@ components:
         type:
           type: string
           description: "Identifies this object as a BinaryExpression"
+          example: "BinaryExpression"
 
     DslInput:
       type: object
       required:
         - dsl
+        - error
       properties:
+        error:
+          $ref: '#/components/schemas/ErrorMessage'
         dsl:
           $ref: '#/components/schemas/Dsl'
 
     DslOutput:
-      type: object
-      required:
-        - dsl
-        - uuid
-      properties:
-        uuid:
-          type: string
-          description: An unique id which is used to address a single clause
-          format: uuid
-        dsl:
-          $ref: '#/components/schemas/Dsl'
+      allOf:
+        - $ref: "#/components/schemas/DslInput"
+        - type: object
+          required:
+            - uuid
+          properties:
+            uuid:
+              type: string
+              description: An unique id which is used to address a single clause
+              format: uuid
+              example: 3d1006d3-3d2a-4361-b9b2-8f255d2aeaae
+            error:
+              $ref: '#/components/schemas/ErrorMessage'
 
     Dsl:
       description: "A clause specified in a domain specific language (DSL)"
       type: string
-#      pattern: "^\\s*(?:(Klausul|og|eller)|(>=|<=|=|i)|([A-Za-z][A-Za-z0-9]*)|([0-9]+)|([:,()])|(\\S))"
-      example: "Klausul CHOL: (ATC = C10BA03) eller (ATC in C10BA02, C10BA05) og (ALDER >= 13)"
-
-
-
-
-
-
-
-
-
-
-
+      #      pattern: "^\\s*(?:(Klausul|og|eller)|(>=|<=|=|i)|([A-Za-z][A-Za-z0-9]*)|([0-9]+)|([:,()])|(\\S))"
+      example: "Klausul CHOL: ALDER >= 13 og EKSISTERENDE_LÆGEMIDDEL = {ATC = *, FORM = TABLET, ROUTE = *} og SPECIALE = psyk"

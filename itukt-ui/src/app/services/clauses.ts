@@ -4,16 +4,17 @@ import { Observable } from 'rxjs';
 import { ManagementService } from '@api/api/management.service';
 import { ClauseOutput } from '@api/model/clauseOutput';
 import { DslOutput } from '@api/model/dslOutput';
+import { ClauseStatus } from '@api/index';
 
 @Injectable({ providedIn: 'root' })
 export class ClausesService {
   private api = inject(ManagementService);
 
-  getClausesAsJson(): Observable<ClauseOutput[]> {
-    return this.api.getAllClausesV20250801();
+  getActiveClausesAsJson(): Observable<ClauseOutput[]> {
+    return this.api.getAllClausesV20250801(ClauseStatus.Active);
   }
 
-  getClausesAsDsl(): Observable<Array<DslOutput>> {
-    return this.api.getAllClausesDslV20250801();
+  getActiveClausesAsDsl(): Observable<Array<DslOutput>> {
+    return this.api.getAllClausesDslV20250801(ClauseStatus.Active);
   }
 }

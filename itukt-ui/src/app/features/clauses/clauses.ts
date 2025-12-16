@@ -20,7 +20,7 @@ export class Clauses {
   private service = inject(ClausesService);
 
   clauses = toSignal<Array<DslOutput>>(
-    this.service.getClausesAsDsl()
+    this.service.getActiveClausesAsDsl()
   );
 
   displayedColumns: string[] = ['dsl', 'error'];
