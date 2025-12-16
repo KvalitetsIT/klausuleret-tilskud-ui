@@ -1,36 +1,23 @@
-<mat-card class="mat-typography">
-  <mat-card-header>
-    <mat-card-title>Klausuler</mat-card-title>
-  </mat-card-header>
+@if (clauses() === undefined) {
+<p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
+} @else if (clauses()?.length === 0) {
+<p><mat-icon>info</mat-icon> Ingen klausuler.</p>
+} @else {
+<table class="clauses" mat-table [dataSource]="clauses() ?? []">
+  <ng-container matColumnDef="dsl">
+    <th mat-header-cell *matHeaderCellDef>Klausul</th>
+    <td mat-cell *matCellDef="let clause">
+      <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="error">
+    <th mat-header-cell *matHeaderCellDef>Fejlbesked</th>
+    <td mat-cell *matCellDef="let clause">
+      {{ clause.error }}
+    </td>
+  </ng-container>
 
-  <br>
-  @if (clauses() === undefined) {
-  <mat-card-content>
-    <p class="loading"><mat-icon>hourglass_top</mat-icon> Henter...</p>
-  </mat-card-content>
-  } @else if (clauses()?.length === 0) {
-  <mat-card-content>
-    <p><mat-icon>info</mat-icon> Ingen klausuler.</p>
-  </mat-card-content>
-  } @else {
-  <mat-card-content>
-    <table class="clauses" mat-table [dataSource]="clauses() ?? []">
-      <ng-container matColumnDef="dsl">
-        <th mat-header-cell *matHeaderCellDef>Klausul</th>
-        <td mat-cell *matCellDef="let clause"> 
-          <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code> 
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="error">
-        <th mat-header-cell *matHeaderCellDef>Fejlbesked</th>
-        <td mat-cell *matCellDef="let clause"> 
-          {{ clause.error }} 
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </mat-card-content>
-  }
-</mat-card>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+}

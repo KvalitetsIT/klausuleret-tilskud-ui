@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { DslOutput } from '@api/model/dslOutput';
 import { MatTableModule } from '@angular/material/table';
 
-// TODO: Det kunne være en idé at skifte til at bruge: https://material.angular.dev/components/table/
 @Component({
   selector: 'app-clauses',
   standalone: true,
