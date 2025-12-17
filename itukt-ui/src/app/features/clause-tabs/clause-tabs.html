@@ -1,6 +1,11 @@
 <mat-card class="mat-typography">
   <mat-card-header>
-    <mat-card-title>Klausuler</mat-card-title>
+    <mat-card-title class="title">
+      Klausuler
+      <button matIconButton (click)="openCreateClauseDialog()">
+        <mat-icon>add_circle</mat-icon>
+      </button>
+    </mat-card-title>
   </mat-card-header>
 
   <mat-card-content>

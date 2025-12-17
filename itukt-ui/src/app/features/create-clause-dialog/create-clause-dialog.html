@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Opret klausul</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Klausulbetingelse</mat-label>
+    <textarea matInput [(ngModel)]="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Fejlbesked</mat-label>
+    <textarea matInput [(ngModel)]="error" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton (click)="onNoClick()">Fortryd</button>
+  <button matButton (click)="create()" cdkFocusInitial>Opret</button>
+</mat-dialog-actions>
