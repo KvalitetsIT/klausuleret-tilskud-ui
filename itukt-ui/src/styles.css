@@ -6,3 +6,7 @@
 .dsl-number      { color: #059669; }                      /* numbers */
 .dsl-id          { color: #231c91; }                      /* identifiers */
 .dsl-punctuation { color: #6b7280; }                      /* punctuation */
+
+.snackbar {
+  white-space: pre-line;
+}

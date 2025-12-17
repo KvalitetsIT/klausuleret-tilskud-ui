@@ -42,13 +42,11 @@ export class CreateClauseDialog {
         this.loading = true;
         this.service.createClause({ dsl: this.dsl(), error: this.error() })
             .subscribe({
-                next: (result) => {
-                    console.log('Clause created:', result);
+                next: (_) => {
                     this.dialogRef.close();
                     this.loading = false;
                 },
-                error: (err) => {
-                    console.error('Error creating clause:', err);
+                error: (_) => {
                     this.loading = false;
                 }
             });
