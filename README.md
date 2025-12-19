@@ -9,19 +9,11 @@ For at bygge app'en kræves:
 - Java (v21)
 
 # Installation og kørsel
-Projektet installeres ved først at bygge angular-app'en, og herefter bygge et Docker image.
+Projektet kan installeres og køres med docker compose.
+I compose folderen, kør:
 
 ```bash
-# Byg angular app
-cd itukt-ui
-npm install
-npm run build
-
-# Byg et lokalt Docker image
-docker build -t itukt-ui:local .
-
-# Sæt ITUKT_API_BASE_URL og start app op på port 4200
-docker run -e ITUKT_API_BASE_URL="http://localhost:8080" -p 4200:8080 itukt-ui:local
+docker compose up
 ```
 
 Man skal pege på en kørende instans af klausuleret-tilskud-valideringskomponenten, for at der kan vises og redigeres data i app'en. 
