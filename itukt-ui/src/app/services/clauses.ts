@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { ManagementService } from '@api/api/management.service';
 import { ClauseStatus, DslInput } from '@api/index';
@@ -17,19 +17,16 @@ export class ClausesService {
 
   createClause(dslInput: DslInput): Observable<DslOutput> {
     const response = this.api.createClauseFromDslV20250801(dslInput);
-    this.subscribeWithSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
-    return response;
+    return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
   }
 
-  subscribeWithSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): void {
-    response.subscribe({
-      next: (result) => {
-        this.openSnackbar(successMessage);
-      },
-      error: (err) => {
-        this.openSnackbar(errorMessage + '.\n' + err.error.message);
-      }
-    });
+  addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
+    return response.pipe(
+      tap({
+        next: () => this.openSnackbar(successMessage),
+        error: (err) => this.openSnackbar(errorMessage + '\n' + err.error.message)
+      })
+    );
   }
 
   openSnackbar(message: string): void {
