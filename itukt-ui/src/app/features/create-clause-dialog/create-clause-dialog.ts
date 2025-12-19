@@ -1,6 +1,6 @@
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { Component, inject, model } from "@angular/core";
-import { FormsModule } from "@angular/forms";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -23,16 +23,20 @@ import { ClausesService } from "src/app/services/clauses";
         MatDialogActions,
         CdkTextareaAutosize,
         MatProgressSpinner,
+        ReactiveFormsModule,
     ],
 })
 export class CreateClauseDialog {
     private service = inject(ClausesService);
+    private fb = inject(FormBuilder)
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
-    readonly data = inject<DslInput>(MAT_DIALOG_DATA);
-    readonly dsl = model(this.data.dsl);
-    readonly error = model(this.data.error);
     loading = false;
+
+    form = this.fb.group({
+      dsl: ['', Validators.required],
+      error: ['', Validators.required]
+    });
 
     onNoClick(): void {
         this.dialogRef.close();
@@ -40,7 +44,8 @@ export class CreateClauseDialog {
 
     create() {
         this.loading = true;
-        this.service.createClause({ dsl: this.dsl(), error: this.error() })
+        const { dsl, error } = this.form.value;
+        this.service.createClause({ dsl: dsl ?? '', error: error ?? '' })
             .subscribe({
                 next: (_) => {
                     this.dialogRef.close();

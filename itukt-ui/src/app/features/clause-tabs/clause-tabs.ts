@@ -20,7 +20,6 @@ export class ClauseTabs {
 
   openCreateClauseDialog(): void {
     const dialogRef = this.dialog.open(CreateClauseDialog, {
-      data: { dsl: "", error: "" },
       minWidth: '700px'
     });
   }
