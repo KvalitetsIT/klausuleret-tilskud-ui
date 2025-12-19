@@ -1,18 +1,7 @@
 <div class="content">
-  <mat-card>
-    <mat-card-header>
-        <mat-card-title>Velkommen til {{ app.title() }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <p>Editor til klausuler ✍️</p>
-    </mat-card-content>
-  </mat-card>
+  <mat-toolbar>
+    <span>IT-understøttelse af klausuleret tilskud</span>
+  </mat-toolbar>
 
-  <mat-card>
-    <mat-card-content>
-      <p><i>App'en er stadig under kraftig udvikling. Alt kan ændre sig. 🚧</i></p>
-    </mat-card-content>
-  </mat-card>
-
-  <app-clauses></app-clauses>
+  <app-clause-tabs></app-clause-tabs>
 </div>
