@@ -9,6 +9,11 @@
         Påkrævet
       </mat-error>
       }
+      @if (form.get('name')?.hasError('nameInUseByActiveClause')) {
+      <mat-error>
+        Klausulkode allerede i brug
+      </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Klausulbetingelse</mat-label>
@@ -33,7 +38,7 @@
 
 <mat-dialog-actions>
   <button matButton (click)="onNoClick()">Fortryd</button>
-  <button matButton (click)="create()" [disabled]="loading">
+  <button matButton (click)="create()" [disabled]="loading || form.invalid">
     Opret
     @if (loading) {
     <div class="spinner">
