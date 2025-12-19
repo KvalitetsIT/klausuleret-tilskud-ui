@@ -2,6 +2,15 @@
 <form [formGroup]="form">
   <mat-dialog-content>
     <mat-form-field>
+      <mat-label>Klausulkode</mat-label>
+      <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+      @if (form.get('name')?.hasError('required')) {
+      <mat-error>
+        Påkrævet
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
       <mat-label>Klausulbetingelse</mat-label>
       <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
       @if (form.get('dsl')?.hasError('required')) {

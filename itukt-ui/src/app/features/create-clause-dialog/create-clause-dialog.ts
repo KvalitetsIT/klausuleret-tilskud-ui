@@ -34,6 +34,7 @@ export class CreateClauseDialog {
     loading = false;
 
     form = this.fb.group({
+      name: ['', Validators.required],
       dsl: ['', Validators.required],
       error: ['', Validators.required]
     });
@@ -44,8 +45,8 @@ export class CreateClauseDialog {
 
     create() {
         this.loading = true;
-        const { dsl, error } = this.form.value;
-        this.service.createClause({ dsl: dsl ?? '', error: error ?? '' })
+        const { name, dsl, error } = this.form.value;
+        this.service.createClause({ name: name ?? '', dsl: dsl ?? '', error: error ?? '' })
             .subscribe({
                 next: (_) => {
                     this.dialogRef.close();
