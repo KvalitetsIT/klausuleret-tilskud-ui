@@ -1,13 +1,13 @@
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
-import { Component, inject, model } from "@angular/core";
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, inject } from "@angular/core";
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
+import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { DslInput } from "@api/index";
 import { ClausesService } from "src/app/services/clauses";
+import { ClauseValidators } from "src/app/shared/clause-validators";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -28,15 +28,21 @@ import { ClausesService } from "src/app/services/clauses";
 })
 export class CreateClauseDialog {
     private service = inject(ClausesService);
+    private clauseValidators = inject(ClauseValidators);
     private fb = inject(FormBuilder)
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
     loading = false;
 
     form = this.fb.group({
-      name: ['', Validators.required],
-      dsl: ['', Validators.required],
-      error: ['', Validators.required]
+        name: ['',
+            [
+                Validators.required,
+                this.clauseValidators.clauseNameInUseValidator
+            ]
+        ],
+        dsl: ['', Validators.required],
+        error: ['', Validators.required]
     });
 
     onNoClick(): void {
