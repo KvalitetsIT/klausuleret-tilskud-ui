@@ -4,6 +4,12 @@
 <p><mat-icon>info</mat-icon> Ingen klausuler.</p>
 } @else {
 <table class="clauses" mat-table [dataSource]="clauses() ?? []">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Kode</th>
+    <td mat-cell *matCellDef="let clause">
+      {{ clause.name }}
+    </td>
+  </ng-container>
   <ng-container matColumnDef="dsl">
     <th mat-header-cell *matHeaderCellDef>Klausul</th>
     <td mat-cell *matCellDef="let clause">

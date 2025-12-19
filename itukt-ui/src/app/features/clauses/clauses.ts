@@ -28,7 +28,7 @@ export class Clauses {
     this.service.getClauses(ClauseStatus.Draft)
   );
 
-  displayedColumns: string[] = ['dsl', 'error'];
+  displayedColumns: string[] = ['name', 'dsl', 'error'];
 
   clauses: Signal<Array<DslOutput> | undefined> = signal(undefined);
 
