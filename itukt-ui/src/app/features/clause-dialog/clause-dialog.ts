@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogContent, MatDialogTitle } from "@angular/mate
 import { MatListModule } from "@angular/material/list";
 import { DslOutput } from "@api/index";
 import { DslHighlightPipe } from "src/app/shared/dsl-highlight-pipe";
+import { ClauseField } from "./field/clause-field";
 
 @Component({
     selector: 'clause-dialog',
@@ -14,7 +15,8 @@ import { DslHighlightPipe } from "src/app/shared/dsl-highlight-pipe";
         MatDialogContent,
         MatListModule,
         DslHighlightPipe,
-        DatePipe
+        DatePipe,
+        ClauseField
     ],
 })
 export class ClauseDialog {
