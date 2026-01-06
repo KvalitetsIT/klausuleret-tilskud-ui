@@ -1,0 +1,40 @@
+<form [formGroup]="form">
+    <mat-list-item>
+        <div class="field">
+            <div class="label">Kode</div>
+            <div class="value">{{ clause.name }}</div>
+        </div>
+    </mat-list-item>
+    <mat-divider />
+    <mat-list-item>
+        <div class="field">
+            <div class="label">Klausulbetingelse</div>
+            <div class="value">
+                <mat-form-field>
+                    <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+                    @if (form.get('dsl')?.hasError('required')) {
+                    <mat-error>
+                        Påkrævet
+                    </mat-error>
+                    }
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-list-item>
+    <mat-divider />
+    <mat-list-item>
+        <div class="field">
+            <div class="label">Fejlbesked</div>
+            <div class="value">
+                <mat-form-field>
+                    <textarea matInput formControlName="error" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+                    @if (form.get('error')?.hasError('required')) {
+                    <mat-error>
+                        Påkrævet
+                    </mat-error>
+                    }
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-list-item>
+</form>

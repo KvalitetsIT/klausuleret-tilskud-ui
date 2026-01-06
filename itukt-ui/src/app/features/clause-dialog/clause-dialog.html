@@ -1,18 +1,28 @@
 <h2 mat-dialog-title>Klausul</h2>
 <mat-dialog-content>
-  <mat-list class="info-list">
-    <clause-field label="Kode">{{ clause.name }}</clause-field>
-    <mat-divider />
-    <clause-field label="Klausulbetingelse">
-      <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code>
-    </clause-field>
-    <mat-divider />
-    <clause-field label="Fejlbesked">{{ clause.error }}</clause-field>
-    @if (clause.validFrom) {
-    <mat-divider />
-    <clause-field label="Gyldig fra">
-      {{ clause.validFrom | date:'dd-MM-yyyy HH:mm' }}
-    </clause-field>
+  <mat-list>
+    @if (editMode) {
+      <clause-edit-items [clause]="clause" />
+    } @else {
+      <clause-read-items [clause]="clause" />
     }
   </mat-list>
 </mat-dialog-content>
+
+@if (status == "ACTIVE") {
+<mat-dialog-actions>
+  @if (editMode) {
+  <button matButton (click)="cancelEditMode()" [disabled]="editItems?.loading">Fortryd</button>
+  <button matButton (click)="save()" [disabled]="editItems?.loading || editItems?.form?.invalid">
+    Opret kladde
+    @if (editItems?.loading) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+  } @else {
+  <button matButton (click)="enterEditMode()">Rediger</button>
+  }
+</mat-dialog-actions>
+}

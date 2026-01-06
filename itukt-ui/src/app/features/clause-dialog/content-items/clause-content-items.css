@@ -1,3 +1,7 @@
+mat-list-item {
+  height: auto !important;
+}
+
 .field {
   display: flex;
   align-items: center;

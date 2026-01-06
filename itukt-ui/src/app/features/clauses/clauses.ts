@@ -44,7 +44,7 @@ export class Clauses {
     const dialogRef = this.clauseDialog.open(ClauseDialog, {
       minWidth: '700px',
       maxWidth: '1500px',
-      data: { clause: row }
+      data: { clause: row, status: this.status }
     });
   }
 }

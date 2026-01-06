@@ -1,28 +1,47 @@
-import { DatePipe } from "@angular/common";
-import { Component, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogContent, MatDialogTitle } from "@angular/material/dialog";
+import { Component, Inject, ViewChild } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { DslOutput } from "@api/index";
-import { DslHighlightPipe } from "src/app/shared/dsl-highlight-pipe";
-import { ClauseField } from "./field/clause-field";
+import { ClauseReadItems } from "./content-items/read/clause-read-items";
+import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 
 @Component({
     selector: 'clause-dialog',
     templateUrl: 'clause-dialog.html',
     styleUrls: ['clause-dialog.css'],
     imports: [
-        MatDialogTitle,
-        MatDialogContent,
+        MatDialogModule,
         MatListModule,
-        DslHighlightPipe,
-        DatePipe,
-        ClauseField
+        MatProgressSpinner,
+        MatButtonModule,
+        ClauseReadItems,
+        ClauseEditItems
     ],
 })
 export class ClauseDialog {
-  clause: DslOutput;
+  @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput }) {
+  clause: DslOutput;
+  status: 'DRAFT' | 'ACTIVE';
+  editMode = false;
+
+  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: 'DRAFT' | 'ACTIVE' }) {
     this.clause = data.clause;
+    this.status = data.status;
   }
+
+  enterEditMode() {
+    this.editMode = true;
+  }
+
+  cancelEditMode() {
+    this.editMode = false;
+  }
+
+  save() {
+    this.editItems?.save();
+  }
+
 }
