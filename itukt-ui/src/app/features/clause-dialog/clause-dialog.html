@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Klausul</h2>
+<mat-dialog-content>
+  <mat-list class="info-list">
+    <mat-list-item>
+      <div class="field">
+        <div class="label">Kode</div>
+        <div class="value">{{ clause.name }}</div>
+      </div>
+    </mat-list-item>
+    <mat-divider />
+    <mat-list-item>
+      <div class="field">
+        <div class="label">Klausulbetingelse</div>
+        <div class="value">
+          <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code>
+        </div>
+      </div>
+    </mat-list-item>
+    <mat-divider />
+    <mat-list-item>
+      <div class="field">
+        <div class="label">Fejlbesked</div>
+        <div class="value">{{ clause.error }}</div>
+      </div>
+    </mat-list-item>
+    @if (clause.validFrom) {
+    <mat-divider />
+    <mat-list-item>
+      <div class="field">
+        <div class="label">Gyldig fra</div>
+        <div class="value">{{ clause.validFrom | date:'dd-MM-yyyy HH:mm' }}</div>
+      </div>
+    </mat-list-item>
+    }
+  </mat-list>
+</mat-dialog-content>
