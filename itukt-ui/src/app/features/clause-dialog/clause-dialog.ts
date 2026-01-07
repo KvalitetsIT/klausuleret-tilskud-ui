@@ -6,6 +6,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { DslOutput } from "@api/index";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
+import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 
 @Component({
   selector: 'clause-dialog',
@@ -23,6 +24,7 @@ import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 export class ClauseDialog {
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
   private cdr = inject(ChangeDetectorRef);
+  private clauseDialogService = inject(ClauseDialogService);
   readonly dialogRef = inject(MatDialogRef<ClauseDialog>);
 
   clause: DslOutput;
@@ -49,9 +51,10 @@ export class ClauseDialog {
     this.saving = true;
     this.editItems?.save()
       .subscribe({
-        next: (_) => {
+        next: (clauseDraft) => {
           this.dialogRef.close();
           this.saving = false;
+          this.clauseDialogService.open(clauseDraft, 'DRAFT');
         },
         error: (_) => {
           this.saving = false;
