@@ -1,4 +1,4 @@
-import { Component, inject, Inject, ViewChild } from "@angular/core";
+import { Component, inject, Inject, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
@@ -22,13 +22,13 @@ import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 })
 export class ClauseDialog {
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
+  private cdr = inject(ChangeDetectorRef);
+  readonly dialogRef = inject(MatDialogRef<ClauseDialog>);
 
   clause: DslOutput;
   status: 'DRAFT' | 'ACTIVE';
   editMode = false;
   saving = false;
-
-  readonly dialogRef = inject(MatDialogRef<ClauseDialog>);
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: 'DRAFT' | 'ACTIVE' }) {
     this.clause = data.clause;
@@ -37,10 +37,12 @@ export class ClauseDialog {
 
   enterEditMode() {
     this.editMode = true;
+    this.cdr.detectChanges();
   }
 
   cancelEditMode() {
     this.editMode = false;
+    this.cdr.detectChanges();
   }
 
   save() {
