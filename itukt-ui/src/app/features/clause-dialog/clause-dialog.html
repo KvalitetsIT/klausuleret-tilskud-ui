@@ -1,36 +1,30 @@
-<h2 mat-dialog-title>Klausul</h2>
+<h2 mat-dialog-title>Klausul {{status == "DRAFT" ? "kladde" : ""}}</h2>
 <mat-dialog-content>
-  <mat-list class="info-list">
-    <mat-list-item>
-      <div class="field">
-        <div class="label">Kode</div>
-        <div class="value">{{ clause.name }}</div>
-      </div>
-    </mat-list-item>
-    <mat-divider />
-    <mat-list-item>
-      <div class="field">
-        <div class="label">Klausulbetingelse</div>
-        <div class="value">
-          <code class="dsl" [innerHTML]="(clause.dsl | dslHighlight)"></code>
-        </div>
-      </div>
-    </mat-list-item>
-    <mat-divider />
-    <mat-list-item>
-      <div class="field">
-        <div class="label">Fejlbesked</div>
-        <div class="value">{{ clause.error }}</div>
-      </div>
-    </mat-list-item>
-    @if (clause.validFrom) {
-    <mat-divider />
-    <mat-list-item>
-      <div class="field">
-        <div class="label">Gyldig fra</div>
-        <div class="value">{{ clause.validFrom | date:'dd-MM-yyyy HH:mm' }}</div>
-      </div>
-    </mat-list-item>
+  <mat-list>
+    @if (editMode) {
+    <clause-edit-items [clause]="clause" />
+    } @else {
+    <clause-read-items [clause]="clause" />
     }
   </mat-list>
 </mat-dialog-content>
+
+@if (status == "ACTIVE") {
+<mat-dialog-actions>
+  @if (editMode) {
+  <button matButton (click)="cancelEditMode()" [disabled]="saving">Fortryd</button>
+  <button matButton (click)="save()" [disabled]="saving || editItems?.form?.invalid">
+    Opret kladde
+    @if (saving) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+  } @else {
+  <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
+    <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()">Rediger</button>
+  </span>
+  }
+</mat-dialog-actions>
+}

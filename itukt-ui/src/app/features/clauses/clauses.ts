@@ -8,8 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ClauseStatus } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
-import { ClauseDialog } from '../clause-dialog/clause-dialog';
-import { MatDialog } from '@angular/material/dialog';
+import { ClauseDialogService } from 'src/app/services/clause-dialog-service';
 
 @Component({
   selector: 'app-clauses',
@@ -22,7 +21,7 @@ export class Clauses {
   @Input() status: 'DRAFT' | 'ACTIVE' = 'ACTIVE';
 
   private service = inject(ClausesService);
-  private clauseDialog = inject(MatDialog);
+  private clauseDialogService = inject(ClauseDialogService);
 
   activeClauses = toSignal<Array<DslOutput>>(
     this.service.getClauses(ClauseStatus.Active)
@@ -41,10 +40,6 @@ export class Clauses {
   }
 
   onRowClick(row: DslOutput): void {
-    const dialogRef = this.clauseDialog.open(ClauseDialog, {
-      minWidth: '700px',
-      maxWidth: '1500px',
-      data: { clause: row }
-    });
+    this.clauseDialogService.open(row, this.status);
   }
 }
