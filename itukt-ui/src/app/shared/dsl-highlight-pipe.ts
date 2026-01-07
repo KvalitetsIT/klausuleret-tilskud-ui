@@ -20,7 +20,7 @@ export class DslHighlightPipe implements PipeTransform {
     out = out.replace(/\b\d+(?:\.\d+)?\b/g, '<span class="dsl-number">$&</span>');
 
     // identifiers
-    out = out.replace(/\b[A-Z][A-Z0-9_]*\b/g, '<span class="dsl-id">$&</span>');
+    out = out.replace(/\b[A-Z][A-ZÆØÅ0-9_]*\b/g, '<span class="dsl-id">$&</span>');
 
     // punctuation
     out = out.replace(/[:(),]/g, '<span class="dsl-punctuation">$&</span>');
