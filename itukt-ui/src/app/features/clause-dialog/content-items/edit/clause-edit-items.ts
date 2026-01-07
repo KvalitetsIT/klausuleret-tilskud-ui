@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { DslOutput } from '@api/index';
+import { Observable } from 'rxjs';
 import { ClausesService } from 'src/app/services/clauses';
 
 @Component({
@@ -24,7 +25,6 @@ export class ClauseEditItems {
     private service = inject(ClausesService);
     private fb = inject(FormBuilder);
     form!: FormGroup;
-    loading = false;
 
     ngOnInit() {
         this.form = this.fb.group({
@@ -33,9 +33,9 @@ export class ClauseEditItems {
         });
     }
 
-    save() {
-        console.log('Saving clause edit:', this.form.value);
-        this.loading = true;
+    save(): Observable<DslOutput> {
+        const { dsl, error } = this.form.value;
+        return this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' })
     }
 
 }

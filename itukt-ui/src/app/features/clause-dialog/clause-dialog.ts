@@ -1,6 +1,6 @@
-import { Component, Inject, ViewChild } from "@angular/core";
+import { Component, inject, Inject, ViewChild } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { DslOutput } from "@api/index";
@@ -8,17 +8,17 @@ import { ClauseReadItems } from "./content-items/read/clause-read-items";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 
 @Component({
-    selector: 'clause-dialog',
-    templateUrl: 'clause-dialog.html',
-    styleUrls: ['clause-dialog.css'],
-    imports: [
-        MatDialogModule,
-        MatListModule,
-        MatProgressSpinner,
-        MatButtonModule,
-        ClauseReadItems,
-        ClauseEditItems
-    ],
+  selector: 'clause-dialog',
+  templateUrl: 'clause-dialog.html',
+  styleUrls: ['clause-dialog.css'],
+  imports: [
+    MatDialogModule,
+    MatListModule,
+    MatProgressSpinner,
+    MatButtonModule,
+    ClauseReadItems,
+    ClauseEditItems
+  ],
 })
 export class ClauseDialog {
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
@@ -26,6 +26,9 @@ export class ClauseDialog {
   clause: DslOutput;
   status: 'DRAFT' | 'ACTIVE';
   editMode = false;
+  saving = false;
+
+  readonly dialogRef = inject(MatDialogRef<ClauseDialog>);
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: 'DRAFT' | 'ACTIVE' }) {
     this.clause = data.clause;
@@ -41,7 +44,17 @@ export class ClauseDialog {
   }
 
   save() {
-    this.editItems?.save();
+    this.saving = true;
+    this.editItems?.save()
+      .subscribe({
+        next: (_) => {
+          this.dialogRef.close();
+          this.saving = false;
+        },
+        error: (_) => {
+          this.saving = false;
+        }
+      });
   }
 
 }
