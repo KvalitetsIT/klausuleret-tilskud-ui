@@ -11,9 +11,13 @@ export class ClauseValidators {
     private activeClauses = toSignal<Array<DslOutput>>(
         this.clauseService.getClauses(ClauseStatus.Active)
     );
+    private draftClauses = toSignal<Array<DslOutput>>(
+        this.clauseService.getClauses(ClauseStatus.Draft)
+    );
 
     clauseNameInUseValidator = (control: AbstractControl): ValidationErrors | null => {
-        return this.activeClauses()?.map(c => c.name).includes(control.value)
+        return this.activeClauses()?.some(c => c.name === control.value)
+            || this.draftClauses()?.some(c => c.name === control.value)
             ? { nameInUseByActiveClause: true }
             : null;
     };

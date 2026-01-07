@@ -1,12 +1,15 @@
-import { Component, inject, Inject, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, Inject, ViewChild } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { DslOutput } from "@api/index";
-import { ClauseReadItems } from "./content-items/read/clause-read-items";
-import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
+import { ClauseStatus, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
+import { ClausesService } from "src/app/services/clauses";
+import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
+import { ClauseReadItems } from "./content-items/read/clause-read-items";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: 'clause-dialog',
@@ -17,6 +20,7 @@ import { ClauseDialogService } from "src/app/services/clause-dialog-service";
     MatListModule,
     MatProgressSpinner,
     MatButtonModule,
+    MatTooltipModule,
     ClauseReadItems,
     ClauseEditItems
   ],
@@ -24,9 +28,11 @@ import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 export class ClauseDialog {
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
   private cdr = inject(ChangeDetectorRef);
+  private clauseService = inject(ClausesService);
   private clauseDialogService = inject(ClauseDialogService);
-  readonly dialogRef = inject(MatDialogRef<ClauseDialog>);
+  private readonly currentDialogRef = inject(MatDialogRef<ClauseDialog>);
 
+  draftClauses = toSignal<Array<DslOutput>>(this.clauseService.getClauses(ClauseStatus.Draft));
   clause: DslOutput;
   status: 'DRAFT' | 'ACTIVE';
   editMode = false;
@@ -52,7 +58,7 @@ export class ClauseDialog {
     this.editItems?.save()
       .subscribe({
         next: (clauseDraft) => {
-          this.dialogRef.close();
+          this.currentDialogRef.close();
           this.saving = false;
           this.clauseDialogService.open(clauseDraft, 'DRAFT');
         },
@@ -60,6 +66,10 @@ export class ClauseDialog {
           this.saving = false;
         }
       });
+  }
+
+  draftAlreadyExists(): boolean | undefined {
+    return this.draftClauses()?.some(c => c.name === this.clause.name);
   }
 
 }

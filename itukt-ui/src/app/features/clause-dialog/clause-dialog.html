@@ -2,9 +2,9 @@
 <mat-dialog-content>
   <mat-list>
     @if (editMode) {
-      <clause-edit-items [clause]="clause" />
+    <clause-edit-items [clause]="clause" />
     } @else {
-      <clause-read-items [clause]="clause" />
+    <clause-read-items [clause]="clause" />
     }
   </mat-list>
 </mat-dialog-content>
@@ -22,7 +22,9 @@
     }
   </button>
   } @else {
-  <button matButton (click)="enterEditMode()">Rediger</button>
+  <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
+    <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()">Rediger</button>
+  </span>
   }
 </mat-dialog-actions>
 }
