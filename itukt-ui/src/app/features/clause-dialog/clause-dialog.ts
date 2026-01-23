@@ -72,4 +72,17 @@ export class ClauseDialog {
     return this.draftClauses()?.some(c => c.name === this.clause.name);
   }
 
+  approve() {
+    this.saving = true;
+    this.clauseService.approveClause(this.clause.uuid)
+      .subscribe({
+        next: () => {
+          this.currentDialogRef.close();
+          this.saving = false;
+        },
+        error: (_) => {
+          this.saving = false;
+        }
+      });
+    }
 }
