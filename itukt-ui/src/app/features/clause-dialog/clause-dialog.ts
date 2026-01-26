@@ -14,7 +14,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 @Component({
   selector: 'clause-dialog',
   templateUrl: 'clause-dialog.html',
-  styleUrls: ['clause-dialog.css'],
   imports: [
     MatDialogModule,
     MatListModule,
@@ -84,7 +83,6 @@ export class ClauseDialog {
 @Component({
   selector: 'approve-confirmation-dialog',
   templateUrl: 'approve-confirmation-dialog.html',
-  styleUrls: ['clause-dialog.css'],
   imports: [MatDialogModule, MatButtonModule, MatProgressSpinner],
 })
 export class ApproveConfirmationDialog {
