@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Godkend klausul: {{clause.name}}</h2>
+<mat-dialog-content>
+  Er du sikker på at du vil gøre klausulen aktiv?
+</mat-dialog-content>
+
+
+<mat-dialog-actions>
+  <button matButton (click)="cancel()" [disabled]="saving">
+    Fortryd
+  </button>
+  <button matButton (click)="approve()" [disabled]="saving" cdkFocusInitial>
+    Ja
+    @if (saving) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+</mat-dialog-actions>
