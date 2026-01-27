@@ -99,7 +99,7 @@ export class ApproveConfirmationDialog {
 
   approve() {
     this.saving = true;
-    this.clauseService.approveClause(this.clause.uuid)
+    this.clauseService.approveClause(this.clause)
       .subscribe({
         next: () => {
           this.currentDialogRef.close();

@@ -20,9 +20,9 @@ export class ClausesService {
     return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
   }
 
-  approveClause(clauseId: string): Observable<void> {
-    const response = this.api.updateClauseStatusV20250801(clauseId, { status: ClauseStatusInput.StatusEnum.Active });
-    return this.addSnackbar(response, "Klausul blev godkendt", "Klausul godkendelse fejlede");
+  approveClause(clause: { uuid: string, name: string }): Observable<void> {
+    const response = this.api.updateClauseStatusV20250801(clause.uuid, { status: ClauseStatusInput.StatusEnum.Active });
+    return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
