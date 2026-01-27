@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject, Inject, ViewChild } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ClauseStatus, DslOutput } from "@api/index";
@@ -14,7 +14,6 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 @Component({
   selector: 'clause-dialog',
   templateUrl: 'clause-dialog.html',
-  styleUrls: ['clause-dialog.css'],
   imports: [
     MatDialogModule,
     MatListModule,
@@ -31,6 +30,7 @@ export class ClauseDialog {
   private clauseService = inject(ClausesService);
   private clauseDialogService = inject(ClauseDialogService);
   private readonly currentDialogRef = inject(MatDialogRef<ClauseDialog>);
+  private matDialog = inject(MatDialog);
 
   draftClauses = toSignal<Array<DslOutput>>(this.clauseService.getClauses(ClauseStatus.Draft));
   clause: DslOutput;
@@ -68,8 +68,51 @@ export class ClauseDialog {
       });
   }
 
+  approve() {
+    this.matDialog.open(ApproveConfirmationDialog, {
+      minWidth: '400px',
+      data: { clause: this.clause, clauseDialogRef: this.currentDialogRef }
+    });
+  }
+
   draftAlreadyExists(): boolean | undefined {
     return this.draftClauses()?.some(c => c.name === this.clause.name);
   }
+}
 
+@Component({
+  selector: 'approve-confirmation-dialog',
+  templateUrl: 'approve-confirmation-dialog.html',
+  imports: [MatDialogModule, MatButtonModule, MatProgressSpinner],
+})
+export class ApproveConfirmationDialog {
+  private currentDialogRef = inject(MatDialogRef<ApproveConfirmationDialog>);
+  private clauseService = inject(ClausesService);
+  private clauseDialogRef: MatDialogRef<ClauseDialog>;
+  clause: DslOutput;
+  saving = false;
+
+  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, clauseDialogRef: MatDialogRef<ClauseDialog> }) {
+    this.clause = data.clause;
+    this.clauseDialogRef = data.clauseDialogRef;
+  }
+
+  approve() {
+    this.saving = true;
+    this.clauseService.approveClause(this.clause)
+      .subscribe({
+        next: () => {
+          this.currentDialogRef.close();
+          this.clauseDialogRef.close();
+          this.saving = false;
+        },
+        error: (_) => {
+          this.saving = false;
+        }
+      });
+  }
+
+  cancel() {
+    this.currentDialogRef.close();
+  }
 }

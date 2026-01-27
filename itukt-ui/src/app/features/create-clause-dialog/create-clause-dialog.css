@@ -3,10 +3,3 @@ mat-dialog-content {
     flex-direction: column;
     row-gap: 10px;
 }
-
-.spinner {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-}

@@ -28,3 +28,16 @@
   }
 </mat-dialog-actions>
 }
+
+@if (status == "DRAFT") {
+<mat-dialog-actions>
+  <button matButton (click)="approve()" [disabled]="saving">
+    Godkend
+    @if (saving) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+</mat-dialog-actions>
+}

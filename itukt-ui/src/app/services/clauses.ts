@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
 import { ManagementService } from '@api/api/management.service';
-import { ClauseStatus, DslInput } from '@api/index';
+import { ClauseStatus, ClauseStatusInput, DslInput } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -18,6 +18,11 @@ export class ClausesService {
   createClause(dslInput: DslInput): Observable<DslOutput> {
     const response = this.api.createClauseFromDslV20250801(dslInput);
     return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
+  }
+
+  approveClause(clause: { uuid: string, name: string }): Observable<void> {
+    const response = this.api.updateClauseStatusV20250801(clause.uuid, { status: ClauseStatusInput.StatusEnum.Active });
+    return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
