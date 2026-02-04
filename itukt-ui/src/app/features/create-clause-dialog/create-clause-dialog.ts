@@ -6,6 +6,7 @@ import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { ClauseStatus } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClausesService } from "src/app/services/clauses";
 import { ClauseValidators } from "src/app/shared/clause-validators";
@@ -59,7 +60,7 @@ export class CreateClauseDialog {
                 next: (clauseDraft) => {
                     this.dialogRef.close();
                     this.loading = false;
-                    this.clauseDialogService.open(clauseDraft, 'DRAFT');
+                    this.clauseDialogService.open(clauseDraft, ClauseStatus.Draft);
                 },
                 error: (_) => {
                     this.loading = false;

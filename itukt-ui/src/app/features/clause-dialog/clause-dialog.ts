@@ -34,11 +34,11 @@ export class ClauseDialog {
 
   draftClauses = toSignal<Array<DslOutput>>(this.clauseService.getClauses(ClauseStatus.Draft));
   clause: DslOutput;
-  status: 'DRAFT' | 'ACTIVE';
+  status: ClauseStatus;
   editMode = false;
   saving = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: 'DRAFT' | 'ACTIVE' }) {
+  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: ClauseStatus }) {
     this.clause = data.clause;
     this.status = data.status;
   }
@@ -60,7 +60,7 @@ export class ClauseDialog {
         next: (clauseDraft) => {
           this.currentDialogRef.close();
           this.saving = false;
-          this.clauseDialogService.open(clauseDraft, 'DRAFT');
+          this.clauseDialogService.open(clauseDraft, ClauseStatus.Draft);
         },
         error: (_) => {
           this.saving = false;
