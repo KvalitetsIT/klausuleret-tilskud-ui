@@ -174,14 +174,14 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses/{id}/status:
+  /2025/08/01/clauses/drafts/{id}/status:
     put:
-      operationId: updateClauseStatus_v20250801
+      operationId: updateDraftStatus_v20250801
       tags:
         - management
-      summary: "Update status of clause"
+      summary: "Update status of draft clause"
       description:  >-
-        Update status of clause. Allowed transitions are:
+        Update status of draft clause. Allowed transitions are:
         <ul>
           <li>DRAFT -> ACTIVE</li>
         </ul>
@@ -192,12 +192,41 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClauseStatusInput'
+              $ref: '#/components/schemas/DraftClauseStatusInput'
       responses:
         '200':
           description: Ok
         '404':
           $ref: '#/components/responses/404'
+
+  /2025/08/01/clauses/{name}/status:
+    put:
+      operationId: updateClauseStatus_v20250801
+      tags:
+        - management
+      summary: "Update status of clause"
+      description:  >-
+        Update status of clause. Allowed transitions are:
+        <ul>
+          <li>ACTIVE -> INACTIVE</li>
+        </ul>
+      parameters:
+        - $ref: '#/components/parameters/name'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClauseStatusInput'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DslOutput'
+        '400':
+          $ref: '#/components/responses/400'
 
 components:
   responses:
@@ -344,6 +373,7 @@ components:
         - $ref: '#/components/schemas/AgeCondition'
         - $ref: '#/components/schemas/ExistingDrugMedicationCondition'
         - $ref: '#/components/schemas/BinaryExpression'
+        - $ref: '#/components/schemas/DepartmentSpecialityCondition'
         - $ref: '#/components/schemas/DoctorSpecialityCondition'
       discriminator:
         propertyName: type
@@ -352,6 +382,7 @@ components:
           AgeCondition: '#/components/schemas/AgeCondition'
           ExistingDrugMedicationCondition: '#/components/schemas/ExistingDrugMedicationCondition'
           BinaryExpression: '#/components/schemas/BinaryExpression'
+          DepartmentSpecialityCondition: '#/components/schemas/DepartmentSpecialityCondition'
           DoctorSpecialityCondition: '#/components/schemas/DoctorSpecialityCondition'
 
     Operator:
@@ -379,6 +410,18 @@ components:
       enum:
         - "DRAFT"
         - "ACTIVE"
+        - "INACTIVE"
+
+    DraftClauseStatusInput:
+      description: Status input for draft clause transition
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - "ACTIVE"
 
     ClauseStatusInput:
       description: Status input for clause transition
@@ -389,7 +432,7 @@ components:
         status:
           type: string
           enum:
-            - "ACTIVE"
+            - "INACTIVE"
 
     IndicationCondition:
       description: "A basic condition consisting of a field and a string value. This represents the most atomic form of an expression"
@@ -431,6 +474,20 @@ components:
           type: string
           description: "Identifies this object as a AgeCondition expression"
           example: "AgeCondition"
+
+    DepartmentSpecialityCondition:
+      description: "A department condition consisting of a code and a type. This represents that the department is expected to have a certain speciality"
+      type: object
+      required: [ speciality, type ]
+      properties:
+        speciality:
+          description: "The speciality, that the field is compared against"
+          type: string
+        type:
+          type: string
+          description: "Identifies this object as a DepartmentSpecialityCondition expression"
+          example: "DepartmentSpecialityCondition"
+
 
     ExistingDrugMedicationCondition:
       description: "A condition for existing drug medication"
