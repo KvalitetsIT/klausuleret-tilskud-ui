@@ -6,3 +6,9 @@
   margin: 0 auto;
   padding: 24px;
 }
+
+#app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}

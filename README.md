@@ -27,5 +27,10 @@ npm install
 npm start
 ```
 
-I så fald læses ITUKT_API_BASE_URL fra følgende fil: `itukt-ui/src/environments/environment.ts`.
+I så fald læses miljøvariable fra følgende fil: `itukt-ui/src/environments/environment.ts`.
 
+# Miljøvariable
+
+| Miljøvariabel           | Beskrivelse                       | Påkrævet |
+|-------------------------|-----------------------------------|----------|
+| ITUKT_AUTH_GATEWAY_URL  | URL til auth gateway foran api'et | Ja       |

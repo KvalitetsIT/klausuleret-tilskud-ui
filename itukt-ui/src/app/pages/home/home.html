@@ -1,7 +1,10 @@
 <div class="content">
   @if (app.userAuthenticated()) {
   <mat-toolbar>
-    <span>IT-understøttelse af klausuleret tilskud</span>
+    <div id="app-toolbar">
+      <span>IT-understøttelse af klausuleret tilskud</span>
+      <button mat-button (click)="logout()">Log ud</button>
+    </div>
   </mat-toolbar>
   <app-clause-tabs></app-clause-tabs>
   }

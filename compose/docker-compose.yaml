@@ -2,7 +2,7 @@ services:
   
   init:
     environment:
-    - ITUKT_API_BASE_URL=https://klaus.t1.hosting.kitkube.dk
+    - ITUKT_AUTH_GATEWAY_URL=https://klaus-gateway-local.t0.hosting.kitkube.dk
     build:
       context: ../
       dockerfile: ./Dockerfile

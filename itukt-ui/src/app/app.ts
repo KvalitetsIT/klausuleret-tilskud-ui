@@ -21,14 +21,14 @@ export class App {
     console.log('App initialized');
     console.log('Auth Gateway URL:', environment.authGatewayUrl);
 
-    http.get(environment.authGatewayUrl + '/auth-check', { withCredentials: true }).subscribe({
+    http.get(environment.authGatewayUrl + '/gateway/auth-check', { withCredentials: true }).subscribe({
       next: (_) => {
         console.log('Successfully authenticated');
         this.userAuthenticated.set(true);
       },
       error: (err) => {
         console.error('Error authenticating:', err);
-        document.location.href = environment.authGatewayUrl + '/login';
+        document.location.href = environment.authGatewayUrl + '/gateway/login';
       }
     });
   }

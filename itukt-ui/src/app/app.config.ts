@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     ),
     {
       provide: Configuration,
-      useFactory: () => new Configuration({ basePath: environment.authGatewayUrl + '/api', withCredentials: true }),
+      useFactory: () => new Configuration({ basePath: environment.authGatewayUrl + '/gateway/api', withCredentials: true }),
     }
   ]
 };
