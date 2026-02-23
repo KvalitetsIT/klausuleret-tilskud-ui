@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  // apiBaseUrl: 'http://localhost:8080'
-  apiBaseUrl: 'https://klaus.t1.hosting.kitkube.dk'
+  // authGatewayUrl: 'http://localhost:8040/gateway'
+  authGatewayUrl: 'https://klaus-gateway-local.t0.hosting.kitkube.dk/gateway'
 };

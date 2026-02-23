@@ -1,7 +1,8 @@
 <div class="content">
+  @if (app.userAuthenticated()) {
   <mat-toolbar>
     <span>IT-understøttelse af klausuleret tilskud</span>
   </mat-toolbar>
-
   <app-clause-tabs></app-clause-tabs>
+  }
 </div>
