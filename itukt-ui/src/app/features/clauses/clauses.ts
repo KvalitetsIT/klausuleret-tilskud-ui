@@ -18,7 +18,7 @@ import { ClauseDialogService } from 'src/app/services/clause-dialog-service';
   styleUrls: ['clauses.css']
 })
 export class Clauses {
-  @Input() status: 'DRAFT' | 'ACTIVE' = 'ACTIVE';
+  @Input() status: ClauseStatus = ClauseStatus.Active;
 
   private service = inject(ClausesService);
   private clauseDialogService = inject(ClauseDialogService);
@@ -29,6 +29,9 @@ export class Clauses {
   draftClauses = toSignal<Array<DslOutput>>(
     this.service.getClauses(ClauseStatus.Draft)
   );
+  inactiveClauses = toSignal<Array<DslOutput>>(
+    this.service.getClauses(ClauseStatus.Inactive)
+  );
 
   displayedColumns: string[] = ['name', 'dsl', 'error'];
 
@@ -36,10 +39,21 @@ export class Clauses {
 
 
   ngOnInit() {
-    this.clauses = this.status === 'ACTIVE' ? this.activeClauses : this.draftClauses;
+    this.clauses = this.getClauses();
   }
 
   onRowClick(row: DslOutput): void {
     this.clauseDialogService.open(row, this.status);
+  }
+
+  getClauses() {
+    switch (this.status) {
+      case ClauseStatus.Active:
+        return this.activeClauses;
+      case ClauseStatus.Draft:
+        return this.draftClauses;
+      case ClauseStatus.Inactive:
+        return this.inactiveClauses;
+    }
   }
 }

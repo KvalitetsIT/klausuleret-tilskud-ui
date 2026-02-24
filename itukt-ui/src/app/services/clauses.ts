@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
 import { ManagementService } from '@api/api/management.service';
-import { ClauseStatus, ClauseStatusInput, DslInput } from '@api/index';
+import { ClauseStatus, ClauseStatusInput, DraftClauseStatusInput, DslInput } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -21,7 +21,7 @@ export class ClausesService {
   }
 
   approveClause(clause: { uuid: string, name: string }): Observable<void> {
-    const response = this.api.updateClauseStatusV20250801(clause.uuid, { status: ClauseStatusInput.StatusEnum.Active });
+    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active });
     return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 
