@@ -18,16 +18,16 @@ export class App {
     private managementService: ManagementService,
     private http: HttpClient) {
 
-    console.log('App initialized');
-    console.log('Auth Gateway URL:', environment.authGatewayUrl);
+    console.debug('App initialized');
+    console.debug('Auth Gateway URL:', environment.authGatewayUrl);
 
     http.get(environment.authGatewayUrl + '/gateway/auth-check', { withCredentials: true }).subscribe({
       next: (_) => {
-        console.log('Successfully authenticated');
+        console.debug('Successfully authenticated');
         this.userAuthenticated.set(true);
       },
       error: (err) => {
-        console.error('Error authenticating:', err);
+        console.debug('Error authenticating:', err);
         document.location.href = environment.authGatewayUrl + '/gateway/login';
       }
     });
