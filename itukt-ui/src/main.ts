@@ -8,4 +8,4 @@ bootstrapApplication(App, {
 })
 .catch((err) => console.error(err));
 
-console.log('Environment:', environment.production ? 'Production' : 'Development');
+console.debug('Environment:', environment.production ? 'Production' : 'Development');
