@@ -10,6 +10,7 @@ import { ClausesService } from "src/app/services/clauses";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { ConfirmationDialog } from "../confirmation-dialog/confirmation-dialog";
 
 @Component({
   selector: 'clause-dialog',
@@ -69,9 +70,14 @@ export class ClauseDialog {
   }
 
   approve() {
-    this.matDialog.open(ApproveConfirmationDialog, {
+    this.matDialog.open(ConfirmationDialog, {
       minWidth: '400px',
-      data: { clause: this.clause, clauseDialogRef: this.currentDialogRef }
+      data: { 
+        title: `Godkend klausul: ${this.clause.name}`, 
+        message: 'Er du sikker på at du vil gøre klausulen aktiv?', 
+        onConfirm: () => this.clauseService.approveClause(this.clause), 
+        onSuccess: () => this.currentDialogRef.close() 
+      }
     });
   }
 
@@ -91,42 +97,5 @@ export class ClauseDialog {
           this.saving = false;
         }
       });
-  }
-}
-
-@Component({
-  selector: 'approve-confirmation-dialog',
-  templateUrl: 'approve-confirmation-dialog.html',
-  imports: [MatDialogModule, MatButtonModule, MatProgressSpinner],
-})
-export class ApproveConfirmationDialog {
-  private currentDialogRef = inject(MatDialogRef<ApproveConfirmationDialog>);
-  private clauseService = inject(ClausesService);
-  private clauseDialogRef: MatDialogRef<ClauseDialog>;
-  clause: DslOutput;
-  saving = false;
-
-  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, clauseDialogRef: MatDialogRef<ClauseDialog> }) {
-    this.clause = data.clause;
-    this.clauseDialogRef = data.clauseDialogRef;
-  }
-
-  approve() {
-    this.saving = true;
-    this.clauseService.approveClause(this.clause)
-      .subscribe({
-        next: () => {
-          this.currentDialogRef.close();
-          this.clauseDialogRef.close();
-          this.saving = false;
-        },
-        error: (_) => {
-          this.saving = false;
-        }
-      });
-  }
-
-  cancel() {
-    this.currentDialogRef.close();
   }
 }
