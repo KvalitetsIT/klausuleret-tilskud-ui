@@ -25,6 +25,12 @@ export class ClausesService {
     return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 
+  updateClauseStatus(name: string, newStatus: ClauseStatusInput.StatusEnum): Observable<void> {
+    const response = this.api.updateClauseStatusV20250801(name, { status: newStatus });
+    const action = newStatus === ClauseStatusInput.StatusEnum.Active ? 'aktiveret' : 'inaktiveret';
+    return this.addSnackbar(response, `Klausul '${name}' blev ${action}`, `Opdatering af klausul status fejlede`);
+  }
+
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
     return response.pipe(
       tap({

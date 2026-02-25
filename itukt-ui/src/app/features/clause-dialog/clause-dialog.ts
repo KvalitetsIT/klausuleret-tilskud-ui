@@ -4,7 +4,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { ClauseStatus, DslOutput } from "@api/index";
+import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClausesService } from "src/app/services/clauses";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
@@ -77,6 +77,20 @@ export class ClauseDialog {
 
   draftAlreadyExists(): boolean | undefined {
     return this.draftClauses()?.some(c => c.name === this.clause.name);
+  }
+
+  updateStatus(newStatus: ClauseStatusInput.StatusEnum) {
+    this.saving = true;
+    this.clauseService.updateClauseStatus(this.clause.name, newStatus)
+      .subscribe({
+        next: () => {
+          this.currentDialogRef.close();
+          this.saving = false;
+        },
+        error: (_) => {
+          this.saving = false;
+        }
+      });
   }
 }
 

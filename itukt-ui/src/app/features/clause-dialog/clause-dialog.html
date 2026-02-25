@@ -9,7 +9,7 @@
   </mat-list>
 </mat-dialog-content>
 
-@if (status == "ACTIVE") {
+@if (status == "ACTIVE" || status == "INACTIVE") {
 <mat-dialog-actions>
   @if (editMode) {
   <button matButton (click)="cancelEditMode()" [disabled]="saving">Fortryd</button>
@@ -22,8 +22,11 @@
     }
   </button>
   } @else {
+  <button matButton (click)="status == 'ACTIVE' ? updateStatus('INACTIVE') : updateStatus('ACTIVE')" [disabled]="saving">
+    {{status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
+  </button>
   <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
-    <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()">Rediger</button>
+    <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()" cdkFocusInitial>Rediger</button>
   </span>
   }
 </mat-dialog-actions>
