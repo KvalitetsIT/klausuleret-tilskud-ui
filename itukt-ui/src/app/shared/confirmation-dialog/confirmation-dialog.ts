@@ -1,12 +1,7 @@
-import { ChangeDetectorRef, Component, inject, Inject, ViewChild } from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { Component, inject, Inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
-import { MatListModule } from "@angular/material/list";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
-import { ClauseDialogService } from "src/app/services/clause-dialog-service";
-import { MatTooltipModule } from "@angular/material/tooltip";
 import { Observable } from "rxjs";
 
 @Component({

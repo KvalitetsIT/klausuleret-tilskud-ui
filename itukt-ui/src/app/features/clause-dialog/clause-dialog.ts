@@ -1,16 +1,16 @@
 import { ChangeDetectorRef, Component, inject, Inject, ViewChild } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClausesService } from "src/app/services/clauses";
+import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { ConfirmationDialog } from "../confirmation-dialog/confirmation-dialog";
 
 @Component({
   selector: 'clause-dialog',
@@ -31,7 +31,7 @@ export class ClauseDialog {
   private clauseService = inject(ClausesService);
   private clauseDialogService = inject(ClauseDialogService);
   private readonly currentDialogRef = inject(MatDialogRef<ClauseDialog>);
-  private matDialog = inject(MatDialog);
+  private confirmationDialogService = inject(ConfirmationDialogService);
 
   draftClauses = toSignal<Array<DslOutput>>(this.clauseService.getClauses(ClauseStatus.Draft));
   clause: DslOutput;
@@ -70,32 +70,33 @@ export class ClauseDialog {
   }
 
   approve() {
-    this.matDialog.open(ConfirmationDialog, {
-      minWidth: '400px',
-      data: { 
-        title: `Godkend klausul: ${this.clause.name}`, 
-        message: 'Er du sikker på at du vil gøre klausulen aktiv?', 
-        onConfirm: () => this.clauseService.approveClause(this.clause), 
-        onSuccess: () => this.currentDialogRef.close() 
-      }
-    });
+    this.confirmationDialogService.open(
+      `Godkend klausul: ${this.clause.name}`, 
+      'Er du sikker på at du vil gøre klausulen aktiv?', 
+      () => this.clauseService.approveClause(this.clause),
+      () => this.currentDialogRef.close()
+    );
   }
 
   draftAlreadyExists(): boolean | undefined {
     return this.draftClauses()?.some(c => c.name === this.clause.name);
   }
 
-  updateStatus(newStatus: ClauseStatusInput.StatusEnum) {
-    this.saving = true;
-    this.clauseService.updateClauseStatus(this.clause.name, newStatus)
-      .subscribe({
-        next: () => {
-          this.currentDialogRef.close();
-          this.saving = false;
-        },
-        error: (_) => {
-          this.saving = false;
-        }
-      });
+  activate() {
+    this.confirmationDialogService.open(
+      `Aktivér klausul: ${this.clause.name}`, 
+      'Er du sikker på at du vil gøre klausulen aktiv?', 
+      () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Active),
+      () => this.currentDialogRef.close()
+    );
+  }
+
+  inactivate() {
+    this.confirmationDialogService.open(
+      `Inaktivér klausul: ${this.clause.name}`, 
+      'Er du sikker på at du vil gøre klausulen inaktiv?', 
+      () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Inactive),
+      () => this.currentDialogRef.close()
+    );
   }
 }

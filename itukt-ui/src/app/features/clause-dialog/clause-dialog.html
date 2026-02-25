@@ -22,7 +22,7 @@
     }
   </button>
   } @else {
-  <button matButton (click)="status == 'ACTIVE' ? updateStatus('INACTIVE') : updateStatus('ACTIVE')" [disabled]="saving">
+  <button matButton (click)="status == 'ACTIVE' ? inactivate() : activate()" [disabled]="saving">
     {{status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
   </button>
   <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
