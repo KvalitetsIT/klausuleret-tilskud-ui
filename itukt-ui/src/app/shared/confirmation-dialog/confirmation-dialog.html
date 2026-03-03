@@ -1,6 +1,13 @@
 <h2 mat-dialog-title>{{title}}</h2>
 <mat-dialog-content>
-  {{message}}
+  @if (isTemplate(content)) {
+    <ng-container 
+      [ngTemplateOutlet]="content" 
+      [ngTemplateOutletContext]="{ $implicit: data.context }">
+    </ng-container>
+  } @else {
+    {{ content }}
+  }
 </mat-dialog-content>
 
 
@@ -9,7 +16,7 @@
     Fortryd
   </button>
   <button matButton (click)="confirm()" [disabled]="saving" cdkFocusInitial>
-    Ja
+    {{confirmBtnTxt}}
     @if (saving) {
     <div class="button-spinner">
       <mat-spinner [diameter]="30"></mat-spinner>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Inject, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, Inject, TemplateRef, ViewChild } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
@@ -11,7 +11,8 @@ import { ClausesService } from "src/app/services/clauses";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
-
+import { MatCheckbox, MatCheckboxModule } from "@angular/material/checkbox";
+import { FormsModule } from "@angular/forms";
 @Component({
   selector: 'clause-dialog',
   templateUrl: 'clause-dialog.html',
@@ -22,11 +23,16 @@ import { ClauseReadItems } from "./content-items/read/clause-read-items";
     MatButtonModule,
     MatTooltipModule,
     ClauseReadItems,
-    ClauseEditItems
+    ClauseEditItems,
+    MatCheckbox,
+    MatCheckboxModule,
+    FormsModule
   ],
-})
+},
+)
 export class ClauseDialog {
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
+  
   private cdr = inject(ChangeDetectorRef);
   private clauseService = inject(ClausesService);
   private clauseDialogService = inject(ClauseDialogService);
@@ -38,6 +44,12 @@ export class ClauseDialog {
   status: ClauseStatus;
   editMode = false;
   saving = false;
+
+  @ViewChild('approveTemplate') approveTemplate!: TemplateRef<any>;
+  
+  context: any = {
+    resetSkippedValidations: false
+  };
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: ClauseStatus }) {
     this.clause = data.clause;
@@ -70,11 +82,16 @@ export class ClauseDialog {
   }
 
   approve() {
+    
+    this.context.resetSkippedValidations = false;
+
     this.confirmationDialogService.open(
-      `Godkend klausul: ${this.clause.name}`, 
-      'Er du sikker på at du vil gøre klausulen aktiv?', 
-      () => this.clauseService.approveClause(this.clause),
-      () => this.currentDialogRef.close()
+      `Godkend klausul: ${this.clause.name}`,
+      this.approveTemplate,
+      this.context,
+      () => this.clauseService.approveClause(this.clause, this.context.resetSkippedValidations),
+      () => this.currentDialogRef.close(),
+      "Godkend"
     );
   }
 
@@ -85,9 +102,11 @@ export class ClauseDialog {
   activate() {
     this.confirmationDialogService.open(
       `Aktivér klausul: ${this.clause.name}`, 
-      'Er du sikker på at du vil gøre klausulen aktiv?', 
+      'Er du sikker på at du vil gøre klausulen aktiv?',
+      null, 
       () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Active),
-      () => this.currentDialogRef.close()
+      () => this.currentDialogRef.close(),
+      "Ja"
     );
   }
 
@@ -95,8 +114,10 @@ export class ClauseDialog {
     this.confirmationDialogService.open(
       `Inaktivér klausul: ${this.clause.name}`, 
       'Er du sikker på at du vil gøre klausulen inaktiv?', 
+      null,
       () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Inactive),
-      () => this.currentDialogRef.close()
+      () => this.currentDialogRef.close(),
+      "Ja"
     );
   }
 }

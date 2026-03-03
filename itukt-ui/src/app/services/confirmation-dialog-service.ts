@@ -1,4 +1,4 @@
-import { Inject, inject, Injectable } from "@angular/core";
+import { inject, Injectable, TemplateRef } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs/internal/Observable";
 import { ConfirmationDialog } from "../shared/confirmation-dialog/confirmation-dialog";
@@ -7,10 +7,10 @@ import { ConfirmationDialog } from "../shared/confirmation-dialog/confirmation-d
 export class ConfirmationDialogService {
     private matDialog = inject(MatDialog);
 
-    open(title: string, message: string, onConfirm: () => Observable<void>, onSuccess: () => void) {
+    open(title: string, content: string | TemplateRef<any>, context: any, onConfirm: () => Observable<void>, onSuccess: () => void, confirmBtnTxt: string) {
         this.matDialog.open(ConfirmationDialog, {
             minWidth: '400px',
-            data: { title, message, onConfirm, onSuccess }
+            data: { title, content, context, onConfirm, onSuccess, confirmBtnTxt},
         });
     }
 }
