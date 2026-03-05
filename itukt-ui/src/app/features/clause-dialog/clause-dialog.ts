@@ -46,10 +46,7 @@ export class ClauseDialog {
   saving = false;
 
   @ViewChild('approveTemplate') approveTemplate!: TemplateRef<any>;
-  
-  context: any = {
-    resetSkippedValidations: false
-  };
+  resetSkippedValidations = false
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: ClauseStatus }) {
     this.clause = data.clause;
@@ -82,14 +79,11 @@ export class ClauseDialog {
   }
 
   approve() {
-    
-    this.context.resetSkippedValidations = false;
-
     this.confirmationDialogService.open(
       `Godkend klausul: ${this.clause.name}`,
       this.approveTemplate,
-      this.context,
-      () => this.clauseService.approveClause(this.clause, this.context.resetSkippedValidations),
+      this.resetSkippedValidations,
+      () => this.clauseService.approveClause(this.clause, this.resetSkippedValidations),
       () => this.currentDialogRef.close(),
       "Godkend"
     );

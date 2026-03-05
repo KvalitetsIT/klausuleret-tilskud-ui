@@ -196,6 +196,10 @@ paths:
       responses:
         '200':
           description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DslOutput'
         '404':
           $ref: '#/components/responses/404'
 

@@ -21,7 +21,7 @@ export class ClausesService {
   }
 
   approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void> {
-    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active,  resetSkippedValidations: resetSkippedValidations ?? false });
+    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active,  resetSkippedValidations: resetSkippedValidations});
     return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 

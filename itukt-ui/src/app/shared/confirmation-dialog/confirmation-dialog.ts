@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 @Component({
   selector: 'confirmation-dialog',
   templateUrl: 'confirmation-dialog.html',
+  styleUrl: "confirmation-dialog.css",
   imports: [MatDialogModule, MatButtonModule, MatProgressSpinner, NgTemplateOutlet],
 })
 export class ConfirmationDialog {
@@ -18,15 +19,20 @@ export class ConfirmationDialog {
   title: string;
   content: string | TemplateRef<any>;
   confirmBtnTxt: string;
-  protected readonly TemplateRef = TemplateRef;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { title: string, content: TemplateRef<any>, context: any, onConfirm: () => Observable<void>, onSuccess: () => void , confirmBtnTxt: string} ) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+    title: string,
+    content: string | TemplateRef<any>,
+    onConfirm: () => Observable<void>,
+    onSuccess: () => void,
+    confirmBtnTxt: string
+  }) {
     this.title = data.title;
     this.content = data.content;
     this.onConfirm = data.onConfirm;
     this.onSuccess = data.onSuccess;
-    this.confirmBtnTxt =  data.confirmBtnTxt
-}
+    this.confirmBtnTxt = data.confirmBtnTxt
+  }
 
   confirm() {
     this.saving = true;
@@ -47,9 +53,8 @@ export class ConfirmationDialog {
     this.currentDialogRef.close();
   }
 
-  // Helper function to narrow the type for the template
   isTemplate(value: any): value is TemplateRef<any> {
-    return value instanceof TemplateRef;
+    return value instanceof TemplateRef;;
   }
-  
+
 }
