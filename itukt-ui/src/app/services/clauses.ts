@@ -20,6 +20,11 @@ export class ClausesService {
     return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
   }
 
+  deleteClause(clause: DslOutput): Observable<void> {
+    const response = this.api._20250801clausesIdDelete(clause.uuid);
+    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejled")
+  }
+
   approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void> {
     const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active,  resetSkippedValidations: resetSkippedValidations});
     return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
