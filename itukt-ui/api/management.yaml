@@ -25,7 +25,7 @@ servers:
           - "8080"
         default: "8080"
 paths:
-  /2025/08/01/clauses/dsl:
+  /management/2025/08/01/clauses/dsl:
     post:
       operationId: createClauseFromDsl_v20250801
       tags:
@@ -65,7 +65,7 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses/dsl/{id}:
+  /management/2025/08/01/clauses/dsl/{id}:
     get:
       operationId: getClauseDslById_v20250801
       tags:
@@ -87,7 +87,7 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses/dsl/{name}/history:
+  /management/2025/08/01/clauses/dsl/{name}/history:
     get:
       operationId: getClauseHistory_v20250801
       tags:
@@ -107,7 +107,7 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses:
+  /management/2025/08/01/clauses:
     post:
       operationId: createClause_v20250801
       tags:
@@ -152,7 +152,7 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses/{id}:
+  /management/2025/08/01/clauses/{id}:
     get:
       operationId: getClauseById_v20250801
       tags:
@@ -174,7 +174,7 @@ paths:
         '400':
           $ref: '#/components/responses/400'
 
-  /2025/08/01/clauses/drafts/{id}/status:
+  /management/2025/08/01/clauses/drafts/{id}/status:
     put:
       operationId: updateDraftStatus_v20250801
       tags:
@@ -203,7 +203,7 @@ paths:
         '404':
           $ref: '#/components/responses/404'
 
-  /2025/08/01/clauses/{name}/status:
+  /management/2025/08/01/clauses/{name}/status:
     put:
       operationId: updateClauseStatus_v20250801
       tags:
