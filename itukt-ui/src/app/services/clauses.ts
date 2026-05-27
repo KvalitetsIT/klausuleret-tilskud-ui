@@ -21,7 +21,7 @@ export class ClausesService {
   }
 
   deleteClause(clause: DslOutput): Observable<void> {
-    const response = this.api._20250801clausesIdDelete(clause.uuid);
+    const response = this.api.deleteClauseV20250801(clause.uuid);
     return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede")
   }
 
