@@ -22,7 +22,7 @@ export class ClausesService {
 
   deleteClause(clause: DslOutput): Observable<void> {
     const response = this.api._20250801clausesIdDelete(clause.uuid);
-    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejled")
+    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede")
   }
 
   approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void> {
