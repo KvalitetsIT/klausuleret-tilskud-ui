@@ -1,8 +1,0 @@
-{
-  "input": "api/management.yaml",
-  "output": "api-client",
-  "useOperationId": true,
-  "services": true,
-  "serviceSuffix": "Service",
-  "promises": false
-}
