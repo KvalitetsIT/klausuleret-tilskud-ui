@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GatewayService } from '@gateway/api/api';
+import { User } from '@gateway/index';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -11,17 +12,17 @@ import { environment } from '../environments/environment';
 })
 export class App {
   public readonly title = signal('itukt-ui');
-  public readonly userAuthenticated = signal(false);
+  public readonly user = signal<User | undefined>(undefined);
 
   public constructor(gatewayService: GatewayService) {
 
     console.debug('App initialized');
     console.debug('Auth Gateway URL:', environment.authGatewayUrl);
 
-    gatewayService.authCheck().subscribe({
-      next: (_) => {
+    gatewayService.getUser().subscribe({
+      next: (userResp) => {
         console.debug('Successfully authenticated');
-        this.userAuthenticated.set(true);
+        this.user.set(userResp);
       },
       error: (err) => {
         console.debug('Error authenticating:', err);
