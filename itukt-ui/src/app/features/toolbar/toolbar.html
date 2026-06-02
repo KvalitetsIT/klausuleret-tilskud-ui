@@ -1,0 +1,15 @@
+<mat-toolbar>
+  <div id="app-toolbar">
+    <span>IT-understøttelse af klausuleret tilskud</span>
+    <div class="user-logout">
+      <div class="divider">
+        <div class="user-info">
+          <small class="user-text">{{ app.user()?.name }}</small>
+          <small class="user-text">{{ app.user()?.email }}</small>
+        </div>
+        <mat-divider [vertical]="true"></mat-divider>
+      </div>
+      <button mat-button (click)="logout()"><mat-icon fontIcon="logout"></mat-icon> Log ud</button>
+    </div>
+  </div>
+</mat-toolbar>

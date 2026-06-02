@@ -1,0 +1,29 @@
+.user-logout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.divider {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-text {
+  font-size: 0.7em;
+  color: rgba(0, 0, 0, 0.74);
+}
+
+#app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
