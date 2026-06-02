@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "paths": {
       "@api/*": ["./src/generated/management/*"],
+      "@gateway/*": ["./src/generated/gateway/*"]
     }
   },
   "include": [
