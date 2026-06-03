@@ -5,7 +5,8 @@
     "types": [],
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["./src/generated/*"]
+      "@api/*": ["./src/generated/management/*"],
+      "@gateway/*": ["./src/generated/gateway/*"]
     }
   },
   "include": [

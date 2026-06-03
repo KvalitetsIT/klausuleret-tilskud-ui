@@ -4,7 +4,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 
 import { environment } from '../environments/environment';
-import { Configuration } from '@api/configuration';
+import { Configuration as ManagementConfiguration } from '@api/configuration';
+import { Configuration as GatewayConfiguration } from '@gateway/configuration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,8 +16,12 @@ export const appConfig: ApplicationConfig = {
       // tilføj eventuelt withInterceptors(...) senere...
     ),
     {
-      provide: Configuration,
-      useFactory: () => new Configuration({ basePath: environment.authGatewayUrl + '/gateway/api', withCredentials: true }),
-    }
+      provide: ManagementConfiguration,
+      useFactory: () => new ManagementConfiguration({ basePath: environment.authGatewayUrl + '/gateway/api', withCredentials: true }),
+    },
+    {
+      provide: GatewayConfiguration,
+      useFactory: () => new GatewayConfiguration({ basePath: environment.authGatewayUrl, withCredentials: true }),
+    },
   ]
 };

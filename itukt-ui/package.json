@@ -10,7 +10,7 @@
     "start": "ng serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "generate-api": "rm -rf src/generated && npm install --save-dev @openapitools/openapi-generator-cli@2.13.2 && npx openapi-generator-cli generate -i api/management.yaml -g typescript-angular -o src/generated --additional-properties=typescriptThreePlus=true"
+    "generate-api": "sh ./generate-api.sh"
   },
   "prettier": {
     "overrides": [
