@@ -1,5 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import { MatTabsModule } from "@angular/material/tabs";
 import { ClauseStatus, DslOutput } from "@api/index";
 import { ClauseInfo } from "../clause-info/clause-info";
 
@@ -10,7 +11,8 @@ import { ClauseInfo } from "../clause-info/clause-info";
   imports: [
     ClauseInfo,
     MatDialogModule,
-  ],
+    MatTabsModule
+],
 },
 )
 export class ClauseDialog {

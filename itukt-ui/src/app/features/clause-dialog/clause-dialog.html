@@ -1,4 +1,11 @@
 <h2 mat-dialog-title>Klausul {{status == "DRAFT" ? "kladde" : ""}}</h2>
-<mat-dialog-content>
-	<clause-info [clause]="clause" [status]="status" />
+<mat-dialog-content class="clause-dialog-content">
+	<mat-tab-group [dynamicHeight]="true" animationDuration="0ms">
+		<mat-tab label="Detaljer">
+			<clause-info [clause]="clause" [status]="status" />
+		</mat-tab>
+		<mat-tab label="Historik">
+			<!-- <clause-history [history]="history" /> -->
+		</mat-tab>
+	</mat-tab-group>
 </mat-dialog-content>
