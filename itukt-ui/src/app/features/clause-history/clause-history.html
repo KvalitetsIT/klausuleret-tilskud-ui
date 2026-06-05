@@ -1,0 +1,30 @@
+@if (history() === undefined) {
+<mat-spinner [diameter]="30"></mat-spinner>
+} @else {
+<mat-accordion>
+    @for (item of history(); track item.uuid) {
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{ item.validFrom | date:'dd-MM-yyyy HH:mm' }}</mat-panel-title>
+            <mat-panel-description>
+                <code [innerHTML]="(item.dsl | dslHighlight)"></code>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="expanded-content">
+            <mat-list>
+                <mat-divider />
+                <mat-list-item>
+                    <div class="field">
+                        <div class="label">Fejlbesked</div>
+                        <div class="value">{{ item.error }}</div>
+                    </div>
+                </mat-list-item>
+                <mat-divider />
+            </mat-list>
+        </div>
+
+    </mat-expansion-panel>
+    }
+</mat-accordion>
+}

@@ -31,6 +31,10 @@ export class ClausesService {
     return this.addSnackbar(response, `Klausul '${name}' blev ${action}`, `Opdatering af klausul status fejlede`);
   }
 
+  getClauseHistory(name: string): Observable<Array<DslOutput>> {
+    return this.api.getClauseHistoryV20250801(name);
+  }
+
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
     return response.pipe(
       tap({

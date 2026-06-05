@@ -3,13 +3,16 @@ import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
 import { ClauseStatus, DslOutput } from "@api/index";
 import { ClauseInfo } from "../clause-info/clause-info";
+import { ClauseHistory } from "../clause-history/clause-history";
 
 @Component({
   standalone: true,
   selector: 'clause-dialog',
   templateUrl: 'clause-dialog.html',
+  styleUrls: ['clause-dialog.css'],
   imports: [
     ClauseInfo,
+    ClauseHistory,
     MatDialogModule,
     MatTabsModule
 ],
