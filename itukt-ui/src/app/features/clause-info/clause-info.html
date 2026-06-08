@@ -7,7 +7,7 @@
 </mat-list>
 
 <div class="action-buttons">
-  @if (status == "ACTIVE" || status == "INACTIVE") {
+  @if (clause.status == "ACTIVE" || clause.status == "INACTIVE") {
   @if (editMode) {
   <button matButton (click)="cancelEditMode()" [disabled]="saving">Fortryd</button>
   <button matButton (click)="save()" [disabled]="saving || editItems?.form?.invalid">
@@ -19,8 +19,8 @@
     }
   </button>
   } @else {
-  <button matButton (click)="status == 'ACTIVE' ? inactivate() : activate()" [disabled]="saving">
-    {{status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
+  <button matButton (click)="clause.status == 'ACTIVE' ? inactivate() : activate()" [disabled]="saving">
+    {{clause.status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
   </button>
   <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
     <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()" cdkFocusInitial>Rediger</button>
@@ -28,7 +28,7 @@
   }
   }
 
-  @if (status == "DRAFT") {
+  @if (clause.status == "DRAFT") {
   <button matButton (click)="approve()" [disabled]="saving">
     Godkend
     @if (saving) {

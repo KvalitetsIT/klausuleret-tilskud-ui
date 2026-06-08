@@ -1,15 +1,15 @@
-<h2 mat-dialog-title>Klausul {{status == "DRAFT" ? "kladde" : ""}}</h2>
+<h2 mat-dialog-title>Klausul {{clause.status == "DRAFT" ? "kladde" : ""}}</h2>
 <mat-dialog-content class="clause-dialog-content">
 
 
-	@if (status === 'DRAFT') {
-	<clause-info [clause]="clause" [status]="status" />
+	@if (clause.status === 'DRAFT') {
+	<clause-info [clause]="clause" />
 	} 
 	@else {
 	<mat-tab-group [dynamicHeight]="true" animationDuration="0ms">
 		<mat-tab label="Detaljer">
 			<div class="tab-content">
-				<clause-info [clause]="clause" [status]="status" />
+				<clause-info [clause]="clause" />
 			</div>
 		</mat-tab>
 		<mat-tab label="Historik">

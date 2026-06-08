@@ -35,7 +35,6 @@ import { ClauseReadItems } from "./content-items/read/clause-read-items";
 )
 export class ClauseInfo {
   @Input({ required: true }) clause!: DslOutput;
-  @Input({ required: true }) status!: ClauseStatus;
 
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
   
@@ -66,7 +65,7 @@ export class ClauseInfo {
         next: (clauseDraft) => {
           this.currentDialogRef.close();
           this.saving = false;
-          this.clauseDialogService.open(clauseDraft, ClauseStatus.Draft);
+          this.clauseDialogService.open(clauseDraft);
         },
         error: (_) => {
           this.saving = false;

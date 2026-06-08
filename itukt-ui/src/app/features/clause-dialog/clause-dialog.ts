@@ -1,9 +1,9 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
 import { MatTabsModule } from "@angular/material/tabs";
-import { ClauseStatus, DslOutput } from "@api/index";
-import { ClauseInfo } from "../clause-info/clause-info";
+import { DslOutput } from "@api/index";
 import { ClauseHistory } from "../clause-history/clause-history";
+import { ClauseInfo } from "../clause-info/clause-info";
 
 @Component({
   standalone: true,
@@ -20,10 +20,8 @@ import { ClauseHistory } from "../clause-history/clause-history";
 )
 export class ClauseDialog {
   clause: DslOutput;
-  status: ClauseStatus;
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput, status: ClauseStatus }) {
+  constructor(@Inject(MAT_DIALOG_DATA) data: { clause: DslOutput }) {
     this.clause = data.clause;
-    this.status = data.status;
   }
 }

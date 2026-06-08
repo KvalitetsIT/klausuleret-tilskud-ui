@@ -43,7 +43,7 @@ export class Clauses {
   }
 
   onRowClick(row: DslOutput): void {
-    this.clauseDialogService.open(row, this.status);
+    this.clauseDialogService.open(row);
   }
 
   getClauses() {
