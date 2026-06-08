@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DslOutput } from '@api/model/dslOutput';
 import { ClausesService } from 'src/app/services/clauses';
+import { StatusTranslatePipe } from 'src/app/shared/clause-status-pipe';
 import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 
 @Component({
@@ -13,7 +14,7 @@ import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 	selector: 'clause-history',
 	templateUrl: 'clause-history.html',
 	styleUrls: ['clause-history.css'],
-	imports: [MatExpansionModule, MatIconModule, DatePipe, DslHighlightPipe, MatProgressSpinner, MatListModule]
+	imports: [MatExpansionModule, MatIconModule, DatePipe, DslHighlightPipe, MatProgressSpinner, MatListModule, StatusTranslatePipe],
 })
 export class ClauseHistory {
 	@Input({ required: true }) name!: string;
