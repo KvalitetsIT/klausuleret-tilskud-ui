@@ -1,3 +1,7 @@
+@if (history() === undefined) {
+<mat-spinner [diameter]="30"></mat-spinner>
+} @else {
+
 <mat-list>
   @if (editMode) {
   <clause-edit-items [clause]="clause" />
@@ -39,11 +43,14 @@
   </button>
   }
 </div>
+}
 
 <ng-template #approveTemplate>
   <p>Er du sikker på at du vil gøre klausulen aktiv?</p>
+  @if ((history()?.length ?? 0) > 0) {
   <p>Bemærk, ved nulstilling af tilsidesættelser nedenfor bedes anvenderen igen tilsidesætte evt. valideringsfejl</p>
   <mat-checkbox [(ngModel)]="resetSkippedValidations">
     Nulstil tilsidesættelser
   </mat-checkbox>
+  }
 </ng-template>

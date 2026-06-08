@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild, inject } from "@angular/core";
+import { Component, Input, TemplateRef, ViewChild, inject, signal } from "@angular/core";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -49,6 +49,16 @@ export class ClauseInfo {
 
   @ViewChild('approveTemplate') approveTemplate!: TemplateRef<any>;
   resetSkippedValidations = false
+
+	history = signal<Array<DslOutput> | undefined>(undefined);
+
+	ngOnInit(): void {
+		this.clauseService.getClauseHistory(this.clause.name)
+			.subscribe({
+				next: (history) => this.history.set(history),
+				error: () => this.history.set([])
+			});
+	}
 
   enterEditMode() {
     this.editMode = true;
