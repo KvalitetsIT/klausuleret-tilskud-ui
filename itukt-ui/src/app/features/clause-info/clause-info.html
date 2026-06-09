@@ -1,0 +1,49 @@
+<mat-list>
+  @if (editMode) {
+  <clause-edit-items [clause]="clause" />
+  } @else {
+  <clause-read-items [clause]="clause" />
+  }
+</mat-list>
+
+<div class="action-buttons">
+  @if (clause.status == "ACTIVE" || clause.status == "INACTIVE") {
+  @if (editMode) {
+  <button matButton (click)="cancelEditMode()" [disabled]="saving">Fortryd</button>
+  <button matButton (click)="save()" [disabled]="saving || editItems?.form?.invalid">
+    Opret kladde
+    @if (saving) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+  } @else {
+  <button matButton (click)="clause.status == 'ACTIVE' ? inactivate() : activate()" [disabled]="saving">
+    {{clause.status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
+  </button>
+  <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
+    <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()" cdkFocusInitial>Rediger</button>
+  </span>
+  }
+  }
+
+  @if (clause.status == "DRAFT") {
+  <button matButton (click)="approve()" [disabled]="saving">
+    Godkend
+    @if (saving) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+  }
+</div>
+
+<ng-template #approveTemplate>
+  <p>Er du sikker på at du vil gøre klausulen aktiv?</p>
+  <p>Bemærk, ved nulstilling af tilsidesættelser nedenfor bedes anvenderen igen tilsidesætte evt. valideringsfejl</p>
+  <mat-checkbox [(ngModel)]="resetSkippedValidations">
+    Nulstil tilsidesættelser
+  </mat-checkbox>
+</ng-template>
