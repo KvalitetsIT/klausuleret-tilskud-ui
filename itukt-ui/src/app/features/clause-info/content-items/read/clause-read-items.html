@@ -20,12 +20,10 @@
         <div class="value">{{ clause.error }}</div>
     </div>
 </mat-list-item>
-@if (clause.validFrom) {
 <mat-divider />
 <mat-list-item>
     <div class="field">
-        <div class="label">Gyldig fra</div>
-        <div class="value">{{ clause.validFrom | date:'dd-MM-yyyy HH:mm' }}</div>
+        <div class="label">{{clause.status == 'DRAFT' ? 'Oprettet' : 'Gyldig fra'}}</div>
+        <div class="value">{{ clause.createdTime | date:'dd-MM-yyyy HH:mm' }}</div>
     </div>
 </mat-list-item>
-}
