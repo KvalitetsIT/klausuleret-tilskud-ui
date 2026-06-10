@@ -45,9 +45,9 @@ export class ClauseInfo {
 
   draftClauses = toSignal<Array<DslOutput>>(this.clauseService.getClauses(ClauseStatus.Draft));
   editMode = false;
-  saving = false;
+  loading = false;
 
-  @ViewChild('approveTemplate') approveTemplate!: TemplateRef<any>;
+  @ViewChild('approveTemplate') confirmationTemplate!: TemplateRef<any>;
   resetSkippedValidations = false
 
   enterEditMode() {
@@ -58,25 +58,36 @@ export class ClauseInfo {
     this.editMode = false;
   }
 
+  confirmDeletion() {
+    this.confirmationDialogService.open(
+      `Slet klausul: ${this.clause.name}`,
+      'Er du sikker på at du ønsker at slette klausulen?',
+      this.confirmationTemplate,
+      () => this.clauseService.deleteClause(this.clause),
+      () => this.currentDialogRef.close(),
+      "Ja"
+    );
+  }
+
   save() {
-    this.saving = true;
+    this.loading = true;
     this.editItems?.save()
       .subscribe({
         next: (clauseDraft) => {
           this.currentDialogRef.close();
-          this.saving = false;
+          this.loading = false;
           this.clauseDialogService.open(clauseDraft);
         },
         error: (_) => {
-          this.saving = false;
+          this.loading = false;
         }
       });
   }
 
-  approve() {
+  confirmApproval() {
     this.confirmationDialogService.open(
       `Godkend klausul: ${this.clause.name}`,
-      this.approveTemplate,
+      this.confirmationTemplate,
       this.resetSkippedValidations,
       () => this.clauseService.approveClause(this.clause, this.resetSkippedValidations),
       () => this.currentDialogRef.close(),
