@@ -9,17 +9,17 @@
 <div class="action-buttons">
   @if (clause.status == "ACTIVE" || clause.status == "INACTIVE") {
   @if (editMode) {
-  <button matButton (click)="cancelEditMode()" [disabled]="saving">Fortryd</button>
-  <button matButton (click)="save()" [disabled]="saving || editItems?.form?.invalid">
+  <button matButton (click)="cancelEditMode()" [disabled]="loading">Fortryd</button>
+  <button matButton (click)="save()" [disabled]="loading || editItems?.form?.invalid">
     Opret kladde
-    @if (saving) {
+    @if (loading) {
     <div class="spinner">
       <mat-spinner [diameter]="30"></mat-spinner>
     </div>
     }
   </button>
   } @else {
-  <button matButton (click)="clause.status == 'ACTIVE' ? inactivate() : activate()" [disabled]="saving">
+  <button matButton (click)="clause.status == 'ACTIVE' ? inactivate() : activate()" [disabled]="loading">
     {{clause.status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
   </button>
   <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
@@ -29,9 +29,17 @@
   }
 
   @if (clause.status == "DRAFT") {
-  <button matButton (click)="approve()" [disabled]="saving">
+  <button matButton (click)="confirmDeletion()" [disabled]="loading">
+    Slet
+    @if (loading) {
+    <div class="spinner">
+      <mat-spinner [diameter]="30"></mat-spinner>
+    </div>
+    }
+  </button>
+  <button matButton (click)="confirmApproval()" [disabled]="loading">
     Godkend
-    @if (saving) {
+    @if (loading) {
     <div class="spinner">
       <mat-spinner [diameter]="30"></mat-spinner>
     </div>
