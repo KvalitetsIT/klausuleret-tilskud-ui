@@ -5,7 +5,7 @@
     @for (item of history(); track item.uuid) {
     <mat-expansion-panel>
         <mat-expansion-panel-header>
-            <mat-panel-title>{{ item.validFrom | date:'dd-MM-yyyy HH:mm' }}</mat-panel-title>
+            <mat-panel-title>{{ item.createdTime | date:'dd-MM-yyyy HH:mm' }}</mat-panel-title>
             <mat-panel-description>
                 <div class="value">{{ item.status | statusTranslate }}</div>
             </mat-panel-description>
@@ -25,6 +25,17 @@
                     <div class="field">
                         <div class="label">Fejlbesked</div>
                         <div class="value">{{ item.error }}</div>
+                    </div>
+                </mat-list-item>
+                <mat-divider />
+                <mat-list-item>
+                    <div class="field">
+                        <div class="label">
+                            {{ item.status == 'ACTIVE' ? 'Aktiveret af'
+                            : item.status == 'INACTIVE' ? 'Inaktiveret af'
+                            : 'Oprettet af' }}
+                        </div>
+                        <div class="value">{{ item.createdBy }}</div>
                     </div>
                 </mat-list-item>
                 <mat-divider />
