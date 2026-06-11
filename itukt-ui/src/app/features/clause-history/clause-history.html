@@ -28,6 +28,17 @@
                     </div>
                 </mat-list-item>
                 <mat-divider />
+                <mat-list-item>
+                    <div class="field">
+                        <div class="label">
+                            {{ item.status == 'ACTIVE' ? 'Aktiveret af'
+                            : item.status == 'INACTIVE' ? 'Inaktiveret af'
+                            : 'Oprettet af' }}
+                        </div>
+                        <div class="value">{{ item.createdBy }}</div>
+                    </div>
+                </mat-list-item>
+                <mat-divider />
             </mat-list>
         </div>
 

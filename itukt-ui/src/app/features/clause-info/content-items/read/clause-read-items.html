@@ -23,7 +23,22 @@
 <mat-divider />
 <mat-list-item>
     <div class="field">
-        <div class="label">{{clause.status == 'DRAFT' ? 'Oprettet' : 'Gyldig fra'}}</div>
+        <div class="label">
+            {{ clause.status == 'ACTIVE' ? 'Aktiv fra'
+            : clause.status == 'INACTIVE' ? 'Inaktiv fra'
+            : 'Oprettet'}}
+        </div>
         <div class="value">{{ clause.createdTime | date:'dd-MM-yyyy HH:mm' }}</div>
+    </div>
+</mat-list-item>
+<mat-divider />
+<mat-list-item>
+    <div class="field">
+        <div class="label">
+            {{ clause.status == 'ACTIVE' ? 'Aktiveret af'
+            : clause.status == 'INACTIVE' ? 'Inaktiveret af'
+            : 'Oprettet af' }}
+        </div>
+        <div class="value">{{ clause.createdBy }}</div>
     </div>
 </mat-list-item>
