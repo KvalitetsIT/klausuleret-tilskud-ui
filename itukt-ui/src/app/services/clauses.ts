@@ -11,50 +11,38 @@ export class ClausesService {
   private api = inject(ManagementService);
   private snackbar = inject(MatSnackBar);
 
-
-  private getClausesCache: Record<string, { data$: Observable<Array<DslOutput>>, refresh: () => void }> = {};
+  private cache: Record<string, Record<string, { data$: Observable<Array<DslOutput>>, refresh: () => void }>> = {};
 
 
   getClauses(status: ClauseStatus): Observable<Array<DslOutput>> {
-    const entry = this.getClausesCache[status] ??= this.createRefreshableStream(() => this.api.getAllClausesDslV20250801(status));
+    const getClausesCache = this.cache["getClauses"] ??= {};
+    const entry = getClausesCache[status] ??= this.createRefreshableStream(() => this.api.getAllClausesDslV20250801(status));
     return entry.data$;
   }
 
   createClause(dslInput: DslInput): Observable<DslOutput> {
-    const response = this.api.createClauseFromDslV20250801(dslInput).pipe(
-      tap(() => {
-        this.clearCaches();
-      })
-    );
-    return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
+    const response = this.api.createClauseFromDslV20250801(dslInput);
+    return this.withCacheClear(
+      this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede"));
   }
 
   deleteClause(clause: DslOutput): Observable<void> {
-    const response = this.api.deleteClauseV20250801(clause.uuid).pipe(
-      tap(() => {
-        this.clearCaches();
-      })
-    );
-    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede");
+    const response = this.api.deleteClauseV20250801(clause.uuid);
+    return this.withCacheClear(
+      this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede"));
   }
 
   approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void> {
-    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active, resetSkippedValidations: resetSkippedValidations }).pipe(
-      tap(() => {
-        this.clearCaches();
-      })
-    );
-    return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
+    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active, resetSkippedValidations: resetSkippedValidations });
+    return this.withCacheClear(
+      this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede"));
   }
 
   updateClauseStatus(name: string, newStatus: ClauseStatusInput.StatusEnum): Observable<void> {
-    const response = this.api.updateClauseStatusV20250801(name, { status: newStatus }).pipe(
-      tap(() => {
-        this.clearCaches();
-      })
-    );
+    const response = this.api.updateClauseStatusV20250801(name, { status: newStatus });
     const action = newStatus === ClauseStatusInput.StatusEnum.Active ? 'aktiveret' : 'inaktiveret';
-    return this.addSnackbar(response, `Klausul '${name}' blev ${action}`, `Opdatering af klausul status fejlede`);
+    return this.withCacheClear(
+      this.addSnackbar(response, `Klausul '${name}' blev ${action}`, `Opdatering af klausul status fejlede`));
   }
 
   getClauseHistory(name: string): Observable<Array<DslOutput>> {
@@ -70,6 +58,14 @@ export class ClausesService {
     );
   }
 
+  withCacheClear(response: Observable<any>): Observable<any> {
+    return response.pipe(
+      tap(() => {
+        this.clearCaches();
+      })
+    );
+  }
+
   openSnackbar(message: string): void {
     this.snackbar.open(message, 'Close', {
       duration: 5000,
@@ -78,19 +74,19 @@ export class ClausesService {
   }
 
   clearCaches(): void {
-    Object.values(this.getClausesCache).forEach(value => value.refresh());
+    Object.values(this.cache).forEach(innerCache => Object.values(innerCache).forEach(entry => entry.refresh()));
   }
 
   createRefreshableStream<T>(fetchFn: () => Observable<T>) {
     const refresher$ = new BehaviorSubject<void>(undefined);
 
-    const stream$ = refresher$.pipe(
+    const data$ = refresher$.pipe(
       switchMap(() => fetchFn()),
       shareReplay(1)
     );
 
     return {
-      data$: stream$,
+      data$: data$,
       refresh: () => refresher$.next()
     };
   }
