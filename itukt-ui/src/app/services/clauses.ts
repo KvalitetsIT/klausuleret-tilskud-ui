@@ -46,8 +46,11 @@ export class ClausesService {
   }
 
   getClauseHistory(name: string): Observable<Array<DslOutput>> {
-    return this.api.getClauseHistoryV20250801(name);
+    const getClauseHistoryCache = this.cache["getClauseHistory"] ??= {};
+    const entry = getClauseHistoryCache[name] ??= this.createRefreshableStream(() => this.api.getClauseHistoryV20250801(name));
+    return entry.data$;
   }
+
 
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
     return response.pipe(
