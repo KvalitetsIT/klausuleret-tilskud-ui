@@ -1,6 +1,5 @@
 import { Component, inject, Input, signal, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ClausesService } from '../../services/clauses';
 import { DslHighlightPipe } from '../../shared/dsl-highlight-pipe';
 
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ClauseStatus } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { ClauseDialogService } from 'src/app/services/clause-dialog-service';
+import { ClauseService } from 'src/app/services/clause-service';
 
 @Component({
   selector: 'app-clauses',
@@ -20,7 +20,7 @@ import { ClauseDialogService } from 'src/app/services/clause-dialog-service';
 export class Clauses {
   @Input() status: ClauseStatus = ClauseStatus.Active;
 
-  private service = inject(ClausesService);
+  private service = inject(ClauseService);
   private clauseDialogService = inject(ClauseDialogService);
 
   activeClauses = toSignal<Array<DslOutput>>(

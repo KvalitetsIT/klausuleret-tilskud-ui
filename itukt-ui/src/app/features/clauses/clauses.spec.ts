@@ -6,8 +6,8 @@ import { By } from '@angular/platform-browser';
 
 // Komponent-halløj
 import { Clauses } from './clauses';
-import { ClausesService } from '../../services/clauses';
 import { DslOutput } from '@api/models/dsl-output';
+import { ClauseService } from '../../services/clause-service';
 
 // Mock Management service
 class MockClausesService {
@@ -23,12 +23,12 @@ describe('Clauses', () => {
     await TestBed.configureTestingModule({
       imports: [Clauses], // standalone component
       providers: [
-        { provide: ClausesService, useClass: MockClausesService },
+        { provide: ClauseService, useClass: MockClausesService },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Clauses);
-    service = TestBed.inject(ClausesService) as unknown as MockClausesService;
+    service = TestBed.inject(ClauseService) as unknown as MockClausesService;
     fixture.detectChanges();
   });
 

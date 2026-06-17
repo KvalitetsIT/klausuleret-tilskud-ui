@@ -5,7 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { DslOutput } from '@api/index';
 import { Observable } from 'rxjs';
-import { ClausesService } from 'src/app/services/clauses';
+import { ClauseService } from 'src/app/services/clause-service';
 
 @Component({
     selector: 'clause-edit-items',
@@ -22,7 +22,7 @@ import { ClausesService } from 'src/app/services/clauses';
 export class ClauseEditItems {
     @Input({ required: true }) clause!: DslOutput;
 
-    private service = inject(ClausesService);
+    private service = inject(ClauseService);
     private fb = inject(FormBuilder);
     form!: FormGroup;
 

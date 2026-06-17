@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DslOutput } from '@api/model/dslOutput';
-import { ClausesService } from 'src/app/services/clauses';
+import { ClauseService } from 'src/app/services/clause-service';
 import { StatusTranslatePipe } from 'src/app/shared/clause-status-pipe';
 import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 
@@ -19,7 +19,7 @@ import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 export class ClauseHistory {
 	@Input({ required: true }) name!: string;
 
-	private clauseService = inject(ClausesService);
+	private clauseService = inject(ClauseService);
 
 	history = signal<Array<DslOutput> | undefined>(undefined);
 
