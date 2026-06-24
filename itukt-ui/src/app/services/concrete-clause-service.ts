@@ -3,7 +3,7 @@ import { Observable, tap } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagementService } from '@api/api/management.service';
-import { ClauseStatus, ClauseStatusInput, DraftClauseStatusInput, DslInput } from '@api/index';
+import { ClauseStatus, ClauseStatusInput, DetailedError, DraftClauseStatusInput, DslInput } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { ClauseService } from './clause-service';
 
@@ -47,7 +47,7 @@ export class ConcreteClauseService implements ClauseService {
     return response.pipe(
       tap({
         next: () => this.openSnackbar(successMessage),
-        error: (err) => this.openSnackbar(errorMessage + '\n' + err.error.message)
+        error: (err) => this.openSnackbar(errorMessage + '\n' + ((err.error as DetailedError)?.detailed_error ?? 'Ukendt fejl'))
       })
     );
   }
