@@ -7,7 +7,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
-import { ClausesService } from "src/app/services/clauses";
+import { ClauseService } from "src/app/services/clause-service";
 import { ClauseValidators } from "src/app/shared/clause-validators";
 
 @Component({
@@ -28,7 +28,7 @@ import { ClauseValidators } from "src/app/shared/clause-validators";
     ],
 })
 export class CreateClauseDialog {
-    private service = inject(ClausesService);
+    private service = inject(ClauseService);
     private clauseValidators = inject(ClauseValidators);
     private fb = inject(FormBuilder)
     private clauseDialogService = inject(ClauseDialogService);

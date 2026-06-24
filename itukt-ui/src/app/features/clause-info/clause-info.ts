@@ -9,11 +9,11 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
-import { ClausesService } from "src/app/services/clauses";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { ClauseDialog } from "../clause-dialog/clause-dialog";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
+import { ClauseService } from "src/app/services/clause-service";
 
 @Component({
   standalone: true,
@@ -38,7 +38,7 @@ export class ClauseInfo {
 
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
   
-  private clauseService = inject(ClausesService);
+  private clauseService = inject(ClauseService);
   private clauseDialogService = inject(ClauseDialogService);
   private readonly currentDialogRef = inject(MatDialogRef<ClauseDialog>);
   private confirmationDialogService = inject(ConfirmationDialogService);

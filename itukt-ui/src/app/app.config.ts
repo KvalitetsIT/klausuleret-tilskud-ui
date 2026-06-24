@@ -6,6 +6,8 @@ import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { Configuration as ManagementConfiguration } from '@api/configuration';
 import { Configuration as GatewayConfiguration } from '@gateway/configuration';
+import { ClauseService } from './services/clause-service';
+import { CachedClauseService } from './services/cached-clause-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +24,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: GatewayConfiguration,
       useFactory: () => new GatewayConfiguration({ basePath: environment.authGatewayUrl, withCredentials: true }),
+    },
+    {
+      provide: ClauseService,
+      useExisting: CachedClauseService,
     },
   ]
 };

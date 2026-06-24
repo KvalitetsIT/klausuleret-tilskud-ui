@@ -1,15 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagementService } from '@api/api/management.service';
 import { ClauseStatus, ClauseStatusInput, DraftClauseStatusInput, DslInput } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClauseService } from './clause-service';
 
 @Injectable({ providedIn: 'root' })
-export class ClausesService {
+export class ConcreteClauseService implements ClauseService {
   private api = inject(ManagementService);
   private snackbar = inject(MatSnackBar);
+
 
   getClauses(status: ClauseStatus): Observable<Array<DslOutput>> {
     return this.api.getAllClausesDslV20250801(status);
@@ -22,11 +24,11 @@ export class ClausesService {
 
   deleteClause(clause: DslOutput): Observable<void> {
     const response = this.api.deleteClauseV20250801(clause.uuid);
-    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede")
+    return this.addSnackbar(response, "Klausul blev slettet", "Sletning af klausul fejlede");
   }
 
   approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void> {
-    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active,  resetSkippedValidations: resetSkippedValidations});
+    const response = this.api.updateDraftStatusV20250801(clause.uuid, { status: DraftClauseStatusInput.StatusEnum.Active, resetSkippedValidations: resetSkippedValidations });
     return this.addSnackbar(response, `Klausul godkendt. '${clause.name}' er nu aktiv`, "Klausul godkendelse fejlede");
   }
 
@@ -39,6 +41,7 @@ export class ClausesService {
   getClauseHistory(name: string): Observable<Array<DslOutput>> {
     return this.api.getClauseHistoryV20250801(name);
   }
+
 
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
     return response.pipe(
