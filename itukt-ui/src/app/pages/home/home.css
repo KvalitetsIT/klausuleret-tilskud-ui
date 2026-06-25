@@ -36,3 +36,12 @@
   align-items: center;
   width: 100%;
 }
+
+.no-access {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
