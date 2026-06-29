@@ -1,6 +1,16 @@
 <div class="content">
-  @if (app.user()) {
   <app-toolbar />
+
+  @if (app.userAuthorized()) {
   <app-clause-tabs />
+  } 
+  @else if(app.userAuthorized() == undefined) {
+  <mat-spinner diameter="50"></mat-spinner>
+  } 
+  @else {
+    <div class="no-access">
+      <mat-icon fontIcon="error"></mat-icon>
+      <p>Denne bruger har ikke adgang</p>
+    </div>
   }
 </div>
