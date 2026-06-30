@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagementService } from '@api/api/management.service';
@@ -40,6 +40,12 @@ export class ConcreteClauseService implements ClauseService {
 
   getClauseHistory(name: string): Observable<Array<DslOutput>> {
     return this.api.getClauseHistoryV20250801(name);
+  }
+
+  getClauseDrugsCount(name: string): Observable<number> {
+    return this.api.getClauseDrugCountV20250801(name).pipe(
+      map(response => response.drugCount)
+    );
   }
 
 

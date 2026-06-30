@@ -7,12 +7,10 @@ import { ConcreteClauseService } from "./concrete-clause-service";
 @Injectable({ providedIn: 'root' })
 export class CachedClauseService implements ClauseService {
     private concreteClauseService = inject(ConcreteClauseService);
-    private cache: Record<string, Record<string, { data$: Observable<Array<DslOutput>>, refresh: () => void }>> = {};
+    private cache: Record<string, Record<string, { data$: Observable<any>, refresh: () => void }>> = {};
 
     getClauses(status: ClauseStatus): Observable<Array<DslOutput>> {
-        const getClausesCache = this.cache["getClauses"] ??= {};
-        const entry = getClausesCache[status] ??= this.createRefreshableStream(() => this.concreteClauseService.getClauses(status));
-        return entry.data$;
+        return this.getWithCache<Array<DslOutput>>("getClauses", status, () => this.concreteClauseService.getClauses(status));
     }
 
     createClause(dslInput: DslInput): Observable<DslOutput> {
@@ -32,8 +30,17 @@ export class CachedClauseService implements ClauseService {
     }
 
     getClauseHistory(name: string): Observable<Array<DslOutput>> {
-        const getClauseHistoryCache = this.cache["getClauseHistory"] ??= {};
-        const entry = getClauseHistoryCache[name] ??= this.createRefreshableStream(() => this.concreteClauseService.getClauseHistory(name));
+        return this.getWithCache<Array<DslOutput>>("getClauseHistory", name, () => this.concreteClauseService.getClauseHistory(name));
+    }
+
+    getClauseDrugsCount(name: string): Observable<number> {
+        return this.getWithCache<number>("getClauseDrugsCount", name, () => this.concreteClauseService.getClauseDrugsCount(name));
+    }
+
+
+    private getWithCache<T>(methodName: string , key: string, fetchFn: () => Observable<T>): Observable<T> {
+        const methodCache = this.cache[methodName] ??= {};
+        const entry = methodCache[key] ??= this.createRefreshableStream(fetchFn);
         return entry.data$;
     }
 

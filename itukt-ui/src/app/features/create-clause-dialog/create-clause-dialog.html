@@ -3,7 +3,10 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Klausulkode</mat-label>
-      <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+      <div class="name-field">
+        <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1" (blur)="onNameBlur()"></textarea>
+        <drugs-count-chip [clauseName]="name" />
+      </div>
       @if (form.get('name')?.hasError('required')) {
       <mat-error>
         Påkrævet
