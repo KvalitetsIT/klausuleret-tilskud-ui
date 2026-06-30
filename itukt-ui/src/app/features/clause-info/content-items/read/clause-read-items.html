@@ -1,7 +1,10 @@
 <mat-list-item>
     <div class="field">
         <div class="label">Kode</div>
-        <div class="value">{{ clause.name }}</div>
+        <div class="value">
+            {{ clause.name }}
+            <drugs-count-chip [clauseName]="clause.name" />
+        </div>
     </div>
 </mat-list-item>
 <mat-divider />
