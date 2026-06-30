@@ -8,6 +8,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClauseService } from "src/app/services/clause-service";
+import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
 import { ClauseValidators } from "src/app/shared/clause-validators";
 
 @Component({
@@ -25,6 +26,7 @@ import { ClauseValidators } from "src/app/shared/clause-validators";
         CdkTextareaAutosize,
         MatProgressSpinner,
         ReactiveFormsModule,
+        DrugsCountChip,
     ],
 })
 export class CreateClauseDialog {
@@ -35,6 +37,7 @@ export class CreateClauseDialog {
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
     loading = false;
+    name = '';
 
     form = this.fb.group({
         name: ['',
@@ -49,6 +52,10 @@ export class CreateClauseDialog {
 
     onNoClick(): void {
         this.dialogRef.close();
+    }
+
+    onNameBlur(): void {
+        this.name = this.form.get('name')?.value ?? '';
     }
 
     create() {
