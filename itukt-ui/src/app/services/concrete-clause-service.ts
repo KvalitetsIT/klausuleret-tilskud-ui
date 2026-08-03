@@ -3,7 +3,7 @@ import { Observable, tap } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagementService } from '@api/api/management.service';
-import { ClauseStatus, ClauseStatusInput, DetailedError, DraftClauseStatusInput, DslInput } from '@api/index';
+import { ClauseStatus, ClauseStatusInput, DetailedError, DraftClauseStatusInput, DslInput, DslUpdateInput } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { ClauseService } from './clause-service';
 
@@ -40,6 +40,11 @@ export class ConcreteClauseService implements ClauseService {
 
   getClauseHistory(name: string): Observable<Array<DslOutput>> {
     return this.api.getClauseHistoryV20250801(name);
+  }
+
+  updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
+    const response = this.api.updateDraftV20250801(name, dslInput);
+    return this.addSnackbar(response, "Klausul kladde blev opdateret", "Opdatering af klausul kladde fejlede");
   }
 
 

@@ -26,7 +26,7 @@
         <div class="label">
             {{ clause.status == 'ACTIVE' ? 'Aktiv fra'
             : clause.status == 'INACTIVE' ? 'Inaktiv fra'
-            : 'Oprettet'}}
+            : 'Senest ændret'}}
         </div>
         <div class="value">{{ clause.createdTime | date:'dd-MM-yyyy HH:mm' }}</div>
     </div>
@@ -37,7 +37,7 @@
         <div class="label">
             {{ clause.status == 'ACTIVE' ? 'Aktiveret af'
             : clause.status == 'INACTIVE' ? 'Inaktiveret af'
-            : 'Oprettet af' }}
+            : 'Ændret af' }}
         </div>
         <div class="value">{{ clause.createdBy }}</div>
     </div>
