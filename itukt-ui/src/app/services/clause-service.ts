@@ -9,4 +9,5 @@ export abstract class ClauseService {
     abstract updateClauseStatus(name: string, newStatus: ClauseStatusInput.StatusEnum): Observable<void>;
     abstract getClauseHistory(name: string): Observable<Array<DslOutput>>
     abstract updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput>;
+    abstract getClauseDrugsCount(name: string): Observable<number>;
 } 

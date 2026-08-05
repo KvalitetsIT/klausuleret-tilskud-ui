@@ -7,12 +7,10 @@ import { ConcreteClauseService } from "./concrete-clause-service";
 @Injectable({ providedIn: 'root' })
 export class CachedClauseService implements ClauseService {
     private concreteClauseService = inject(ConcreteClauseService);
-    private cache: Record<string, Record<string, { data$: Observable<Array<DslOutput>>, refresh: () => void }>> = {};
+    private cache: Cache = new Cache();
 
     getClauses(status: ClauseStatus): Observable<Array<DslOutput>> {
-        const getClausesCache = this.cache["getClauses"] ??= {};
-        const entry = getClausesCache[status] ??= this.createRefreshableStream(() => this.concreteClauseService.getClauses(status));
-        return entry.data$;
+        return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauses(status), "getClauses", status);
     }
 
     createClause(dslInput: DslInput): Observable<DslOutput> {
@@ -32,26 +30,38 @@ export class CachedClauseService implements ClauseService {
     }
 
     getClauseHistory(name: string): Observable<Array<DslOutput>> {
-        const getClauseHistoryCache = this.cache["getClauseHistory"] ??= {};
-        const entry = getClauseHistoryCache[name] ??= this.createRefreshableStream(() => this.concreteClauseService.getClauseHistory(name));
-        return entry.data$;
+        return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauseHistory(name), "getClauseHistory", name);
+    }
+
+    getClauseDrugsCount(name: string): Observable<number> {
+        return this.cache.get<number>(() => this.concreteClauseService.getClauseDrugsCount(name), "getClauseDrugsCount", name);
     }
 
     updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
         return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput));
     }
 
-
     private withCacheClear(response: Observable<any>): Observable<any> {
         return response.pipe(
             tap(() => {
-                this.clearCaches();
+                this.cache.clear();
             })
         );
     }
+}
 
-    private clearCaches(): void {
-        Object.values(this.cache).forEach(innerCache => Object.values(innerCache).forEach(entry => entry.refresh()));
+class Cache {
+    
+    private cache: Record<string, { data$: Observable<any>, refresh: () => void }> = {};
+
+    get<T>(fetchFn: () => Observable<T>, ...keys: string[]): Observable<T> {
+        const key = keys.join('|');
+        const entry = this.cache[key] ??= this.createRefreshableStream(fetchFn);
+        return entry.data$;
+    }
+
+    clear(): void {
+        Object.values(this.cache).forEach(entry => entry.refresh());
     }
 
     private createRefreshableStream<T>(fetchFn: () => Observable<T>) {
