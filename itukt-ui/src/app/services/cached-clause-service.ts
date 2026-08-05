@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { ClauseService } from "./clause-service";
-import { ClauseStatus, DslOutput, DslInput, ClauseStatusInput } from "@api/index";
+import { ClauseStatus, DslOutput, DslInput, ClauseStatusInput, DslUpdateInput } from "@api/index";
 import { BehaviorSubject, Observable, shareReplay, switchMap, tap } from "rxjs";
 import { ConcreteClauseService } from "./concrete-clause-service";
 
@@ -35,6 +35,10 @@ export class CachedClauseService implements ClauseService {
         const getClauseHistoryCache = this.cache["getClauseHistory"] ??= {};
         const entry = getClauseHistoryCache[name] ??= this.createRefreshableStream(() => this.concreteClauseService.getClauseHistory(name));
         return entry.data$;
+    }
+
+    updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
+        return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput));
     }
 
 

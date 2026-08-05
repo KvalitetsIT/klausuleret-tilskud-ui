@@ -35,7 +35,9 @@ export class ClauseEditItems {
 
     save(): Observable<DslOutput> {
         const { dsl, error } = this.form.value;
-        return this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' })
+        return this.clause.status == 'DRAFT'
+            ? this.service.updateDraftClause(this.clause.name, { dsl: dsl ?? '', error: error ?? '' })
+            : this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' });
     }
 
 }

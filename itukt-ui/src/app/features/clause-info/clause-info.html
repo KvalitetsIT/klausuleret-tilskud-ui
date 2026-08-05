@@ -11,25 +11,27 @@
 </mat-list>
 
 <div class="action-buttons">
-  @if (clause.status == "ACTIVE" || clause.status == "INACTIVE") {
   @if (editMode) {
   <button matButton (click)="cancelEditMode()" [disabled]="loading">Fortryd</button>
   <button matButton (click)="save()" [disabled]="loading || editItems?.form?.invalid">
-    Opret kladde
+    {{clause.status == "DRAFT" ? "Gem" : "Opret kladde"}}
     @if (loading) {
     <div class="spinner">
       <mat-spinner [diameter]="30"></mat-spinner>
     </div>
     }
   </button>
-  } @else {
+  }
+
+  @else {
+
+  @if (clause.status == "ACTIVE" || clause.status == "INACTIVE") {
   <button matButton (click)="clause.status == 'ACTIVE' ? inactivate() : activate()" [disabled]="loading">
     {{clause.status == "ACTIVE" ? "Inaktivér" : "Aktivér"}}
   </button>
   <span [matTooltip]="draftAlreadyExists() ? 'Der findes allerede en kladde for denne klausul' : undefined">
     <button matButton (click)="enterEditMode()" [disabled]="draftAlreadyExists()" cdkFocusInitial>Rediger</button>
   </span>
-  }
   }
 
   @if (clause.status == "DRAFT") {
@@ -41,7 +43,8 @@
     </div>
     }
   </button>
-  <button matButton (click)="confirmApproval()" [disabled]="loading">
+  <button matButton (click)="enterEditMode()">Rediger</button>
+  <button matButton (click)="confirmApproval()" cdkFocusInitial [disabled]="loading">
     Godkend
     @if (loading) {
     <div class="spinner">
@@ -49,7 +52,8 @@
     </div>
     }
   </button>
-  }
+  }}
+
 </div>
 }
 
