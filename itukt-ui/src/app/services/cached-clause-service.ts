@@ -33,6 +33,10 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauseHistory(name), "getClauseHistory", name);
     }
 
+    getDraftHistory(name: string): Observable<Array<DslOutput>> {
+        return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getDraftHistory(name), "getDraftHistory", name);
+    }
+
     getClauseDrugsCount(name: string): Observable<number> {
         return this.cache.get<number>(() => this.concreteClauseService.getClauseDrugsCount(name), "getClauseDrugsCount", name);
     }
