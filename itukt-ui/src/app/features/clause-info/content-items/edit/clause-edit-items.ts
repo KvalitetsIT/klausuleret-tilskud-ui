@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { DslOutput } from '@api/index';
 import { Observable } from 'rxjs';
 import { ClauseService } from 'src/app/services/clause-service';
+import { UppercaseDirective } from 'src/app/shared/uppercase-directive';
 
 @Component({
     selector: 'clause-edit-items',
@@ -17,6 +18,7 @@ import { ClauseService } from 'src/app/services/clause-service';
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
+        UppercaseDirective
     ],
 })
 export class ClauseEditItems {
