@@ -18,3 +18,11 @@
   align-items: center;
   justify-content: center;
 }
+
+.dsl-help-tooltip {
+  white-space: pre-wrap;
+}
+
+.dsl-help-tooltip .mat-mdc-tooltip-surface {
+  max-width: 1000px;
+}

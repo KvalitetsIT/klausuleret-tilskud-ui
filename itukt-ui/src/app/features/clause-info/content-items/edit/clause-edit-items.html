@@ -12,6 +12,7 @@
             <div class="value">
                 <mat-form-field>
                     <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1" appUppercase></textarea>
+                    <dsl-tooltip matSuffix />
                     @if (form.get('dsl')?.hasError('required')) {
                     <mat-error>
                         Påkrævet
