@@ -53,7 +53,7 @@ export class ClauseInfo {
 	history = signal<Array<DslOutput> | undefined>(undefined);
 
 	ngOnInit(): void {
-		this.clauseService.getClauseHistory(this.clause.name)
+		this.clauseService.getClauseHistory(this.clause.uuid)
 			.subscribe({
 				next: (history) => this.history.set(history),
 				error: () => this.history.set([])

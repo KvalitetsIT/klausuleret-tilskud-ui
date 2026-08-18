@@ -18,7 +18,7 @@ import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 	imports: [MatExpansionModule, MatIconModule, DatePipe, DslHighlightPipe, MatProgressSpinner, MatListModule, StatusTranslatePipe],
 })
 export class ClauseHistory {
-	@Input({ required: true }) name!: string;
+	@Input({ required: true }) uuid!: string;
 	@Input({ required: true }) status!: ClauseStatus;
 
 	private clauseService = inject(ClauseService);
@@ -26,7 +26,7 @@ export class ClauseHistory {
 	history = signal<Array<DslOutput> | undefined>(undefined);
 
 	ngOnInit(): void {
-		(this.status === ClauseStatus.Draft ? this.clauseService.getDraftHistory(this.name) : this.clauseService.getClauseHistory(this.name))
+		this.clauseService.getClauseHistory(this.uuid)
 			.subscribe({
 				next: (history) => this.history.set(history),
 				error: () => this.history.set([])
