@@ -18,3 +18,15 @@ th {
 .clickable-row:hover {
   background: #e0e0e0;
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.export {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
