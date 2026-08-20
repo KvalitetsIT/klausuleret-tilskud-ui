@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { DslOutput } from '@api/model/dslOutput';
+import { ClauseStatus } from '@api/model/models';
 import { ClauseService } from 'src/app/services/clause-service';
 import { StatusTranslatePipe } from 'src/app/shared/clause-status-pipe';
 import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
@@ -17,14 +18,15 @@ import { DslHighlightPipe } from 'src/app/shared/dsl-highlight-pipe';
 	imports: [MatExpansionModule, MatIconModule, DatePipe, DslHighlightPipe, MatProgressSpinner, MatListModule, StatusTranslatePipe],
 })
 export class ClauseHistory {
-	@Input({ required: true }) name!: string;
+	@Input({ required: true }) uuid!: string;
+	@Input({ required: true }) status!: ClauseStatus;
 
 	private clauseService = inject(ClauseService);
 
 	history = signal<Array<DslOutput> | undefined>(undefined);
 
 	ngOnInit(): void {
-		this.clauseService.getClauseHistory(this.name)
+		this.clauseService.getClauseHistory(this.uuid)
 			.subscribe({
 				next: (history) => this.history.set(history),
 				error: () => this.history.set([])

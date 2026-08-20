@@ -9,11 +9,11 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
+import { ClauseService } from "src/app/services/clause-service";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { ClauseDialog } from "../clause-dialog/clause-dialog";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
-import { ClauseService } from "src/app/services/clause-service";
 
 @Component({
   standalone: true,
@@ -37,7 +37,7 @@ export class ClauseInfo {
   @Input({ required: true }) clause!: DslOutput;
 
   @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
-  
+
   private clauseService = inject(ClauseService);
   private clauseDialogService = inject(ClauseDialogService);
   private readonly currentDialogRef = inject(MatDialogRef<ClauseDialog>);
@@ -50,15 +50,22 @@ export class ClauseInfo {
   @ViewChild('approveTemplate') confirmationTemplate!: TemplateRef<any>;
   resetSkippedValidations = false
 
-	history = signal<Array<DslOutput> | undefined>(undefined);
+  activeClauses = signal<Array<DslOutput> | undefined>(undefined);
+  inactiveClauses = signal<Array<DslOutput> | undefined>(undefined);
 
-	ngOnInit(): void {
-		this.clauseService.getClauseHistory(this.clause.name)
-			.subscribe({
-				next: (history) => this.history.set(history),
-				error: () => this.history.set([])
-			});
-	}
+  ngOnInit(): void {
+    this.clauseService.getClauses(ClauseStatus.Active)
+      .subscribe({
+        next: (activeClauses) => this.activeClauses.set(activeClauses),
+        error: () => this.activeClauses.set([])
+      });
+
+    this.clauseService.getClauses(ClauseStatus.Inactive)
+      .subscribe({
+        next: (inactiveClauses) => this.inactiveClauses.set(inactiveClauses),
+        error: () => this.inactiveClauses.set([])
+      });
+  }
 
   enterEditMode() {
     this.editMode = true;
@@ -109,11 +116,16 @@ export class ClauseInfo {
     return this.draftClauses()?.some(c => c.name === this.clause.name);
   }
 
+  activeOrInactiveAlreadyExists(): boolean | undefined {
+    return [...(this.activeClauses() ?? []), ...(this.inactiveClauses() ?? [])]
+      .some(c => c.name === this.clause.name);
+  }
+
   activate() {
     this.confirmationDialogService.open(
-      `Aktivér klausul: ${this.clause.name}`, 
+      `Aktivér klausul: ${this.clause.name}`,
       'Er du sikker på at du vil gøre klausulen aktiv?',
-      null, 
+      null,
       () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Active),
       () => this.currentDialogRef.close(),
       "Ja"
@@ -122,8 +134,8 @@ export class ClauseInfo {
 
   inactivate() {
     this.confirmationDialogService.open(
-      `Inaktivér klausul: ${this.clause.name}`, 
-      'Er du sikker på at du vil gøre klausulen inaktiv?', 
+      `Inaktivér klausul: ${this.clause.name}`,
+      'Er du sikker på at du vil gøre klausulen inaktiv?',
       null,
       () => this.clauseService.updateClauseStatus(this.clause.name, ClauseStatusInput.StatusEnum.Inactive),
       () => this.currentDialogRef.close(),

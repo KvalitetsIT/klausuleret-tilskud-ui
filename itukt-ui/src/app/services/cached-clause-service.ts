@@ -29,8 +29,8 @@ export class CachedClauseService implements ClauseService {
         return this.withCacheClear(this.concreteClauseService.updateClauseStatus(name, newStatus));
     }
 
-    getClauseHistory(name: string): Observable<Array<DslOutput>> {
-        return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauseHistory(name), "getClauseHistory", name);
+    getClauseHistory(uuid: string): Observable<Array<DslOutput>> {
+        return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauseHistory(uuid), "getClauseHistory", uuid);
     }
 
     getClauseDrugsCount(name: string): Observable<number> {
