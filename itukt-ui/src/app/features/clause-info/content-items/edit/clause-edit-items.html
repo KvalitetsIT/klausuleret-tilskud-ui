@@ -11,7 +11,7 @@
             <div class="label">Klausulbetingelse</div>
             <div class="value">
                 <mat-form-field>
-                    <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1" appUppercase></textarea>
+                    <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
                     <dsl-tooltip matSuffix />
                     @if (form.get('dsl')?.hasError('required')) {
                     <mat-error>

@@ -6,7 +6,6 @@ import { MatListModule } from '@angular/material/list';
 import { DslOutput } from '@api/index';
 import { Observable } from 'rxjs';
 import { ClauseService } from 'src/app/services/clause-service';
-import { UppercaseDirective } from 'src/app/shared/uppercase-directive';
 import { DslTooltip } from 'src/app/shared/dsl-tooltip/dsl-tooltip';
 
 @Component({
@@ -19,7 +18,6 @@ import { DslTooltip } from 'src/app/shared/dsl-tooltip/dsl-tooltip';
         MatInputModule,
         FormsModule,
         ReactiveFormsModule,
-        UppercaseDirective,
         DslTooltip,
     ],
 })

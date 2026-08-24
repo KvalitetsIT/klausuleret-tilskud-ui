@@ -11,7 +11,6 @@ import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClauseService } from "src/app/services/clause-service";
 import { ClauseValidators } from "src/app/shared/clause-validators";
 import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
-import { UppercaseDirective } from "src/app/shared/uppercase-directive";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -29,7 +28,6 @@ import { UppercaseDirective } from "src/app/shared/uppercase-directive";
         MatProgressSpinner,
         ReactiveFormsModule,
         DrugsCountChip,
-        UppercaseDirective,
         DslTooltip,
     ],
 })

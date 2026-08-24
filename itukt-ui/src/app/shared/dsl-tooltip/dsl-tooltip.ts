@@ -26,11 +26,11 @@ export class DslTooltip {
         Eksempel 1: EKSISTERENDE_LÆGEMIDDEL = {FORM = TABLET, ATC = A10BK, ROUTE = ORAL}
         Eksempel 2: EKSISTERENDE_LÆGEMIDDEL = {ATC = A10BK}
     
-Betingelserne kan kombineres med OG/ELLER, og kan grupperes med parenteser.
-        Eksempel: (ALDER > 60 ELLER INDIKATION = 155) OG LÆGESPECIALE = PSYK
+Betingelserne kan kombineres med og/eller, og kan grupperes med parenteser.
+        Eksempel: (ALDER > 60 eller INDIKATION = 155) og LÆGESPECIALE = PSYK
 
-Betingelser med flere mulige værdiger kan angives med operatoren I.
-        Eksempel 1: INDIKATION I [31, 415]
-        Eksempel 2: EKSISTERENDE_LÆGEMIDDEL I [{ATC = A10BK}, {ATC = A10BD19}]
+Betingelser med flere mulige værdiger kan angives med operatoren 'i'.
+        Eksempel 1: INDIKATION i [31, 415]
+        Eksempel 2: EKSISTERENDE_LÆGEMIDDEL i [{ATC = A10BK}, {ATC = A10BD19}]
 `;
 }
