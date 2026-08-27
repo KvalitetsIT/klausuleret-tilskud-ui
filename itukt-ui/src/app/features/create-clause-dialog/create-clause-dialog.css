@@ -4,11 +4,6 @@ mat-dialog-content {
     row-gap: 10px;
 }
 
-.name-field {
-    display: flex;
-    flex-direction: row;
-}
-
 .name-field:focus-within drugs-count-chip {
     display: none;
 }

@@ -1,12 +1,10 @@
 <h2 mat-dialog-title>Opret klausul</h2>
 <form [formGroup]="form">
   <mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field class="name-field">
       <mat-label>Klausulkode</mat-label>
-      <div class="name-field">
-        <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1" (blur)="onNameBlur()"></textarea>
-        <drugs-count-chip [clauseName]="name" />
-      </div>
+      <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1" (blur)="onNameBlur()"></textarea>
+      <drugs-count-chip matSuffix [clauseName]="name" />
       @if (form.get('name')?.hasError('required')) {
       <mat-error>
         Påkrævet
@@ -21,6 +19,7 @@
     <mat-form-field>
       <mat-label>Klausulbetingelse</mat-label>
       <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+      <dsl-tooltip matSuffix />
       @if (form.get('dsl')?.hasError('required')) {
       <mat-error>
         Påkrævet

@@ -10,20 +10,14 @@ export class DslHighlightPipe implements PipeTransform {
     const src = (input ?? '').toString();
     let out = src;
 
-    // operators
-    out = out.replace(/(>=|<=|=|>|<)/gi, '<span class="dsl-operator">$1</span>');
-
-    // keywords
-    out = out.replace(/\b(eller|og)\b/g, '<span class="dsl-keyword">$1</span>');
-
     // numbers
     out = out.replace(/\b\d+(?:\.\d+)?\b/g, '<span class="dsl-number">$&</span>');
 
     // identifiers
-    out = out.replace(/\b[A-Z][A-ZÆØÅ0-9_]*\b/g, '<span class="dsl-id">$&</span>');
+    out = out.replace(/\b(ALDER|INDIKATION|LÆGESPECIALE|AFDELINGSSPECIALE|EKSISTERENDE_LÆGEMIDDEL|FORM|ATC|ROUTE)\b/g, '<span class="dsl-id">$&</span>');
 
-    // punctuation
-    out = out.replace(/[:(),]/g, '<span class="dsl-punctuation">$&</span>');
+    // keywords
+    out = out.replace(/\b(eller|og|i)\b/g, '<span class="dsl-keyword">$1</span>');
 
     return out;
   }

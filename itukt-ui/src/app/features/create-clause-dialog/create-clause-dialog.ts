@@ -1,6 +1,7 @@
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { Component, inject } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { DslTooltip } from "src/app/shared/dsl-tooltip/dsl-tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -8,8 +9,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClauseService } from "src/app/services/clause-service";
-import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
 import { ClauseValidators } from "src/app/shared/clause-validators";
+import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -27,6 +28,7 @@ import { ClauseValidators } from "src/app/shared/clause-validators";
         MatProgressSpinner,
         ReactiveFormsModule,
         DrugsCountChip,
+        DslTooltip,
     ],
 })
 export class CreateClauseDialog {
