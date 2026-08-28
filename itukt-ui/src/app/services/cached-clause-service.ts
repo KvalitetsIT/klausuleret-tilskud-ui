@@ -13,8 +13,8 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauses(status), "getClauses", status);
     }
 
-    createClause(dslInput: DslInput): Observable<DslOutput> {
-        return this.withCacheClear(this.concreteClauseService.createClause(dslInput));
+    createClause(dslInput: DslInput, skipValidation: boolean): Observable<DslOutput> {
+        return this.withCacheClear(this.concreteClauseService.createClause(dslInput, skipValidation));
     }
 
     deleteClause(clause: DslOutput): Observable<void> {

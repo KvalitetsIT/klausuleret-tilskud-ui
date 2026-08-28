@@ -30,6 +30,8 @@ paths:
       operationId: createClauseFromDsl_v20250801
       tags:
         - management
+      parameters:
+        - $ref: '#/components/parameters/skipValidation'
       requestBody:
         description: "A clause in Domain-Specific Language (DSL) format"
         required: true
@@ -130,6 +132,8 @@ paths:
       operationId: createClause_v20250801
       tags:
         - management
+      parameters:
+        - $ref: '#/components/parameters/skipValidation'
       requestBody:
         description: "A list of expressions"
         required: true
@@ -250,6 +254,7 @@ paths:
       description: "Update draft clause. This will create a new version of the draft with the specified name."
       parameters:
         - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/skipValidation'
       requestBody:
         required: true
         content:
@@ -361,6 +366,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ClauseStatus'
+    skipValidation:
+      name: skipValidation
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
 
   schemas:
     detailedError:
@@ -376,15 +388,15 @@ components:
               type: string
             detailed_error_code:
               description: >-
-                Detailed error code. This could be a code describing a validation error.
+                Detailed error code.
                 <ul>
-                  <li>1: Bad request</li>
-                  <li>2: Not found</li>
+                  <li>1: Standard error</li>
+                  <li>2: Validation error</li>
                 </ul>
               type: string
               enum:
-                - "1"
-                - "2"
+                - "ERROR"
+                - "VALIDATION"
     
     ErrorMessage:
       type: string

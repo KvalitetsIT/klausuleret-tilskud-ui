@@ -11,10 +11,10 @@ import { Observable } from "rxjs";
   styleUrl: "confirmation-dialog.css",
   imports: [MatDialogModule, MatButtonModule, MatProgressSpinner, NgTemplateOutlet],
 })
-export class ConfirmationDialog {
-  private currentDialogRef = inject(MatDialogRef<ConfirmationDialog>);
-  private onConfirm: () => Observable<void>;
-  private onSuccess: () => void;
+export class ConfirmationDialog<T> {
+  private currentDialogRef = inject(MatDialogRef<ConfirmationDialog<T>>);
+  private onConfirm: () => Observable<T>;
+  private onSuccess: (result: T) => void;
   saving = false;
   title: string;
   content: string | TemplateRef<any>;
@@ -23,8 +23,8 @@ export class ConfirmationDialog {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     title: string,
     content: string | TemplateRef<any>,
-    onConfirm: () => Observable<void>,
-    onSuccess: () => void,
+    onConfirm: () => Observable<T>,
+    onSuccess: (result: T) => void,
     confirmBtnTxt: string
   }) {
     this.title = data.title;
@@ -38,10 +38,10 @@ export class ConfirmationDialog {
     this.saving = true;
     this.onConfirm()
       .subscribe({
-        next: () => {
+        next: (result) => {
           this.currentDialogRef.close();
           this.saving = false;
-          this.onSuccess();
+          this.onSuccess(result);
         },
         error: (_) => {
           this.saving = false;

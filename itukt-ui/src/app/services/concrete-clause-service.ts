@@ -17,8 +17,8 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getAllClausesDslV20250801(status);
   }
 
-  createClause(dslInput: DslInput): Observable<DslOutput> {
-    const response = this.api.createClauseFromDslV20250801(dslInput);
+  createClause(dslInput: DslInput, skipValidation: boolean): Observable<DslOutput> {
+    const response = this.api.createClauseFromDslV20250801(dslInput, skipValidation);
     return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
   }
 

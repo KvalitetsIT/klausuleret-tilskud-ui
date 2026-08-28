@@ -7,8 +7,8 @@ import { ConfirmationDialog } from "../shared/confirmation-dialog/confirmation-d
 export class ConfirmationDialogService {
     private matDialog = inject(MatDialog);
 
-    open(title: string, content: string | TemplateRef<any>, context: any, onConfirm: () => Observable<void>, onSuccess: () => void, confirmBtnTxt: string) {
-        this.matDialog.open(ConfirmationDialog, {
+    open<T>(title: string, content: string | TemplateRef<any>, context: any, onConfirm: () => Observable<T>, onSuccess: (result: T) => void, confirmBtnTxt: string) {
+        this.matDialog.open(ConfirmationDialog<T>, {
             minWidth: '400px',
             data: { title, content, context, onConfirm, onSuccess, confirmBtnTxt},
         });
