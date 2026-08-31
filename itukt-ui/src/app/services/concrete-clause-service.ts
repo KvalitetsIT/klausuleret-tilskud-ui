@@ -42,8 +42,8 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getClauseHistoryV20250801(uuid);
   }
 
-  updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
-    const response = this.api.updateDraftV20250801(name, dslInput);
+  updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput> {
+    const response = this.api.updateDraftV20250801(name, dslInput, skipValidation);
     return this.addSnackbar(response, "Klausul kladde blev opdateret", "Opdatering af klausul kladde fejlede");
   }
 

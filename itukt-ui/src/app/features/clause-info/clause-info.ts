@@ -7,13 +7,14 @@ import { MatDialogRef } from "@angular/material/dialog";
 import { MatListModule } from "@angular/material/list";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { ClauseStatus, ClauseStatusInput, DslOutput } from "@api/index";
+import { ClauseStatus, ClauseStatusInput, DetailedError, DslOutput } from "@api/index";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClauseService } from "src/app/services/clause-service";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { ClauseDialog } from "../clause-dialog/clause-dialog";
 import { ClauseEditItems } from "./content-items/edit/clause-edit-items";
 import { ClauseReadItems } from "./content-items/read/clause-read-items";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   standalone: true,
@@ -36,7 +37,7 @@ import { ClauseReadItems } from "./content-items/read/clause-read-items";
 export class ClauseInfo {
   @Input({ required: true }) clause!: DslOutput;
 
-  @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
+  @ViewChild(ClauseEditItems) editItems!: ClauseEditItems;
 
   private clauseService = inject(ClauseService);
   private clauseDialogService = inject(ClauseDialogService);
@@ -88,17 +89,36 @@ export class ClauseInfo {
 
   save() {
     this.loading = true;
-    this.editItems?.save()
+    this.editItems.save(false)
       .subscribe({
         next: (clauseDraft) => {
-          this.currentDialogRef.close();
-          this.loading = false;
-          this.clauseDialogService.open(clauseDraft);
+          this.onSaveSuccess(clauseDraft);
         },
-        error: (_) => {
+        error: (e: HttpErrorResponse) => {
           this.loading = false;
+          const detailedError = e.error as DetailedError;
+          if (detailedError?.detailed_error_code === DetailedError.DetailedErrorCodeEnum.Validation) {
+            this.openConfirmSaveDialog();
+          }
         }
       });
+  }
+
+  onSaveSuccess(draft: DslOutput) {
+    this.currentDialogRef.close();
+    this.loading = false;
+    this.clauseDialogService.open(draft);
+  }
+
+  openConfirmSaveDialog() {
+    this.confirmationDialogService.open(
+      "Validering fejlede",
+      "Vil du gemme klausulen alligevel?",
+      undefined,
+      () => this.editItems.save(true),
+      (result) => this.onSaveSuccess(result),
+      "Ja"
+    );
   }
 
   confirmApproval() {

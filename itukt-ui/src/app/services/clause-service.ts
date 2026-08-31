@@ -8,6 +8,6 @@ export abstract class ClauseService {
     abstract approveClause(clause: { uuid: string, name: string }, resetSkippedValidations: boolean): Observable<void>;
     abstract updateClauseStatus(name: string, newStatus: ClauseStatusInput.StatusEnum): Observable<void>;
     abstract getClauseHistory(uuid: string): Observable<Array<DslOutput>>
-    abstract updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput>;
+    abstract updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput>;
     abstract getClauseDrugsCount(name: string): Observable<number>;
 } 

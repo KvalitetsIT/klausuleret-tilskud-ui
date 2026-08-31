@@ -37,8 +37,8 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<number>(() => this.concreteClauseService.getClauseDrugsCount(name), "getClauseDrugsCount", name);
     }
 
-    updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
-        return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput));
+    updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput> {
+        return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput, skipValidation));
     }
 
     private withCacheClear(response: Observable<any>): Observable<any> {

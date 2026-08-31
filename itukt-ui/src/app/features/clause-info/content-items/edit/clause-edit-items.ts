@@ -35,11 +35,11 @@ export class ClauseEditItems {
         });
     }
 
-    save(): Observable<DslOutput> {
+    save(skipValidation: boolean): Observable<DslOutput> {
         const { dsl, error } = this.form.value;
         return this.clause.status == 'DRAFT'
-            ? this.service.updateDraftClause(this.clause.name, { dsl: dsl ?? '', error: error ?? '' })
-            : this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' }, false);
+            ? this.service.updateDraftClause(this.clause.name, { dsl: dsl ?? '', error: error ?? '' }, skipValidation)
+            : this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' }, skipValidation);
     }
 
 }
