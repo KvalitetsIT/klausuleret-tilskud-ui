@@ -9,8 +9,11 @@ import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { ClauseDialogService } from "src/app/services/clause-dialog-service";
 import { ClauseService } from "src/app/services/clause-service";
+import { HttpErrorResponse } from "@angular/common/http";
 import { ClauseValidators } from "src/app/shared/clause-validators";
 import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
+import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
+import { DetailedError, DslOutput } from "@api/model/models";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -36,6 +39,7 @@ export class CreateClauseDialog {
     private clauseValidators = inject(ClauseValidators);
     private fb = inject(FormBuilder)
     private clauseDialogService = inject(ClauseDialogService);
+    private confirmationDialogService = inject(ConfirmationDialogService);
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
     loading = false;
@@ -60,19 +64,42 @@ export class CreateClauseDialog {
         this.name = this.form.get('name')?.value ?? '';
     }
 
+    tryCreate(skipValidation: boolean) {
+        const { name, dsl, error } = this.form.value;
+        return this.service.createClause({ name: name ?? '', dsl: dsl ?? '', error: error ?? '' }, skipValidation);
+    }
+
     create() {
         this.loading = true;
-        const { name, dsl, error } = this.form.value;
-        this.service.createClause({ name: name ?? '', dsl: dsl ?? '', error: error ?? '' })
+        this.tryCreate(false)
             .subscribe({
                 next: (clauseDraft) => {
-                    this.dialogRef.close();
-                    this.loading = false;
-                    this.clauseDialogService.open(clauseDraft);
+                    this.onCreateSuccess(clauseDraft);
                 },
-                error: (_) => {
+                error: (e: HttpErrorResponse) => {
                     this.loading = false;
+                    const detailedError = e.error as DetailedError;
+                    if (detailedError?.detailed_error_code === DetailedError.DetailedErrorCodeEnum.Validation) {
+                        this.openConfirmDialog();
+                    }
                 }
             });
+    }
+
+    onCreateSuccess(draft: DslOutput) {
+        this.dialogRef.close();
+        this.loading = false;
+        this.clauseDialogService.open(draft);
+    }
+
+    openConfirmDialog() {
+        this.confirmationDialogService.open(
+            "Validering fejlede",
+            "Vil du oprette klausulen alligevel?",
+            undefined,
+            () => this.tryCreate(true),
+            (result) => this.onCreateSuccess(result),
+            "Ja"
+        );
     }
 }

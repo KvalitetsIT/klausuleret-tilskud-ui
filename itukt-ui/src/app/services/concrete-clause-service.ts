@@ -17,8 +17,8 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getAllClausesDslV20250801(status);
   }
 
-  createClause(dslInput: DslInput): Observable<DslOutput> {
-    const response = this.api.createClauseFromDslV20250801(dslInput);
+  createClause(dslInput: DslInput, skipValidation: boolean): Observable<DslOutput> {
+    const response = this.api.createClauseFromDslV20250801(dslInput, skipValidation);
     return this.addSnackbar(response, "Klausul blev oprettet", "Klausul oprettelse fejlede");
   }
 
@@ -42,8 +42,8 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getClauseHistoryV20250801(uuid);
   }
 
-  updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
-    const response = this.api.updateDraftV20250801(name, dslInput);
+  updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput> {
+    const response = this.api.updateDraftV20250801(name, dslInput, skipValidation);
     return this.addSnackbar(response, "Klausul kladde blev opdateret", "Opdatering af klausul kladde fejlede");
   }
 

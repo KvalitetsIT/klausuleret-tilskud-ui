@@ -13,8 +13,8 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Array<DslOutput>>(() => this.concreteClauseService.getClauses(status), "getClauses", status);
     }
 
-    createClause(dslInput: DslInput): Observable<DslOutput> {
-        return this.withCacheClear(this.concreteClauseService.createClause(dslInput));
+    createClause(dslInput: DslInput, skipValidation: boolean): Observable<DslOutput> {
+        return this.withCacheClear(this.concreteClauseService.createClause(dslInput, skipValidation));
     }
 
     deleteClause(clause: DslOutput): Observable<void> {
@@ -37,8 +37,8 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<number>(() => this.concreteClauseService.getClauseDrugsCount(name), "getClauseDrugsCount", name);
     }
 
-    updateDraftClause(name: string, dslInput: DslUpdateInput): Observable<DslOutput> {
-        return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput));
+    updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput> {
+        return this.withCacheClear(this.concreteClauseService.updateDraftClause(name, dslInput, skipValidation));
     }
 
     private withCacheClear(response: Observable<any>): Observable<any> {
