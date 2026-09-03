@@ -1,0 +1,20 @@
+mat-card {
+    margin-bottom: 2em;
+}
+
+.age-fields {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1em;
+}
+
+.age {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.age-operator {
+    width: 4em !important;
+}
