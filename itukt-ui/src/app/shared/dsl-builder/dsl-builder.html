@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-content>
-        <div class="age">
-            <div class="age-fields">
+        <div class="expression">
+            <div class="fields">
                 <code [innerHTML]="('ALDER' | dslHighlight)"></code>
                 <mat-form-field class="age-operator">
                     <mat-select [(ngModel)]="selectedAgeOperator">
@@ -17,7 +17,35 @@
                 </mat-form-field>
 
             </div>
-            <button matButton type="button" (click)="appendAge()">Tilføj</button>
+            <button matIconButton type="button" (click)="appendAge()">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+        </div>
+
+        <div class="expression">
+            <div class="fields">
+                <code [innerHTML]="('INDIKATION =' | dslHighlight)"></code>
+                <mat-form-field>
+                    <input matInput [(ngModel)]="selectedIndicationValue" />
+                </mat-form-field>
+
+            </div>
+            <button matIconButton type="button" (click)="appendIndication()">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
+        </div>
+
+        <div class="expression">
+            <div class="fields">
+                <code [innerHTML]="('LÆGESPECIALE =' | dslHighlight)"></code>
+                <mat-form-field>
+                    <input matInput [(ngModel)]="selectedDoctorSpecialityValue" />
+                </mat-form-field>
+
+            </div>
+            <button matIconButton type="button" (click)="appendDoctorSpeciality()">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
         </div>
     </mat-card-content>
 </mat-card>

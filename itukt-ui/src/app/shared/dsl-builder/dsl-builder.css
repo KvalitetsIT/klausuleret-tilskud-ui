@@ -2,14 +2,14 @@ mat-card {
     margin-bottom: 2em;
 }
 
-.age-fields {
+.fields {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 1em;
 }
 
-.age {
+.expression {
     display: flex;
     justify-content: space-between;
     align-items: center;
