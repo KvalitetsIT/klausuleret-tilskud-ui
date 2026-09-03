@@ -48,9 +48,7 @@ export class ConcreteClauseService implements ClauseService {
   }
 
   getClauseDrugsCount(name: string): Observable<number> {
-    return this.api.getClauseDrugCountV20250801(name).pipe(
-      map(response => response.drugCount)
-    );
+    return this.api.getClauseDrugCountV20250801(name);
   }
 
 
