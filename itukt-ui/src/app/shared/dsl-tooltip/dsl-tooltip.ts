@@ -23,7 +23,7 @@ export class DslTooltip {
   - Eksisterende lægemiddel: Angivelse af et eksisterende lægemiddel.
     Herunder formkode (FORM), ATC kode (ATC) og administrationsvejskode (ROUTE).
     Hver af disse koder kan udelades.
-        Eksempel 1: EKSISTERENDE_LÆGEMIDDEL = {FORM = TABLET, ATC = A10BK, ROUTE = ORAL}
+        Eksempel 1: EKSISTERENDE_LÆGEMIDDEL = {FORM = TAB, ATC = A10BK, ROUTE = ORAL}
         Eksempel 2: EKSISTERENDE_LÆGEMIDDEL = {ATC = A10BK}
     
 Betingelserne kan kombineres med og/eller, og kan grupperes med parenteser.
