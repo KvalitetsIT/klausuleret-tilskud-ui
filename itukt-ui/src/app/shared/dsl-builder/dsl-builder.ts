@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { DslHighlightPipe } from '../dsl-highlight-pipe';
 
 @Component({
@@ -15,6 +16,7 @@ import { DslHighlightPipe } from '../dsl-highlight-pipe';
     imports: [
         MatCardModule,
         MatButtonModule, 
+        MatIconModule,
         DslHighlightPipe,
         MatSelectModule,
         MatInputModule,
@@ -28,9 +30,21 @@ export class DslBuilder {
     ageOperators = ['=', '<', '<=', '>=', '>'];
     selectedAgeOperator = this.ageOperators[0];
     selectedAgeValue = "";
+
+    selectedIndicationValue = "";
+
+    selectedDoctorSpecialityValue = "";
     
     appendAge(){
         this.append(['ALDER', this.selectedAgeOperator, this.selectedAgeValue]);
+    }
+
+    appendIndication(){
+        this.append(['INDIKATION =', this.selectedIndicationValue]);
+    }
+
+    appendDoctorSpeciality(){
+        this.append(['LÆGESPECIALE =', this.selectedDoctorSpecialityValue]);
     }
     
     append(values: string[]){
