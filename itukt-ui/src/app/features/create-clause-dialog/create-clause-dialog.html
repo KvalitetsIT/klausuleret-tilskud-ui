@@ -26,6 +26,7 @@
       </mat-error>
       }
     </mat-form-field>
+    <dsl-builder [dslField]="form.get('dsl')!"/>
     <mat-form-field>
       <mat-label>Fejlbesked</mat-label>
       <textarea matInput formControlName="error" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>

@@ -14,6 +14,7 @@ import { ClauseValidators } from "src/app/shared/clause-validators";
 import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip";
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { DetailedError, DslOutput } from "@api/model/models";
+import { DslBuilder } from "src/app/shared/dsl-builder/dsl-builder";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -32,6 +33,7 @@ import { DetailedError, DslOutput } from "@api/model/models";
         ReactiveFormsModule,
         DrugsCountChip,
         DslTooltip,
+        DslBuilder,
     ],
 })
 export class CreateClauseDialog {

@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-content>
+        <div class="age">
+            <div class="age-fields">
+                <code [innerHTML]="('ALDER' | dslHighlight)"></code>
+                <mat-form-field class="age-operator">
+                    <mat-select [(ngModel)]="selectedAgeOperator">
+                        @for (operator of ageOperators; track operator) {
+                        <mat-option [value]="operator">
+                            {{ operator }}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="number" [(ngModel)]="selectedAgeValue" />
+                </mat-form-field>
+
+            </div>
+            <button matButton type="button" (click)="appendAge()">Tilføj</button>
+        </div>
+    </mat-card-content>
+</mat-card>
