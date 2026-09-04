@@ -5,3 +5,9 @@ mat-card {
 .age-operator {
     width: 4em !important;
 }
+
+.fields {
+    display: flex;
+    gap: 1em;
+    width: 20em;
+}
