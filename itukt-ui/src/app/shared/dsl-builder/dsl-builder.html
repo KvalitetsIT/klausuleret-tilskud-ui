@@ -1,51 +1,31 @@
 <mat-card>
     <mat-card-content>
-        <div class="expression">
-            <div class="fields">
-                <code [innerHTML]="('ALDER' | dslHighlight)"></code>
-                <mat-form-field class="age-operator">
-                    <mat-select [(ngModel)]="selectedAgeOperator">
-                        @for (operator of ageOperators; track operator) {
-                        <mat-option [value]="operator">
-                            {{ operator }}
-                        </mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-                <mat-form-field>
-                    <input matInput type="number" [(ngModel)]="selectedAgeValue" />
-                </mat-form-field>
+        <expression identifier="ALDER =" [action]="appendAge">
+            <mat-form-field class="age-operator">
+                <mat-select [(ngModel)]="selectedAgeOperator">
+                    @for (operator of ageOperators; track operator) {
+                    <mat-option [value]="operator">
+                        {{ operator }}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="number" [(ngModel)]="selectedAgeValue" />
+            </mat-form-field>
+        </expression>
 
-            </div>
-            <button matIconButton type="button" (click)="appendAge()">
-                <mat-icon>add_circle_outline</mat-icon>
-            </button>
-        </div>
+        <expression identifier="INDIKATION =" [action]="appendIndication">
+            <mat-form-field>
+                <input matInput [(ngModel)]="selectedIndicationValue" />
+            </mat-form-field>
+        </expression>
 
-        <div class="expression">
-            <div class="fields">
-                <code [innerHTML]="('INDIKATION =' | dslHighlight)"></code>
-                <mat-form-field>
-                    <input matInput [(ngModel)]="selectedIndicationValue" />
-                </mat-form-field>
+        <expression identifier="LÆGESPECIALE =" [action]="appendDoctorSpeciality">
+            <mat-form-field>
+                <input matInput [(ngModel)]="selectedDoctorSpecialityValue" />
+            </mat-form-field>
+        </expression>
 
-            </div>
-            <button matIconButton type="button" (click)="appendIndication()">
-                <mat-icon>add_circle_outline</mat-icon>
-            </button>
-        </div>
-
-        <div class="expression">
-            <div class="fields">
-                <code [innerHTML]="('LÆGESPECIALE =' | dslHighlight)"></code>
-                <mat-form-field>
-                    <input matInput [(ngModel)]="selectedDoctorSpecialityValue" />
-                </mat-form-field>
-
-            </div>
-            <button matIconButton type="button" (click)="appendDoctorSpeciality()">
-                <mat-icon>add_circle_outline</mat-icon>
-            </button>
-        </div>
     </mat-card-content>
 </mat-card>

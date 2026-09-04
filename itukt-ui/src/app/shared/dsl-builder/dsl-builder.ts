@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Expression } from './expression/expression';
 import { AbstractControl, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,13 +16,14 @@ import { DslHighlightPipe } from '../dsl-highlight-pipe';
     styleUrls: ['dsl-builder.css'],
     imports: [
         MatCardModule,
-        MatButtonModule, 
+        MatButtonModule,
         MatIconModule,
         DslHighlightPipe,
         MatSelectModule,
         MatInputModule,
         MatFormFieldModule,
-        FormsModule
+        FormsModule,
+        Expression
     ],
 })
 export class DslBuilder {
@@ -34,20 +36,20 @@ export class DslBuilder {
     selectedIndicationValue = "";
 
     selectedDoctorSpecialityValue = "";
-    
-    appendAge(){
+
+    appendAge = () => {
         this.append(['ALDER', this.selectedAgeOperator, this.selectedAgeValue]);
     }
 
-    appendIndication(){
+    appendIndication = () => {
         this.append(['INDIKATION =', this.selectedIndicationValue]);
     }
 
-    appendDoctorSpeciality(){
+    appendDoctorSpeciality = () => {
         this.append(['LÆGESPECIALE =', this.selectedDoctorSpecialityValue]);
     }
-    
-    append(values: string[]){
+
+    append(values: string[]) {
         const prefix = this.dslField.value ? this.dslField.value + ' ' : '';
         this.dslField.setValue(prefix + values.join(' '));
     }

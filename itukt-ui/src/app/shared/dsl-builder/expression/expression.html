@@ -1,0 +1,10 @@
+<div class="expression">
+    <div class="fields">
+        <code [innerHTML]="(this.identifier| dslHighlight)"></code>
+        <ng-content></ng-content>
+
+    </div>
+    <button matIconButton type="button" (click)="action()">
+        <mat-icon>add_circle_outline</mat-icon>
+    </button>
+</div>
