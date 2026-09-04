@@ -15,6 +15,7 @@ import { DrugsCountChip } from "src/app/shared/drugs-count-chip/drugs-count-chip
 import { ConfirmationDialogService } from "src/app/services/confirmation-dialog-service";
 import { DetailedError, DslOutput } from "@api/model/models";
 import { DslBuilder } from "src/app/shared/dsl-builder/dsl-builder";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
     selector: 'create-clause-dialog',
@@ -34,6 +35,7 @@ import { DslBuilder } from "src/app/shared/dsl-builder/dsl-builder";
         DrugsCountChip,
         DslTooltip,
         DslBuilder,
+        MatIconModule
     ],
 })
 export class CreateClauseDialog {
@@ -46,6 +48,7 @@ export class CreateClauseDialog {
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
     loading = false;
     name = '';
+    editMode = false;
 
     form = this.fb.group({
         name: ['',
@@ -57,6 +60,11 @@ export class CreateClauseDialog {
         dsl: ['', Validators.required],
         error: ['', Validators.required]
     });
+
+    editModeOnOff() {
+        this.editMode = !this.editMode;
+        console.log('Edit mode is now', this.editMode);
+    }
 
     onNoClick(): void {
         this.dialogRef.close();
