@@ -1,3 +1,7 @@
+.identifier {
+    width: 8em;
+}
+
 .fields {
     display: flex;
     justify-content: flex-start;
