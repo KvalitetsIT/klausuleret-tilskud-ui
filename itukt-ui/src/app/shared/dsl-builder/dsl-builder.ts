@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { Expression } from './expression/expression';
 import { AbstractControl, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { DslHighlightPipe } from '../dsl-highlight-pipe';
+import { Expression } from './expression/expression';
 
 @Component({
     standalone: true,
@@ -18,12 +17,11 @@ import { DslHighlightPipe } from '../dsl-highlight-pipe';
         MatCardModule,
         MatButtonModule,
         MatIconModule,
-        DslHighlightPipe,
         MatSelectModule,
         MatInputModule,
         MatFormFieldModule,
         FormsModule,
-        Expression
+        Expression,
     ],
 })
 export class DslBuilder {
