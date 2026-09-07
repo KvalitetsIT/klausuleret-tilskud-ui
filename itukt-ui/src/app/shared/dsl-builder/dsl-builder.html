@@ -1,5 +1,5 @@
 <div class="builder">
-    @if (departmentSpecialities() === undefined) {
+    @if (filteredSpecialities === undefined) {
     <mat-spinner [diameter]="30"></mat-spinner>
     } @else {
 
@@ -28,7 +28,7 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="age-value">
-                        <input matInput type="number" [(ngModel)]="value" />
+                        <input matInput type="number" [formControl]="valueForm" />
                     </mat-form-field>
                 </div>
             </expression>
@@ -37,7 +37,7 @@
             @if (selectedExpressionType === ExpressionType.INDICATION) {
             <expression [identifier]="ExpressionType.INDICATION" [action]="appendExpression">
                 <mat-form-field>
-                    <input matInput [(ngModel)]="value" />
+                    <input matInput [formControl]="valueForm" />
                 </mat-form-field>
             </expression>
             }
@@ -45,7 +45,7 @@
             @if (selectedExpressionType === ExpressionType.DOCTOR_SPECIALITY) {
             <expression [identifier]="ExpressionType.DOCTOR_SPECIALITY" [action]="appendExpression">
                 <mat-form-field>
-                    <input matInput [(ngModel)]="value" />
+                    <input matInput [formControl]="valueForm" />
                 </mat-form-field>
             </expression>
             }
@@ -53,9 +53,9 @@
             @if (selectedExpressionType === ExpressionType.DEPARTMENT_SPECIALITY) {
             <expression [identifier]="ExpressionType.DEPARTMENT_SPECIALITY" [action]="appendExpression">
                 <mat-form-field>
-                    <input matInput [(ngModel)]="value" [matAutocomplete]="auto" />
+                    <input matInput [matAutocomplete]="auto" [formControl]="valueForm" />
                     <mat-autocomplete #auto="matAutocomplete">
-                        @for (speciality of departmentSpecialities() ; track speciality) {
+                        @for (speciality of filteredSpecialities | async; track speciality) {
                         <mat-option [value]="speciality">{{speciality}}</mat-option>
                         }
                     </mat-autocomplete>

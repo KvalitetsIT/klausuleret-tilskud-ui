@@ -1,5 +1,5 @@
 import { Component, inject, Input, signal } from '@angular/core';
-import { AbstractControl, FormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -12,6 +12,8 @@ import { Expression } from './expression/expression';
 import { ClauseService } from 'src/app/services/clause-service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs/internal/Observable';
+import { map, startWith } from 'rxjs';
 
 @Component({
     standalone: true,
@@ -29,14 +31,13 @@ import { AsyncPipe } from '@angular/common';
         Expression,
         MatProgressSpinner,
         MatAutocompleteModule,
-        AsyncPipe
+        AsyncPipe,
+        ReactiveFormsModule
     ],
 })
 export class DslBuilder {
     @Input({ required: true }) dslField!: AbstractControl;
     private clauseService = inject(ClauseService);
-
-    departmentSpecialities = signal<Set<string> | undefined>(undefined);
 
     ExpressionType = ExpressionType;
     expressionTypes = Object.values(ExpressionType);
@@ -44,20 +45,28 @@ export class DslBuilder {
 
     operators = ['=', '<', '<=', '>=', '>'];
     selectedOperator = this.operators[0];
-    value = "";
+    valueForm = new FormControl('');
 
+    filteredSpecialities: Observable<string[]> | undefined;
 
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
             .subscribe({
-                next: (departmentSpecialities) => this.departmentSpecialities.set(departmentSpecialities)
+                next: (departmentSpecialities) => this.filteredSpecialities = this.valueForm.valueChanges.pipe(
+                    startWith(''),
+                    map(value => this._filter(value || '', departmentSpecialities)),
+                )
             });
+    }
+
+    private _filter(value: string, options: Set<string>): string[] {
+        return Array.from(options).filter(option => option.toLowerCase().includes(value.toLowerCase()));
     }
 
     appendExpression = () => {
         if (this.selectedExpressionType === undefined) return;
 
-        this.append([this.selectedExpressionType.valueOf(), this.selectedOperator, this.value]);
+        this.append([this.selectedExpressionType.valueOf(), this.selectedOperator, this.valueForm.value as string]);
         this.selectedExpressionType = undefined;
         this.resetOperatorAndValue();
     }
@@ -69,6 +78,6 @@ export class DslBuilder {
 
     resetOperatorAndValue() {
         this.selectedOperator = this.operators[0];
-        this.value = "";
+        this.valueForm.setValue("");
     }
 }
