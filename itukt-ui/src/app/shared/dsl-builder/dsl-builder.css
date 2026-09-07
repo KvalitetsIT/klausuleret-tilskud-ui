@@ -38,3 +38,8 @@
 .value-input {
     width: 100%;
 }
+
+.and-or {
+    display: flex;
+    gap: 1em;
+}
