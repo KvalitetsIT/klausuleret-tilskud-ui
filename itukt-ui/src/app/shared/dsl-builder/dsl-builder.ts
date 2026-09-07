@@ -54,6 +54,7 @@ export class DslBuilder {
     routeCodeForm = new FormControl('');
 
     filteredDepartmentSpecialities: Observable<string[]> | undefined;
+    filteredFormCodes: Observable<string[]> | undefined;
 
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
@@ -61,6 +62,13 @@ export class DslBuilder {
                 next: (departmentSpecialities) => this.filteredDepartmentSpecialities = this.simpleValueForm.valueChanges.pipe(
                     startWith(''),
                     map(value => this._filter(value || '', departmentSpecialities)),
+                )
+            });
+        this.clauseService.getMedicationFormCodes()
+            .subscribe({
+                next: (formCodes) => this.filteredFormCodes = this.formCodeForm.valueChanges.pipe(
+                    startWith(''),
+                    map(value => this._filter(value || '', formCodes)),
                 )
             });
     }
