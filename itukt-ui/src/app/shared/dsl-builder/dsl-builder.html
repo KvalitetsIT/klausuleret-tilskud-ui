@@ -90,7 +90,12 @@
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('FORM'| dslHighlight)"></code>
                     <mat-form-field class="value-input">
-                        <input matInput [formControl]="formCodeForm" />
+                        <input matInput [matAutocomplete]="auto" [formControl]="formCodeForm" />
+                        <mat-autocomplete #auto="matAutocomplete">
+                            @for (formCode of filteredFormCodes | async; track formCode) {
+                            <mat-option [value]="formCode">{{formCode}}</mat-option>
+                            }
+                        </mat-autocomplete>
                     </mat-form-field>
                 </div>
                 <div class="existing-drug-medication-field">
