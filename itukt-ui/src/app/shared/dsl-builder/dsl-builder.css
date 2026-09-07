@@ -1,5 +1,11 @@
-mat-card {
+.builder {
     margin-bottom: 2em;
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
+.expression-type {
+    width: 100%;
 }
 
 .age-operator {
