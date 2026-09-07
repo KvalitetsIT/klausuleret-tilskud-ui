@@ -1,7 +1,7 @@
 <div class="builder">
     <mat-form-field class="expression-type">
         <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="selectedExpressionType">
+        <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValue()">
             @for (type of expressionTypes; track type) {
             <mat-option [value]="type">{{type}}</mat-option>
             }
@@ -11,12 +11,12 @@
     @if (selectedExpressionType != undefined) {
     <mat-card>
         <mat-card-content>
-            @if (selectedExpressionType === "ALDER") {
-            <expression identifier="ALDER" [action]="appendAge">
+            @if (selectedExpressionType === ExpressionType.AGE) {
+            <expression [identifier]="ExpressionType.AGE" [action]="appendExpression">
                 <div class="fields">
                     <mat-form-field class="age-operator">
-                        <mat-select [(ngModel)]="selectedAgeOperator">
-                            @for (operator of ageOperators; track operator) {
+                        <mat-select [(ngModel)]="selectedOperator">
+                            @for (operator of operators; track operator) {
                             <mat-option [value]="operator">
                                 {{ operator }}
                             </mat-option>
@@ -24,27 +24,27 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="age-value">
-                        <input matInput type="number" [(ngModel)]="selectedAgeValue" />
+                        <input matInput type="number" [(ngModel)]="value" />
                     </mat-form-field>
                 </div>
             </expression>
             }
 
-            @if (selectedExpressionType === "INDIKATION") {
-            <expression identifier="INDIKATION" [action]="appendIndication">
+            @if (selectedExpressionType === ExpressionType.INDICATION) {
+            <expression [identifier]="ExpressionType.INDICATION" [action]="appendExpression">
                 <div class="fields">
                     <mat-form-field>
-                        <input matInput [(ngModel)]="selectedIndicationValue" />
+                        <input matInput [(ngModel)]="value" />
                     </mat-form-field>
                 </div>
             </expression>
             }
 
-            @if (selectedExpressionType === "LÆGESPECIALE") {
-            <expression identifier="LÆGESPECIALE" [action]="appendDoctorSpeciality">
+            @if (selectedExpressionType === ExpressionType.DOCTOR_SPECIALITY) {
+            <expression [identifier]="ExpressionType.DOCTOR_SPECIALITY" [action]="appendExpression">
                 <div class="fields">
                     <mat-form-field>
-                        <input matInput [(ngModel)]="selectedDoctorSpecialityValue" />
+                        <input matInput [(ngModel)]="value" />
                     </mat-form-field>
                 </div>
             </expression>
