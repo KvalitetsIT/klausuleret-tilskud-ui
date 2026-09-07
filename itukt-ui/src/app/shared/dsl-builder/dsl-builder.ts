@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Expression } from './expression/expression';
+import { ExpressionType } from '../expression-types';
 
 @Component({
     standalone: true,
@@ -26,6 +27,9 @@ import { Expression } from './expression/expression';
 })
 export class DslBuilder {
     @Input({ required: true }) dslField!: AbstractControl;
+
+    expressionTypes = Object.values(ExpressionType);
+    selectedExpressionType: ExpressionType | undefined;
 
     ageOperators = ['=', '<', '<=', '>=', '>'];
     selectedAgeOperator = this.ageOperators[0];
@@ -50,5 +54,6 @@ export class DslBuilder {
     append(values: string[]) {
         const prefix = this.dslField.value ? this.dslField.value + ' ' : '';
         this.dslField.setValue(prefix + values.join(' '));
+        this.selectedExpressionType = undefined;
     }
 }
