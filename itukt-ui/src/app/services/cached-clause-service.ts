@@ -45,6 +45,10 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Set<string>>(() => this.concreteClauseService.getDepartmentSpecialities(), "getDepartmentSpecialities");
     }
 
+    getMedicationFormCodes(): Observable<Set<string>> {
+        return this.cache.get<Set<string>>(() => this.concreteClauseService.getMedicationFormCodes(), "getMedicationFormCodes");
+    }
+
     private withCacheClear(response: Observable<any>): Observable<any> {
         return response.pipe(
             tap(() => {
@@ -55,7 +59,7 @@ export class CachedClauseService implements ClauseService {
 }
 
 class Cache {
-    
+
     private cache: Record<string, { data$: Observable<any>, refresh: () => void }> = {};
 
     get<T>(fetchFn: () => Observable<T>, ...keys: string[]): Observable<T> {

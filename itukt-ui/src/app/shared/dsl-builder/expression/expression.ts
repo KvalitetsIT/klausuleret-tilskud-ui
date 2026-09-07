@@ -1,8 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { DslHighlightPipe } from '../../dsl-highlight-pipe';
-import { ExpressionType } from '../../expression-types';
 
 @Component({
     standalone: true,
@@ -12,7 +10,6 @@ import { ExpressionType } from '../../expression-types';
     imports: [
         MatButtonModule, 
         MatIconModule,
-        DslHighlightPipe,
     ],
 })
 export class Expression {
