@@ -1,4 +1,8 @@
 <div class="builder">
+    @if (departmentSpecialities() === undefined) {
+    <mat-spinner [diameter]="30"></mat-spinner>
+    } @else {
+
     <mat-form-field class="expression-type">
         <mat-label>Type</mat-label>
         <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValue()">
@@ -32,25 +36,35 @@
 
             @if (selectedExpressionType === ExpressionType.INDICATION) {
             <expression [identifier]="ExpressionType.INDICATION" [action]="appendExpression">
-                <div class="fields">
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="value" />
-                    </mat-form-field>
-                </div>
+                <mat-form-field>
+                    <input matInput [(ngModel)]="value" />
+                </mat-form-field>
             </expression>
             }
 
             @if (selectedExpressionType === ExpressionType.DOCTOR_SPECIALITY) {
             <expression [identifier]="ExpressionType.DOCTOR_SPECIALITY" [action]="appendExpression">
-                <div class="fields">
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="value" />
-                    </mat-form-field>
-                </div>
+                <mat-form-field>
+                    <input matInput [(ngModel)]="value" />
+                </mat-form-field>
+            </expression>
+            }
+
+            @if (selectedExpressionType === ExpressionType.DEPARTMENT_SPECIALITY) {
+            <expression [identifier]="ExpressionType.DEPARTMENT_SPECIALITY" [action]="appendExpression">
+                <mat-form-field>
+                    <input matInput [(ngModel)]="value" [matAutocomplete]="auto" />
+                    <mat-autocomplete #auto="matAutocomplete">
+                        @for (speciality of departmentSpecialities() ; track speciality) {
+                        <mat-option [value]="speciality">{{speciality}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
             </expression>
             }
 
         </mat-card-content>
     </mat-card>
+    }
     }
 </div>
