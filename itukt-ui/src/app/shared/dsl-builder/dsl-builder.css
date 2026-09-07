@@ -1,7 +1,7 @@
 .builder {
-    margin-bottom: 2em;
-    margin-left: 2em;
-    margin-right: 2em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .expression-type {
@@ -9,17 +9,19 @@
 }
 
 .age-operator {
-    width: 4em !important;
+    width: 5em !important;
 }
 
 .fields {
     display: flex;
     gap: 1em;
+    width: 100%;
 }
 
 .existing-drug-medication-fields {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .existing-drug-medication-field {
@@ -31,4 +33,8 @@
 
 .existing-drug-medication-identifier {
     width: 4em;
+}
+
+.value-input {
+    width: 100%;
 }

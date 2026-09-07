@@ -45,20 +45,20 @@ export class DslBuilder {
     expressionTypes = Object.values(ExpressionType);
     selectedExpressionType: ExpressionType | undefined;
 
-    operators = ['=', '<', '<=', '>=', '>'];
-    selectedOperator = this.operators[0];
+    ageOperators = ['=', '<', '<=', '>=', '>'];
+    selectedAgeOperator = this.ageOperators[0];
 
-    valueForm = new FormControl('');
+    simpleValueForm = new FormControl('');
     formCodeForm = new FormControl('');
     atcCodeForm = new FormControl('');
     routeCodeForm = new FormControl('');
 
-    filteredSpecialities: Observable<string[]> | undefined;
+    filteredDepartmentSpecialities: Observable<string[]> | undefined;
 
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
             .subscribe({
-                next: (departmentSpecialities) => this.filteredSpecialities = this.valueForm.valueChanges.pipe(
+                next: (departmentSpecialities) => this.filteredDepartmentSpecialities = this.simpleValueForm.valueChanges.pipe(
                     startWith(''),
                     map(value => this._filter(value || '', departmentSpecialities)),
                 )
@@ -77,9 +77,17 @@ export class DslBuilder {
         this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
     }
 
-    appendExpression = () => {
+    appendAgeExpression = () => {
+        this.appendExpression(this.selectedAgeOperator, this.simpleValueForm.value as string);
+    }
+
+    appendSimpleStringExpression = () => {
+        this.appendExpression('=', this.simpleValueForm.value as string);
+    }
+
+    appendExpression(operator: string, value: string) {
         if (this.selectedExpressionType === undefined) return;
-        this.append([this.selectedExpressionType.valueOf(), this.selectedOperator, this.valueForm.value as string]);
+        this.append([this.selectedExpressionType.valueOf(), operator, value]);
     }
 
     append(values: string[]) {
@@ -90,8 +98,8 @@ export class DslBuilder {
     }
 
     resetOperatorAndValues() {
-        this.selectedOperator = this.operators[0];
-        this.valueForm.setValue("");
+        this.selectedAgeOperator = this.ageOperators[0];
+        this.simpleValueForm.setValue("");
         this.formCodeForm.setValue("");
         this.atcCodeForm.setValue("");
         this.routeCodeForm.setValue("");
