@@ -69,6 +69,11 @@ export class DslBuilder {
         return Array.from(options).filter(option => option.toLowerCase().includes(value.toLowerCase()));
     }
 
+    dslReadyForExpression(): boolean {
+        const dsl = (this.dslField.value as string).trim().toLowerCase();
+        return dsl === '' || dsl.endsWith(' eller') || dsl.endsWith(' og');
+    }
+
     appendExistingDrugMedicationExpression = () => {
         const atcValue = this.atcCodeForm.value ? "ATC = " + this.atcCodeForm.value : undefined;
         const formValue = this.formCodeForm.value ? "FORM = " + this.formCodeForm.value : undefined;

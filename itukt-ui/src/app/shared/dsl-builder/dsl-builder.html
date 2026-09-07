@@ -4,6 +4,17 @@
         <mat-spinner [diameter]="30"></mat-spinner>
         } @else {
 
+        @if (!dslReadyForExpression()) {
+        <div class="and-or">
+            <button matButton="tonal" type="button" (click)="append([' og'])">
+                og
+            </button>
+            <button matButton="tonal" type="button" (click)="append([' eller'])">
+                eller
+            </button>
+        </div>
+        } @else {
+
         <mat-form-field class="expression-type">
             <mat-label>Type</mat-label>
             <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValues()">
@@ -90,6 +101,6 @@
                 </div>
             </div>
         </expression>
-        }}}
+        }}}}
     </mat-card-content>
 </mat-card>
