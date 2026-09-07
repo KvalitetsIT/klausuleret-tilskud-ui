@@ -16,7 +16,6 @@ import { ExpressionType } from '../../expression-types';
     ],
 })
 export class Expression {
-    @Input({ required: true }) identifier!: ExpressionType;
     @Input({ required: true }) action!: () => void;
 
 }

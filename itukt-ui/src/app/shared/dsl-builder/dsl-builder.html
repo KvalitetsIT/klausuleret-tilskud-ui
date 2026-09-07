@@ -5,7 +5,7 @@
 
     <mat-form-field class="expression-type">
         <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValue()">
+        <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValues()">
             @for (type of expressionTypes; track type) {
             <mat-option [value]="type">{{type}}</mat-option>
             }
@@ -16,7 +16,7 @@
     <mat-card>
         <mat-card-content>
             @if (selectedExpressionType === ExpressionType.AGE) {
-            <expression [identifier]="ExpressionType.AGE" [action]="appendExpression">
+            <expression [action]="appendExpression">
                 <div class="fields">
                     <mat-form-field class="age-operator">
                         <mat-select [(ngModel)]="selectedOperator">
@@ -35,7 +35,7 @@
             }
 
             @if (selectedExpressionType === ExpressionType.INDICATION) {
-            <expression [identifier]="ExpressionType.INDICATION" [action]="appendExpression">
+            <expression [action]="appendExpression">
                 <mat-form-field>
                     <input matInput [formControl]="valueForm" />
                 </mat-form-field>
@@ -43,7 +43,7 @@
             }
 
             @if (selectedExpressionType === ExpressionType.DOCTOR_SPECIALITY) {
-            <expression [identifier]="ExpressionType.DOCTOR_SPECIALITY" [action]="appendExpression">
+            <expression [action]="appendExpression">
                 <mat-form-field>
                     <input matInput [formControl]="valueForm" />
                 </mat-form-field>
@@ -51,7 +51,7 @@
             }
 
             @if (selectedExpressionType === ExpressionType.DEPARTMENT_SPECIALITY) {
-            <expression [identifier]="ExpressionType.DEPARTMENT_SPECIALITY" [action]="appendExpression">
+            <expression [action]="appendExpression">
                 <mat-form-field>
                     <input matInput [matAutocomplete]="auto" [formControl]="valueForm" />
                     <mat-autocomplete #auto="matAutocomplete">
@@ -60,6 +60,31 @@
                         }
                     </mat-autocomplete>
                 </mat-form-field>
+            </expression>
+            }
+
+            @if (selectedExpressionType === ExpressionType.EXISTING_DRUG_MEDICATION) {
+            <expression [action]="appendExistingDrugMedicationExpression">
+                <div class="existing-drug-medication-fields">
+                    <div class="existing-drug-medication-field">
+                        <code class="existing-drug-medication-identifier" [innerHTML]="('ATC'| dslHighlight)"></code>
+                        <mat-form-field>
+                            <input matInput [formControl]="atcCodeForm" />
+                        </mat-form-field>
+                    </div>
+                    <div class="existing-drug-medication-field">
+                        <code class="existing-drug-medication-identifier" [innerHTML]="('FORM'| dslHighlight)"></code>
+                        <mat-form-field>
+                            <input matInput [formControl]="formCodeForm" />
+                        </mat-form-field>
+                    </div>
+                    <div class="existing-drug-medication-field">
+                        <code class="existing-drug-medication-identifier" [innerHTML]="('ROUTE'| dslHighlight)"></code>
+                        <mat-form-field>
+                            <input matInput [formControl]="routeCodeForm" />
+                        </mat-form-field>
+                    </div>
+                </div>
             </expression>
             }
 
