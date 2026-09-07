@@ -16,3 +16,19 @@
     display: flex;
     gap: 1em;
 }
+
+.existing-drug-medication-fields {
+    display: flex;
+    flex-direction: column;
+}
+
+.existing-drug-medication-field {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+}
+
+.existing-drug-medication-identifier {
+    width: 4em;
+}

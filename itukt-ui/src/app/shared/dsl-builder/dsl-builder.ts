@@ -14,6 +14,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs/internal/Observable';
 import { map, startWith } from 'rxjs';
+import { DslHighlightPipe } from '../dsl-highlight-pipe';
 
 @Component({
     standalone: true,
@@ -32,7 +33,8 @@ import { map, startWith } from 'rxjs';
         MatProgressSpinner,
         MatAutocompleteModule,
         AsyncPipe,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DslHighlightPipe
     ],
 })
 export class DslBuilder {
@@ -45,7 +47,11 @@ export class DslBuilder {
 
     operators = ['=', '<', '<=', '>=', '>'];
     selectedOperator = this.operators[0];
+
     valueForm = new FormControl('');
+    formCodeForm = new FormControl('');
+    atcCodeForm = new FormControl('');
+    routeCodeForm = new FormControl('');
 
     filteredSpecialities: Observable<string[]> | undefined;
 
@@ -63,21 +69,31 @@ export class DslBuilder {
         return Array.from(options).filter(option => option.toLowerCase().includes(value.toLowerCase()));
     }
 
+    appendExistingDrugMedicationExpression = () => {
+        const atcValue = this.atcCodeForm.value ? "ATC = " + this.atcCodeForm.value : undefined;
+        const formValue = this.formCodeForm.value ? "FORM = " + this.formCodeForm.value : undefined;
+        const routeValue = this.routeCodeForm.value ? "ROUTE = " + this.routeCodeForm.value : undefined;
+        const values = [atcValue, formValue, routeValue].filter(v => v !== undefined); 
+        this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
+    }
+
     appendExpression = () => {
         if (this.selectedExpressionType === undefined) return;
-
         this.append([this.selectedExpressionType.valueOf(), this.selectedOperator, this.valueForm.value as string]);
-        this.selectedExpressionType = undefined;
-        this.resetOperatorAndValue();
     }
 
     append(values: string[]) {
         const prefix = this.dslField.value ? this.dslField.value + ' ' : '';
         this.dslField.setValue(prefix + values.join(' '));
+        this.selectedExpressionType = undefined;
+        this.resetOperatorAndValues();
     }
 
-    resetOperatorAndValue() {
+    resetOperatorAndValues() {
         this.selectedOperator = this.operators[0];
         this.valueForm.setValue("");
+        this.formCodeForm.setValue("");
+        this.atcCodeForm.setValue("");
+        this.routeCodeForm.setValue("");
     }
 }
