@@ -63,7 +63,6 @@ export class CreateClauseDialog {
 
     editModeOnOff() {
         this.editMode = !this.editMode;
-        console.log('Edit mode is now', this.editMode);
     }
 
     onNoClick(): void {
