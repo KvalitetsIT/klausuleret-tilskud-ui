@@ -19,6 +19,9 @@
     <mat-form-field>
       <mat-label>Klausulbetingelse</mat-label>
       <textarea matInput formControlName="dsl" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
+      <button type="button" mat-icon-button matSuffix (click)="editModeOnOff()">
+        <mat-icon>{{editMode ? 'edit_off' : 'edit'}}</mat-icon>
+      </button>
       <dsl-tooltip matSuffix />
       @if (form.get('dsl')?.hasError('required')) {
       <mat-error>
@@ -26,6 +29,9 @@
       </mat-error>
       }
     </mat-form-field>
+    @if (editMode) {
+      <dsl-builder [dslField]="form.get('dsl')!"/>
+    }
     <mat-form-field>
       <mat-label>Fejlbesked</mat-label>
       <textarea matInput formControlName="error" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>

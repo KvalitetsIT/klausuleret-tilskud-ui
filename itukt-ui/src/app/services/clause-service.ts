@@ -10,4 +10,6 @@ export abstract class ClauseService {
     abstract getClauseHistory(uuid: string): Observable<Array<DslOutput>>
     abstract updateDraftClause(name: string, dslInput: DslUpdateInput, skipValidation: boolean): Observable<DslOutput>;
     abstract getClauseDrugsCount(name: string): Observable<number>;
+    abstract getDepartmentSpecialities(): Observable<Set<string>>;
+    abstract getMedicationFormCodes(): Observable<Set<string>>;
 } 

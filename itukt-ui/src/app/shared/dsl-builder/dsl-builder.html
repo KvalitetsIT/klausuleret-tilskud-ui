@@ -1,0 +1,111 @@
+<mat-card class="builder">
+    <mat-card-content>
+        @if (filteredDepartmentSpecialities === undefined) {
+        <mat-spinner [diameter]="30"></mat-spinner>
+        } @else {
+
+        @if (!dslReadyForExpression()) {
+        <div class="and-or">
+            <button matButton="tonal" type="button" (click)="append([' og'])">
+                og
+            </button>
+            <button matButton="tonal" type="button" (click)="append([' eller'])">
+                eller
+            </button>
+        </div>
+        } @else {
+
+        <mat-form-field class="expression-type">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="selectedExpressionType" (selectionChange)="resetOperatorAndValues()">
+                @for (type of expressionTypes; track type) {
+                <mat-option [value]="type">{{type}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        @if (selectedExpressionType != undefined) {
+
+        @if (selectedExpressionType === ExpressionType.AGE) {
+        <expression [action]="appendAgeExpression">
+            <div class="fields">
+                <mat-form-field class="age-operator">
+                    <mat-select [(ngModel)]="selectedAgeOperator">
+                        @for (operator of ageOperators; track operator) {
+                        <mat-option [value]="operator">
+                            {{ operator }}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="value-input">
+                    <mat-label>Alder</mat-label>
+                    <input matInput type="number" [formControl]="simpleValueForm" />
+                </mat-form-field>
+            </div>
+        </expression>
+        }
+
+        @if (selectedExpressionType === ExpressionType.INDICATION) {
+        <expression [action]="appendSimpleStringExpression">
+            <mat-form-field class="value-input">
+                <mat-label>Indikation</mat-label>
+                <input matInput [formControl]="simpleValueForm" />
+            </mat-form-field>
+        </expression>
+        }
+
+        @if (selectedExpressionType === ExpressionType.DOCTOR_SPECIALITY) {
+        <expression [action]="appendSimpleStringExpression">
+            <mat-form-field class="value-input">
+                <mat-label>Lægespeciale</mat-label>
+                <input matInput [formControl]="simpleValueForm" />
+            </mat-form-field>
+        </expression>
+        }
+
+        @if (selectedExpressionType === ExpressionType.DEPARTMENT_SPECIALITY) {
+        <expression [action]="appendSimpleStringExpression">
+            <mat-form-field class="value-input">
+                <mat-label>Afdelingsspeciale</mat-label>
+                <input matInput [matAutocomplete]="auto" [formControl]="simpleValueForm" />
+                <mat-autocomplete #auto="matAutocomplete">
+                    @for (speciality of filteredDepartmentSpecialities | async; track speciality) {
+                    <mat-option [value]="speciality">{{speciality}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        </expression>
+        }
+
+        @if (selectedExpressionType === ExpressionType.EXISTING_DRUG_MEDICATION) {
+        <expression [action]="appendExistingDrugMedicationExpression">
+            <div class="existing-drug-medication-fields">
+                <div class="existing-drug-medication-field">
+                    <code class="existing-drug-medication-identifier" [innerHTML]="('ATC'| dslHighlight)"></code>
+                    <mat-form-field class="value-input">
+                        <input matInput [formControl]="atcCodeForm" />
+                    </mat-form-field>
+                </div>
+                <div class="existing-drug-medication-field">
+                    <code class="existing-drug-medication-identifier" [innerHTML]="('FORM'| dslHighlight)"></code>
+                    <mat-form-field class="value-input">
+                        <input matInput [matAutocomplete]="auto" [formControl]="formCodeForm" />
+                        <mat-autocomplete #auto="matAutocomplete">
+                            @for (formCode of filteredFormCodes | async; track formCode) {
+                            <mat-option [value]="formCode">{{formCode}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="existing-drug-medication-field">
+                    <code class="existing-drug-medication-identifier" [innerHTML]="('ROUTE'| dslHighlight)"></code>
+                    <mat-form-field class="value-input">
+                        <input matInput [formControl]="routeCodeForm" />
+                    </mat-form-field>
+                </div>
+            </div>
+        </expression>
+        }}}}
+    </mat-card-content>
+</mat-card>
