@@ -4,6 +4,7 @@
 .dsl-keyword     { color: #57011e; font-weight: 600; }    /* keywords */
 .dsl-number      { color: #059669; }                      /* numbers */
 .dsl-id          { color: #231c91; font-weight: 600; }    /* identifiers */
+.dsl-string      { color: #059669; }                      /* strings */
 
 .snackbar {
   white-space: pre-line;
