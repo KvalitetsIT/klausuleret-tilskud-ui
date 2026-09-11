@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 })
 export class App {
   public readonly title = signal('itukt-ui');
+  public readonly userLoggedIn = signal<boolean | undefined>(undefined);
   public readonly userAuthorized = signal<boolean | undefined>(undefined);
 
   public constructor(gatewayService: GatewayService) {
@@ -21,15 +22,16 @@ export class App {
     gatewayService.authCheck().subscribe({
       next: () => {
         console.debug('Successfully authorized user');
+        this.userLoggedIn.set(true);
         this.userAuthorized.set(true);
       },
       error: (err: HttpErrorResponse) => {
-        if (err.status === 302) {
-          console.debug('User is not authenticated, redirecting to login');
-          document.location.href = environment.authGatewayUrl + '/gateway/login';
+        this.userAuthorized.set(false);
+        if (err.status === 403) {
+          // User is logged in but not authorized
+          this.userLoggedIn.set(true);
         } else {
-          console.debug('Error authorizing user:', err);
-          this.userAuthorized.set(false);
+          this.userLoggedIn.set(false);
         }
       }
     });
