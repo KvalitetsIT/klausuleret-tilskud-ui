@@ -7,6 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { GatewayService } from '@gateway/api/api';
 import { User } from '@gateway/model/models';
 import { environment } from '../../../environments/environment';
+import { App } from 'src/app/app';
 
 @Component({
   selector: 'app-toolbar',
@@ -17,6 +18,7 @@ import { environment } from '../../../environments/environment';
 })
 export class Toolbar {
   private gatewayService = inject(GatewayService);
+  app = inject(App);
 
   user = signal<User | undefined>(undefined);
   

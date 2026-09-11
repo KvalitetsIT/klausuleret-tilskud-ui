@@ -1,6 +1,8 @@
 <mat-toolbar>
   <div id="app-toolbar">
     <span>IT-understøttelse af klausuleret tilskud</span>
+
+    @if (app.userLoggedIn()) {
     <div class="user-logout">
       <div class="divider">
         <div class="user-info">
@@ -11,5 +13,6 @@
       </div>
       <button mat-button (click)="logout()"><mat-icon fontIcon="logout"></mat-icon> Log ud</button>
     </div>
+    }
   </div>
 </mat-toolbar>
