@@ -83,9 +83,9 @@ export class DslBuilder {
     }
 
     appendExistingDrugMedicationExpression = () => {
-        const atcValue = this.atcCodeForm.value ? "ATC = " + this.atcCodeForm.value : undefined;
-        const formValue = this.formCodeForm.value ? "FORM = " + this.formCodeForm.value : undefined;
-        const routeValue = this.routeCodeForm.value ? "ROUTE = " + this.routeCodeForm.value : undefined;
+        const atcValue = this.atcCodeForm.value ? `ATC = "${this.atcCodeForm.value}"` : undefined;
+        const formValue = this.formCodeForm.value ? `FORM = "${this.formCodeForm.value}"` : undefined;
+        const routeValue = this.routeCodeForm.value ? `ROUTE = "${this.routeCodeForm.value}"` : undefined;
         const values = [atcValue, formValue, routeValue].filter(v => v !== undefined); 
         this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
     }
@@ -95,7 +95,7 @@ export class DslBuilder {
     }
 
     appendSimpleStringExpression = () => {
-        this.appendExpression('=', this.simpleValueForm.value as string);
+        this.appendExpression('=', `"${this.simpleValueForm.value}"`);
     }
 
     appendExpression(operator: string, value: string) {
