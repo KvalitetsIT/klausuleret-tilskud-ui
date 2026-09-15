@@ -59,6 +59,10 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getMedicationFormCodesV20250801();
   }
 
+  getMedicationAtcCodes(): Observable<Set<string>> {
+    return this.api.getMedicationAtcCodesV20250801();
+  }
+
 
   addSnackbar(response: Observable<any>, successMessage: string, errorMessage: string): Observable<any> {
     return response.pipe(
