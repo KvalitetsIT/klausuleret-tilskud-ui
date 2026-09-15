@@ -12,4 +12,5 @@ export abstract class ClauseService {
     abstract getClauseDrugsCount(name: string): Observable<number>;
     abstract getDepartmentSpecialities(): Observable<Set<string>>;
     abstract getMedicationFormCodes(): Observable<Set<string>>;
+    abstract getMedicationAtcCodes(): Observable<Set<string>>;
 } 
