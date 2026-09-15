@@ -68,8 +68,8 @@
         <expression [action]="appendSimpleStringExpression">
             <mat-form-field class="value-input">
                 <mat-label>Afdelingsspeciale</mat-label>
-                <input matInput [matAutocomplete]="auto" [formControl]="simpleValueForm" />
-                <mat-autocomplete #auto="matAutocomplete">
+                <input matInput [matAutocomplete]="autoDep" [formControl]="simpleValueForm" />
+                <mat-autocomplete #autoDep="matAutocomplete">
                     @for (speciality of filteredDepartmentSpecialities | async; track speciality) {
                     <mat-option [value]="speciality">{{speciality}}</mat-option>
                     }
@@ -84,14 +84,19 @@
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('ATC'| dslHighlight)"></code>
                     <mat-form-field class="value-input">
-                        <input matInput [formControl]="atcCodeForm" />
+                        <input matInput [matAutocomplete]="autoAtc" [formControl]="atcCodeForm" />
+                        <mat-autocomplete #autoAtc="matAutocomplete">
+                            @for (atcCode of filteredAtcCodes | async; track atcCode) {
+                            <mat-option [value]="atcCode">{{atcCode}}</mat-option>
+                            }
+                        </mat-autocomplete>
                     </mat-form-field>
                 </div>
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('FORM'| dslHighlight)"></code>
                     <mat-form-field class="value-input">
-                        <input matInput [matAutocomplete]="auto" [formControl]="formCodeForm" />
-                        <mat-autocomplete #auto="matAutocomplete">
+                        <input matInput [matAutocomplete]="autoForm" [formControl]="formCodeForm" />
+                        <mat-autocomplete #autoForm="matAutocomplete">
                             @for (formCode of filteredFormCodes | async; track formCode) {
                             <mat-option [value]="formCode">{{formCode}}</mat-option>
                             }
