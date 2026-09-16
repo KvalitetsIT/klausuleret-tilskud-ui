@@ -60,29 +60,29 @@ export class DslBuilder {
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
             .subscribe({
-                next: (departmentSpecialities) => this.filteredDepartmentSpecialities = this.simpleValueForm.valueChanges.pipe(
-                    startWith(''),
-                    map(value => this._filter(value || '', departmentSpecialities)),
-                )
+                next: (departmentSpecialities) => this.filteredDepartmentSpecialities = this._createFilteredValues(this.simpleValueForm, departmentSpecialities)
             });
         this.clauseService.getMedicationFormCodes()
             .subscribe({
-                next: (formCodes) => this.filteredFormCodes = this.formCodeForm.valueChanges.pipe(
-                    startWith(''),
-                    map(value => this._filter(value || '', formCodes)),
-                )
+                next: (formCodes) => this.filteredFormCodes = this._createFilteredValues(this.formCodeForm, formCodes)
             });
         this.clauseService.getMedicationAtcCodes()
             .subscribe({
-                next: (atcCodes) => this.filteredAtcCodes = this.atcCodeForm.valueChanges.pipe(
-                    startWith(''),
-                    map(value => this._filter(value || '', atcCodes)),
-                )
+                next: (atcCodes) => this.filteredAtcCodes = this._createFilteredValues(this.atcCodeForm, atcCodes)
             });
     }
 
-    private _filter(value: string, options: Set<string>): string[] {
-        return Array.from(options).filter(option => option.toLowerCase().includes(value.toLowerCase()));
+    private _createFilteredValues(formControl: FormControl, values: Set<string>): Observable<string[]> {
+        const options = Array.from(values).sort();
+        return formControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this._filter(value || '', options)),
+        );
+    }
+
+    private _filter(value: string, options: string[]): string[] {
+        return options
+            .filter(option => option.toLowerCase().includes(value.toLowerCase()));
     }
 
     dslReadyForExpression(): boolean {
@@ -94,7 +94,7 @@ export class DslBuilder {
         const atcValue = this.atcCodeForm.value ? `ATC = "${this.atcCodeForm.value}"` : undefined;
         const formValue = this.formCodeForm.value ? `FORM = "${this.formCodeForm.value}"` : undefined;
         const routeValue = this.routeCodeForm.value ? `ROUTE = "${this.routeCodeForm.value}"` : undefined;
-        const values = [atcValue, formValue, routeValue].filter(v => v !== undefined); 
+        const values = [atcValue, formValue, routeValue].filter(v => v !== undefined);
         this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
     }
 
