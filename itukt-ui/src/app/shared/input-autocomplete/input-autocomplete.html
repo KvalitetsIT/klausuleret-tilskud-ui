@@ -1,0 +1,9 @@
+<mat-form-field class="form">
+    <mat-label>{{label}}</mat-label>
+    <input matInput [matAutocomplete]="auto" [formControl]="formControl" />
+    <mat-autocomplete #auto="matAutocomplete">
+        @for (value of filteredValues | async; track value) {
+        <mat-option [value]="value">{{value}}</mat-option>
+        }
+    </mat-autocomplete>
+</mat-form-field>

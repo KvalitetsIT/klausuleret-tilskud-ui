@@ -1,6 +1,6 @@
 <mat-card class="builder">
     <mat-card-content>
-        @if (filteredDepartmentSpecialities === undefined) {
+        @if (departmentSpecialities === undefined || atcCodes === undefined || formCodes === undefined) {
         <mat-spinner [diameter]="30"></mat-spinner>
         } @else {
 
@@ -40,7 +40,7 @@
                 </mat-form-field>
                 <mat-form-field class="value-input">
                     <mat-label>Alder</mat-label>
-                    <input matInput type="number" [formControl]="simpleValueForm" />
+                    <input matInput type="number" [(ngModel)]="simpleValue" />
                 </mat-form-field>
             </div>
         </expression>
@@ -50,7 +50,7 @@
         <expression [action]="appendSimpleStringExpression">
             <mat-form-field class="value-input">
                 <mat-label>Indikation</mat-label>
-                <input matInput [formControl]="simpleValueForm" />
+                <input matInput [(ngModel)]="simpleValue" />
             </mat-form-field>
         </expression>
         }
@@ -59,54 +59,32 @@
         <expression [action]="appendSimpleStringExpression">
             <mat-form-field class="value-input">
                 <mat-label>Lægespeciale</mat-label>
-                <input matInput [formControl]="simpleValueForm" />
+                <input matInput [(ngModel)]="simpleValue" />
             </mat-form-field>
         </expression>
         }
 
         @if (selectedExpressionType === ExpressionType.DEPARTMENT_SPECIALITY) {
         <expression [action]="appendSimpleStringExpression">
-            <mat-form-field class="value-input">
-                <mat-label>Afdelingsspeciale</mat-label>
-                <input matInput [matAutocomplete]="autoDep" [formControl]="simpleValueForm" />
-                <mat-autocomplete #autoDep="matAutocomplete">
-                    @for (speciality of filteredDepartmentSpecialities | async; track speciality) {
-                    <mat-option [value]="speciality">{{speciality}}</mat-option>
-                    }
-                </mat-autocomplete>
-            </mat-form-field>
+            <input-autocomplete class="value-input" label="Afdelingsspeciale" [values]="departmentSpecialities" [(value)]="simpleValue"></input-autocomplete>
         </expression>
         }
 
         @if (selectedExpressionType === ExpressionType.EXISTING_DRUG_MEDICATION) {
-        <expression [action]="appendExistingDrugMedicationExpression">
+        <expression [action]="appendExistingDrugMedicationExpression" [hidden]="selectedExpressionType !== ExpressionType.EXISTING_DRUG_MEDICATION">
             <div class="existing-drug-medication-fields">
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('ATC'| dslHighlight)"></code>
-                    <mat-form-field class="value-input">
-                        <input matInput [matAutocomplete]="autoAtc" [formControl]="atcCodeForm" />
-                        <mat-autocomplete #autoAtc="matAutocomplete">
-                            @for (atcCode of filteredAtcCodes | async; track atcCode) {
-                            <mat-option [value]="atcCode">{{atcCode}}</mat-option>
-                            }
-                        </mat-autocomplete>
-                    </mat-form-field>
+                    <input-autocomplete class="value-input" [values]="atcCodes" [(value)]="atcCode"></input-autocomplete>
                 </div>
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('FORM'| dslHighlight)"></code>
-                    <mat-form-field class="value-input">
-                        <input matInput [matAutocomplete]="autoForm" [formControl]="formCodeForm" />
-                        <mat-autocomplete #autoForm="matAutocomplete">
-                            @for (formCode of filteredFormCodes | async; track formCode) {
-                            <mat-option [value]="formCode">{{formCode}}</mat-option>
-                            }
-                        </mat-autocomplete>
-                    </mat-form-field>
+                    <input-autocomplete class="value-input" [values]="formCodes" [(value)]="formCode"></input-autocomplete>
                 </div>
                 <div class="existing-drug-medication-field">
                     <code class="existing-drug-medication-identifier" [innerHTML]="('ROUTE'| dslHighlight)"></code>
                     <mat-form-field class="value-input">
-                        <input matInput [formControl]="routeCodeForm" />
+                        <input matInput [(ngModel)]="routeCode" />
                     </mat-form-field>
                 </div>
             </div>

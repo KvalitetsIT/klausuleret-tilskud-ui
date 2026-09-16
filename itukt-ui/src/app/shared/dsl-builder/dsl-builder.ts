@@ -1,20 +1,18 @@
-import { Component, inject, Input, signal } from '@angular/core';
-import { AbstractControl, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, Input } from '@angular/core';
+import { AbstractControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { ExpressionType } from '../expression-types';
-import { Expression } from './expression/expression';
-import { ClauseService } from 'src/app/services/clause-service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { AsyncPipe } from '@angular/common';
-import { Observable } from 'rxjs/internal/Observable';
-import { map, startWith } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import { ClauseService } from 'src/app/services/clause-service';
 import { DslHighlightPipe } from '../dsl-highlight-pipe';
+import { ExpressionType } from '../expression-types';
+import { InputAutocomplete } from '../input-autocomplete/input-autocomplete';
+import { Expression } from './expression/expression';
 
 @Component({
     standalone: true,
@@ -32,9 +30,9 @@ import { DslHighlightPipe } from '../dsl-highlight-pipe';
         Expression,
         MatProgressSpinner,
         MatAutocompleteModule,
-        AsyncPipe,
         ReactiveFormsModule,
-        DslHighlightPipe
+        DslHighlightPipe,
+        InputAutocomplete
     ],
 })
 export class DslBuilder {
@@ -48,41 +46,28 @@ export class DslBuilder {
     ageOperators = ['=', '<', '<=', '>=', '>'];
     selectedAgeOperator = this.ageOperators[0];
 
-    simpleValueForm = new FormControl('');
-    formCodeForm = new FormControl('');
-    atcCodeForm = new FormControl('');
-    routeCodeForm = new FormControl('');
-
-    filteredDepartmentSpecialities: Observable<string[]> | undefined;
-    filteredFormCodes: Observable<string[]> | undefined;
-    filteredAtcCodes: Observable<string[]> | undefined;
+    departmentSpecialities: Set<string> | undefined;
+    atcCodes: Set<string> | undefined;
+    formCodes: Set<string> | undefined;
+    
+    simpleValue = '';
+    atcCode = '';
+    formCode = '';
+    routeCode = '';
 
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
             .subscribe({
-                next: (departmentSpecialities) => this.filteredDepartmentSpecialities = this._createFilteredValues(this.simpleValueForm, departmentSpecialities)
+                next: (departmentSpecialities) => this.departmentSpecialities = departmentSpecialities
             });
         this.clauseService.getMedicationFormCodes()
             .subscribe({
-                next: (formCodes) => this.filteredFormCodes = this._createFilteredValues(this.formCodeForm, formCodes)
+                next: (formCodes) => this.formCodes = formCodes
             });
         this.clauseService.getMedicationAtcCodes()
             .subscribe({
-                next: (atcCodes) => this.filteredAtcCodes = this._createFilteredValues(this.atcCodeForm, atcCodes)
+                next: (atcCodes) => this.atcCodes = atcCodes
             });
-    }
-
-    private _createFilteredValues(formControl: FormControl, values: Set<string>): Observable<string[]> {
-        const options = Array.from(values).sort();
-        return formControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._filter(value || '', options)),
-        );
-    }
-
-    private _filter(value: string, options: string[]): string[] {
-        return options
-            .filter(option => option.toLowerCase().includes(value.toLowerCase()));
     }
 
     dslReadyForExpression(): boolean {
@@ -91,19 +76,19 @@ export class DslBuilder {
     }
 
     appendExistingDrugMedicationExpression = () => {
-        const atcValue = this.atcCodeForm.value ? `ATC = "${this.atcCodeForm.value}"` : undefined;
-        const formValue = this.formCodeForm.value ? `FORM = "${this.formCodeForm.value}"` : undefined;
-        const routeValue = this.routeCodeForm.value ? `ROUTE = "${this.routeCodeForm.value}"` : undefined;
+        const atcValue = this.atcCode != '' ? `ATC = "${this.atcCode}"` : undefined;
+        const formValue = this.formCode != '' ? `FORM = "${this.formCode}"` : undefined;
+        const routeValue = this.routeCode != '' ? `ROUTE = "${this.routeCode}"` : undefined;
         const values = [atcValue, formValue, routeValue].filter(v => v !== undefined);
         this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
     }
 
     appendAgeExpression = () => {
-        this.appendExpression(this.selectedAgeOperator, this.simpleValueForm.value as string);
+        this.appendExpression(this.selectedAgeOperator, this.simpleValue);
     }
 
     appendSimpleStringExpression = () => {
-        this.appendExpression('=', `"${this.simpleValueForm.value}"`);
+        this.appendExpression('=', `"${this.simpleValue}"`);
     }
 
     appendExpression(operator: string, value: string) {
@@ -120,9 +105,9 @@ export class DslBuilder {
 
     resetOperatorAndValues() {
         this.selectedAgeOperator = this.ageOperators[0];
-        this.simpleValueForm.setValue("");
-        this.formCodeForm.setValue("");
-        this.atcCodeForm.setValue("");
-        this.routeCodeForm.setValue("");
+        this.formCode = "";
+        this.atcCode = "";
+        this.routeCode = "";
+        this.simpleValue = "";
     }
 }
