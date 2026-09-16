@@ -31,13 +31,27 @@ export class InputAutocomplete {
     @Input() value: string = '';
     @Output() valueChange = new EventEmitter<string>();
 
-    formControl = new FormControl('');
+    initialMaxOptions = 200;
+    maxOptions = this.initialMaxOptions;
+
+    formControl = new FormControl();
     filteredValues: Observable<string[]> | undefined;
 
     ngOnInit(): void {
         this.formControl.setValue(this.value, { emitEvent: false });
-        this.formControl.valueChanges.subscribe(val => this.valueChange.emit(val || ''));
+        this.formControl.valueChanges.subscribe(val => {
+            this.valueChange.emit(val || '');
+            this.maxOptions = this.initialMaxOptions;
+        });
         this.filteredValues = this._createFilteredValues(this.formControl, this.values)
+    }
+
+    showMoreOptions() {
+        this.maxOptions += this.maxOptions;
+    }
+
+    onInputBlur() {
+        this.maxOptions = this.initialMaxOptions;
     }
 
     private _createFilteredValues(formControl: FormControl, values: Set<string>): Observable<string[]> {
