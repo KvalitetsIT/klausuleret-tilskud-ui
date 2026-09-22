@@ -1,47 +1,9 @@
 services:
-  
-  init:
+  itukt-ui:
     environment:
-    - ITUKT_AUTH_GATEWAY_URL=https://klaus-gateway-local.t0.hosting.kitkube.dk
+    - ITUKT_AUTH_GATEWAY_URL=https://klaus-gateway-without-oiosaml.t0.hosting.kitkube.dk
     build:
       context: ../
       dockerfile: ./Dockerfile
-    volumes:
-      - init-dockerentrypoint:/temp/docker-entrypoint.d
-      - nginx:/temp/etc/nginx
-      - run:/temp/var/run
-      - cache-nginx:/temp/var/cache/nginx
-  frontend:
-    image: nginxinc/nginx-unprivileged:alpine3.17
-    restart: always
-    volumes:
-      - init-dockerentrypoint:/docker-entrypoint.d
-      - nginx:/etc/nginx
-      - run:/var/run
-      - cache-nginx:/var/cache/nginx
     ports:
       - "4200:80"
-    depends_on:
-      - init
-      
-volumes:
-  init-dockerentrypoint:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  nginx:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  cache-nginx:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs
-  run:
-    driver: local
-    driver_opts:
-      type: tmpfs
-      device: tmpfs

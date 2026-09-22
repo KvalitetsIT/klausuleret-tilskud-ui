@@ -39,8 +39,7 @@ RUN mkdir -p /var/cache/nginx/
 RUN chmod 777 /var/cache/nginx/
 
 # Run our startup script
-CMD /runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ && \
-    chmod 777 /usr/share/nginx/html/index.html &&\
-    cp -R /usr/share/nginx/* /temp/etc/nginx/ &&\
-    cp -R -p /var/cache/nginx /temp/var/cache/ &&\
-    cp -R /docker-entrypoint.d/* /temp/docker-entrypoint.d/
+RUN /runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ && \
+    chmod 777 /usr/share/nginx/html/index.html
+
+CMD ["nginx", "-g", "daemon off;"]
