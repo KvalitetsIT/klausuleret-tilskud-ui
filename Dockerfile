@@ -20,9 +20,9 @@ RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 RUN go install github.com/KvalitetsIT/runtime-js-env@83fdece6e4a6244909157ab100b091cb611ad481
 
 # STAGE 3: Copy the built application into Nginx for serving
-FROM nginx:alpine3.22
+FROM nginxinc/nginx-unprivileged:alpine3.24
 
-COPY --from=build /app/dist/itukt-ui/browser /usr/share/nginx/html
+COPY --from=build /app/dist/itukt-ui/browser /etc/nginx/html
 
 # Copy package-lock for easier CVE scanning
 COPY --from=build /app/package-lock.json /opt/kvalitetsit/package-lock.json
@@ -31,15 +31,13 @@ COPY --from=build /app/package-lock.json /opt/kvalitetsit/package-lock.json
 COPY --from=go-downloader /go/bin/runtime-js-env /
 
 # Copy custom nginx config
-COPY ./itukt-ui/nginx/nginx.conf /usr/share/nginx/nginx.conf
-COPY ./itukt-ui/nginx/mime.types /usr/share/nginx/mime.types
-RUN rm /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+COPY ./itukt-ui/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./itukt-ui/nginx/mime.types /etc/nginx/mime.types
 
-RUN mkdir -p /var/cache/nginx/
-RUN chmod 777 /var/cache/nginx/
+COPY entrypoint.sh .
 
-# Run our startup script
-RUN /runtime-js-env -i usr/share/nginx/html/index.html -w __RUNTIME_CONFIG__ -p ITUKT_ && \
-    chmod 777 /usr/share/nginx/html/index.html
-
-CMD ["nginx", "-g", "daemon off;"]
+USER root
+RUN chown nginx:nginx /etc/nginx/html/
+RUN chmod 700 /etc/nginx/html/
+USER nginx
+ENTRYPOINT ["/entrypoint.sh"]
