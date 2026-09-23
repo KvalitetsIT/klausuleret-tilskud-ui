@@ -37,7 +37,7 @@ COPY ./itukt-ui/nginx/mime.types /etc/nginx/mime.types
 COPY entrypoint.sh .
 
 USER root
-RUN chown nginx:nginx /etc/nginx/html/
-RUN chmod 700 /etc/nginx/html/
-USER nginx
+RUN apk add --no-cache su-exec
+
 ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
