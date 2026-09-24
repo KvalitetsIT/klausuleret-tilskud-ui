@@ -15,8 +15,8 @@ I compose folderen, kør:
 docker compose up
 ```
 
-Man skal pege på en kørende instans af klausuleret-tilskud-valideringskomponenten, for at der kan vises og redigeres data i app'en. 
-Komponenten findes her: https://github.com/KvalitetsIT/klausuleret-tilskud-valideringskomponent/
+Man skal pege på en kørende instans af gateway'en til api'et, for at der kan vises og redigeres data i app'en. 
+Gateway komponenten findes her: https://github.com/KvalitetsIT/klausuleret-tilskud-auth-gateway
 
 Angular-app'en kan også startes direkte med `ng serve` via npm, hvilket er praktisk under udvikling.
 
