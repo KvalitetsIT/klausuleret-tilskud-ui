@@ -4,4 +4,4 @@ Komponenten findes som image på Dockerhub: [kvalitetsit/klausuleret-tilskud-ui]
 
 Konfigurationen er beskrevet her: [Konfiguration](configuration.md)
 
-Dette image vil bygge en Angular app, som herefter kan startes med en Nginx container.
+Dette image indeholder en Angular app, som køres i en Nginx container og er tilgængelig på port 8080
