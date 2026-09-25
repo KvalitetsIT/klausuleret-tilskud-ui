@@ -46,9 +46,12 @@ export class DslBuilder {
     ageOperators = ['=', '<', '<=', '>=', '>'];
     selectedAgeOperator = this.ageOperators[0];
 
-    departmentSpecialities: Set<string> | undefined;
-    atcCodes: Set<string> | undefined;
-    formCodes: Set<string> | undefined;
+    departmentSpecialities: string[] | undefined;
+    doctorSpecialities: string[] | undefined;
+    indicationCodes: string[] | undefined;
+    atcCodes: string[] | undefined;
+    formCodes: string[] | undefined;
+    routeCodes: string[] | undefined;
     
     simpleValue = '';
     atcCode = '';
@@ -58,15 +61,27 @@ export class DslBuilder {
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
             .subscribe({
-                next: (departmentSpecialities) => this.departmentSpecialities = departmentSpecialities
+                next: (departmentSpecialities) => this.departmentSpecialities = Array.from(departmentSpecialities).sort(),
+            });
+        this.clauseService.getDoctorSpecialities()
+            .subscribe({
+                next: (doctorSpecialities) => this.doctorSpecialities = Array.from(doctorSpecialities).sort(),
+            });
+        this.clauseService.getIndicationCodes()
+            .subscribe({
+                next: (indications) => this.indicationCodes = Array.from(indications).sort((a, b) => Number(a) - Number(b)).map(String),
             });
         this.clauseService.getMedicationFormCodes()
             .subscribe({
-                next: (formCodes) => this.formCodes = formCodes
+                next: (formCodes) => this.formCodes = Array.from(formCodes).sort(),
             });
         this.clauseService.getMedicationAtcCodes()
             .subscribe({
-                next: (atcCodes) => this.atcCodes = atcCodes
+                next: (atcCodes) => this.atcCodes = Array.from(atcCodes).sort(),
+            });
+        this.clauseService.getMedicationRouteCodes()
+            .subscribe({
+                next: (routeCodes) => this.routeCodes = Array.from(routeCodes).sort(),
             });
     }
 

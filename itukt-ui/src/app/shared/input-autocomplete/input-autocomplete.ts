@@ -26,7 +26,7 @@ import { Observable } from 'rxjs/internal/Observable';
     ],
 })
 export class InputAutocomplete {
-    @Input({ required: true }) values!: Set<string>;
+    @Input({ required: true }) values!: string[];
     @Input() label?: string;
     @Input() value: string = '';
     @Output() valueChange = new EventEmitter<string>();
@@ -54,11 +54,10 @@ export class InputAutocomplete {
         this.maxOptions = this.initialMaxOptions;
     }
 
-    private _createFilteredValues(formControl: FormControl, values: Set<string>): Observable<string[]> {
-        const options = Array.from(values).sort();
+    private _createFilteredValues(formControl: FormControl, values: string[]): Observable<string[]> {
         return formControl.valueChanges.pipe(
             startWith(''),
-            map(value => this._filter(value || '', options)),
+            map(value => this._filter(value || '', values)),
         );
     }
 
