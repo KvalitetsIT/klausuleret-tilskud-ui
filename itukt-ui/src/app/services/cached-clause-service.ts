@@ -53,6 +53,18 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Set<string>>(() => this.concreteClauseService.getMedicationAtcCodes(), "getMedicationAtcCodes");
     }
 
+    getMedicationRouteCodes(): Observable<Set<string>> {
+        return this.cache.get<Set<string>>(() => this.concreteClauseService.getMedicationRouteCodes(), "getMedicationRouteCodes");
+    }
+
+    getIndicationCodes(): Observable<Set<number>> {
+        return this.cache.get<Set<number>>(() => this.concreteClauseService.getIndicationCodes(), "getIndicationCodes");
+    }
+
+    getDoctorSpecialities(): Observable<Set<string>> {
+        return this.cache.get<Set<string>>(() => this.concreteClauseService.getDoctorSpecialities(), "getDoctorSpecialities");
+    }
+
     private withCacheClear(response: Observable<any>): Observable<any> {
         return response.pipe(
             tap(() => {
