@@ -1,11 +1,14 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { DslOutput } from '@api/index';
 import { Observable } from 'rxjs';
 import { ClauseService } from 'src/app/services/clause-service';
+import { DslBuilder } from 'src/app/shared/dsl-builder/dsl-builder';
 import { DslTooltip } from 'src/app/shared/dsl-tooltip/dsl-tooltip';
 
 @Component({
@@ -19,6 +22,9 @@ import { DslTooltip } from 'src/app/shared/dsl-tooltip/dsl-tooltip';
         FormsModule,
         ReactiveFormsModule,
         DslTooltip,
+        MatButtonModule,
+        MatIconModule,
+        DslBuilder,
     ],
 })
 export class ClauseEditItems {
@@ -27,6 +33,7 @@ export class ClauseEditItems {
     private service = inject(ClauseService);
     private fb = inject(FormBuilder);
     form!: FormGroup;
+    editMode = false;
 
     ngOnInit() {
         this.form = this.fb.group({
@@ -40,6 +47,10 @@ export class ClauseEditItems {
         return this.clause.status == 'DRAFT'
             ? this.service.updateDraftClause(this.clause.name, { dsl: dsl ?? '', error: error ?? '' }, skipValidation)
             : this.service.createClause({ name: this.clause.name, dsl: dsl ?? '', error: error ?? '' }, skipValidation);
+    }
+
+    editModeOnOff() {
+        this.editMode = !this.editMode;
     }
 
 }

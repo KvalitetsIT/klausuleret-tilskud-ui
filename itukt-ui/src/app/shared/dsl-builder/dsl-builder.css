@@ -1,0 +1,45 @@
+.builder {
+    margin-bottom: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.expression-type {
+    width: 100%;
+}
+
+.age-operator {
+    width: 5em !important;
+}
+
+.fields {
+    display: flex;
+    gap: 1em;
+    width: 100%;
+}
+
+.existing-drug-medication-fields {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.existing-drug-medication-field {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+}
+
+.existing-drug-medication-identifier {
+    width: 4em;
+}
+
+.value-input {
+    width: 100%;
+}
+
+.and-or {
+    display: flex;
+    gap: 1em;
+}
