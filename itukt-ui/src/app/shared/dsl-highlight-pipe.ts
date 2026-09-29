@@ -8,17 +8,21 @@ import { SafeHtml } from '@angular/platform-browser';
 export class DslHighlightPipe implements PipeTransform {
   transform(input: string | null | undefined): SafeHtml {
     const src = (input ?? '').toString();
-    let out = src;
 
-    // numbers
-    out = out.replace(/\b\d+(?:\.\d+)?\b/g, '<span class="dsl-number">$&</span>');
+    const identifierRegex = '\\b(ALDER|INDIKATION|LÆGESPECIALE|AFDELINGSSPECIALE|EKSISTERENDE_LÆGEMIDDEL|FORM|ATC|ROUTE)\\b';
+    const numberRegex = '\\b(\\d+)\\b';
+    const stringRegex = '("[^\\"]*")';
+    const keywordRegex = '\\b(eller|og|i)\\b';
+    const regex = [identifierRegex, numberRegex, stringRegex, keywordRegex].join('|');
 
-    // identifiers
-    out = out.replace(/\b(ALDER|INDIKATION|LÆGESPECIALE|AFDELINGSSPECIALE|EKSISTERENDE_LÆGEMIDDEL|FORM|ATC|ROUTE)\b/g, '<span class="dsl-id">$&</span>');
-
-    // keywords
-    out = out.replace(/\b(eller|og|i)\b/g, '<span class="dsl-keyword">$1</span>');
-
-    return out;
+    return src.replace(new RegExp(regex, 'g'),
+      (match, id, num, str, keyword) => {
+        if (id) return `<span class="dsl-id">${id}</span>`;
+        if (num) return `<span class="dsl-number">${num}</span>`;
+        if (str) return `<span class="dsl-string">${str}</span>`;
+        if (keyword) return `<span class="dsl-keyword">${keyword}</span>`;
+        return match;
+      }
+    );
   }
 }
