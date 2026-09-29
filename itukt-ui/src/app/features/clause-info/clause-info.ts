@@ -37,7 +37,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 export class ClauseInfo {
   @Input({ required: true }) clause!: DslOutput;
 
-  @ViewChild(ClauseEditItems) editItems!: ClauseEditItems;
+  @ViewChild(ClauseEditItems) editItems?: ClauseEditItems;
 
   private clauseService = inject(ClauseService);
   private clauseDialogService = inject(ClauseDialogService);
@@ -89,7 +89,7 @@ export class ClauseInfo {
 
   save() {
     this.loading = true;
-    this.editItems.save(false)
+    this.editItems?.save(false)
       .subscribe({
         next: (clauseDraft) => {
           this.onSaveSuccess(clauseDraft);
@@ -115,7 +115,7 @@ export class ClauseInfo {
       "Validering fejlede",
       "Vil du gemme klausulen alligevel?",
       undefined,
-      () => this.editItems.save(true),
+      () => this.editItems!.save(true),
       (result) => this.onSaveSuccess(result),
       "Ja"
     );

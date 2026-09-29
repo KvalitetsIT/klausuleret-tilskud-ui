@@ -13,7 +13,7 @@
 <div class="action-buttons">
   @if (editMode) {
   <button matButton (click)="cancelEditMode()" [disabled]="loading">Fortryd</button>
-  <button matButton (click)="save()" [disabled]="loading || editItems?.form?.invalid">
+  <button matButton (click)="save()" [disabled]="loading || (editItems?.form?.invalid ?? true)">
     {{clause.status == "DRAFT" ? "Gem" : "Opret kladde"}}
     @if (loading) {
     <div class="spinner">

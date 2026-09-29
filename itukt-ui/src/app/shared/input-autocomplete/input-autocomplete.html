@@ -1,0 +1,14 @@
+<mat-form-field>
+    <mat-label>{{label}}</mat-label>
+    <input matInput [matAutocomplete]="auto" [formControl]="formControl" (blur)="onInputBlur()" />
+    <mat-autocomplete #auto="matAutocomplete">
+        @for (value of filteredValues | async; let i = $index; track value) {
+            @if (i < maxOptions) {
+                <mat-option [value]="value">{{value}}</mat-option>
+            }
+        }
+        @if (((filteredValues | async)?.length ?? 0) > maxOptions) {
+            <button mat-button (click)="showMoreOptions()">Vis flere</button>
+        }
+    </mat-autocomplete>
+</mat-form-field>
