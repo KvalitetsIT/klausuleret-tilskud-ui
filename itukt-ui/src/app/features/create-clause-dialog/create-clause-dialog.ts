@@ -46,6 +46,7 @@ export class CreateClauseDialog {
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
     
+    readonly requiredValidator = ClauseValidators.Required;
     readonly nameInUseValidator = ClauseValidators.NameInUse;
     
     loading = false;
@@ -55,14 +56,14 @@ export class CreateClauseDialog {
     form = this.fb.group({
         name: ['',
             [
-                Validators.required,
+                this.requiredValidator.validator,
                 this.nameInUseValidator.validator
             ]
         ],
-        dsl: ['', Validators.required],
+        dsl: ['', this.requiredValidator.validator],
         error: ['',
             [
-                Validators.required,
+                this.requiredValidator.validator,
             ]
         ]
     });
