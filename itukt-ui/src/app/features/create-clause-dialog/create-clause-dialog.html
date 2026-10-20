@@ -10,9 +10,9 @@
         Påkrævet
       </mat-error>
       }
-      @if (form.get('name')?.hasError('nameInUseByActiveClause')) {
+      @if (form.get('name')?.hasError(nameInUseValidator.name)) {
       <mat-error>
-        Klausulkode allerede i brug
+        {{nameInUseValidator.errorMessage}}
       </mat-error>
       }
     </mat-form-field>
