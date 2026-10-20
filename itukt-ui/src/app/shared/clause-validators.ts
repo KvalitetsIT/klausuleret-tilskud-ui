@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidationErrors, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ClauseStatus, DslOutput } from '@api/index';
 import { ClauseService } from '../services/clause-service';
@@ -8,6 +8,13 @@ export interface ClauseValidator {
     name: string;
     validator: (control: AbstractControl<string>) => ValidationErrors | null;
     errorMessage: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class Required implements ClauseValidator {
+    name = 'required';
+    validator = Validators.required;
+    errorMessage = 'Påkrævet';
 }
 
 @Injectable({ providedIn: 'root' })
@@ -32,6 +39,10 @@ export class NameInUse implements ClauseValidator {
 }
 
 export class ClauseValidators {
+    static get Required(): ClauseValidator {
+        return inject(Required);
+    }
+
     static get NameInUse(): ClauseValidator {
         return inject(NameInUse);
     }
