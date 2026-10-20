@@ -40,6 +40,11 @@
                         {{ requiredValidator.errorMessage }}
                     </mat-error>
                     }
+                    @if (form.get('error')?.hasError(errorLengthValidator.name)) {
+                    <mat-error>
+                        {{ errorLengthValidator.errorMessage }}
+                    </mat-error>
+                    }
                 </mat-form-field>
             </div>
         </div>

@@ -35,6 +35,7 @@ export class ClauseEditItems {
     private fb = inject(FormBuilder);
 
     readonly requiredValidator = ClauseValidators.Required;
+    readonly errorLengthValidator = ClauseValidators.ErrorMaxLength;
 
     form!: FormGroup;
     editMode = false;
@@ -42,7 +43,12 @@ export class ClauseEditItems {
     ngOnInit() {
         this.form = this.fb.group({
             dsl: [this.clause.dsl, this.requiredValidator.validator],
-            error: [this.clause.error, this.requiredValidator.validator],
+            error: [this.clause.error, 
+                [
+                    this.requiredValidator.validator, 
+                    this.errorLengthValidator.validator
+                ]
+            ],
         });
     }
 

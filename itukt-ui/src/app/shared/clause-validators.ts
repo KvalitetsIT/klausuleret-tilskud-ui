@@ -4,21 +4,35 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ClauseStatus, DslOutput } from '@api/index';
 import { ClauseService } from '../services/clause-service';
 
-export interface ClauseValidator {
+interface ClauseValidator {
     name: string;
     validator: (control: AbstractControl<string>) => ValidationErrors | null;
     errorMessage: string;
 }
 
-@Injectable({ providedIn: 'root' })
-export class Required implements ClauseValidator {
+class Required implements ClauseValidator {
     name = 'required';
     validator = Validators.required;
     errorMessage = 'Påkrævet';
 }
 
+class MaxLength implements ClauseValidator {
+    private maxLength: number;
+    constructor(maxLength: number) {
+        this.maxLength = maxLength;
+    }
+
+    name = 'maxlength';
+    get validator() {
+        return Validators.maxLength(this.maxLength);
+    }
+    get errorMessage() {
+        return `Maksimal længde er ${this.maxLength} tegn`;
+    }
+}
+
 @Injectable({ providedIn: 'root' })
-export class NameInUse implements ClauseValidator {
+class NameInUse implements ClauseValidator {
     private clauseService = inject(ClauseService);
 
     private activeClauses = toSignal<Array<DslOutput>>(
@@ -39,9 +53,8 @@ export class NameInUse implements ClauseValidator {
 }
 
 export class ClauseValidators {
-    static get Required(): ClauseValidator {
-        return inject(Required);
-    }
+    public static readonly ErrorMaxLength = new MaxLength(1000);
+    public static readonly Required = new Required();
 
     static get NameInUse(): ClauseValidator {
         return inject(NameInUse);

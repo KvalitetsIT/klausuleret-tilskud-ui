@@ -48,6 +48,7 @@ export class CreateClauseDialog {
     
     readonly requiredValidator = ClauseValidators.Required;
     readonly nameInUseValidator = ClauseValidators.NameInUse;
+    readonly errorLengthValidator = ClauseValidators.ErrorMaxLength;
     
     loading = false;
     name = '';
@@ -64,6 +65,7 @@ export class CreateClauseDialog {
         error: ['',
             [
                 this.requiredValidator.validator,
+                this.errorLengthValidator.validator
             ]
         ]
     });
