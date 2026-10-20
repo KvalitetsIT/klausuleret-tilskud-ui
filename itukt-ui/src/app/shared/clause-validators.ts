@@ -4,8 +4,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ClauseStatus, DslOutput } from '@api/index';
 import { ClauseService } from '../services/clause-service';
 
+export interface ClauseValidator {
+    name: string;
+    validator: (control: AbstractControl<string>) => ValidationErrors | null;
+    errorMessage: string;
+}
+
 @Injectable({ providedIn: 'root' })
-export class ClauseValidators {
+export class NameInUse implements ClauseValidator {
     private clauseService = inject(ClauseService);
 
     private activeClauses = toSignal<Array<DslOutput>>(
@@ -15,10 +21,18 @@ export class ClauseValidators {
         this.clauseService.getClauses(ClauseStatus.Draft)
     );
 
-    clauseNameInUseValidator = (control: AbstractControl<string>): ValidationErrors | null => {
+    name = 'nameInUseByActiveClause';
+    validator = (control: AbstractControl<string>): ValidationErrors | null => {
         return this.activeClauses()?.some(c => c.name.toUpperCase() === control.value.toUpperCase())
             || this.draftClauses()?.some(c => c.name.toUpperCase() === control.value.toUpperCase())
-            ? { nameInUseByActiveClause: true }
+            ? { [this.name]: true }
             : null;
     };
+    errorMessage = 'Klausulkode allerede i brug';
+}
+
+export class ClauseValidators {
+    static get NameInUse(): ClauseValidator {
+        return inject(NameInUse);
+    }
 }
