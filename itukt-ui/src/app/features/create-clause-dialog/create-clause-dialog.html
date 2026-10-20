@@ -15,6 +15,11 @@
         {{nameInUseValidator.errorMessage}}
       </mat-error>
       }
+      @if (form.get('name')?.hasError(nameLengthValidator.name)) {
+      <mat-error>
+        {{ nameLengthValidator.errorMessage }}
+      </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <mat-label>Klausulbetingelse</mat-label>

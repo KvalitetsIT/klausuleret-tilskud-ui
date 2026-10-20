@@ -53,10 +53,11 @@ class NameInUse implements ClauseValidator {
 }
 
 export class ClauseValidators {
-    public static readonly ErrorMaxLength = new MaxLength(1000);
     public static readonly Required = new Required();
+    public static readonly ErrorMaxLength = new MaxLength(1000);
+    public static readonly NameMaxLength = new MaxLength(255);
 
-    static get NameInUse(): ClauseValidator {
+    public static get NameInUse(): ClauseValidator {
         return inject(NameInUse);
     }
 }
