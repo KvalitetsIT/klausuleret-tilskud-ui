@@ -1,5 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ClauseValidators } from 'src/app/shared/clause-validators';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,13 +33,22 @@ export class ClauseEditItems {
 
     private service = inject(ClauseService);
     private fb = inject(FormBuilder);
+
+    readonly requiredValidator = ClauseValidators.Required;
+    readonly errorLengthValidator = ClauseValidators.ErrorMaxLength;
+
     form!: FormGroup;
     editMode = false;
 
     ngOnInit() {
         this.form = this.fb.group({
-            dsl: [this.clause.dsl, Validators.required],
-            error: [this.clause.error, Validators.required],
+            dsl: [this.clause.dsl, this.requiredValidator.validator],
+            error: [this.clause.error, 
+                [
+                    this.requiredValidator.validator, 
+                    this.errorLengthValidator.validator
+                ]
+            ],
         });
     }
 
