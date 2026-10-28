@@ -1,6 +1,7 @@
 import { Component, inject, Input, signal, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { computed } from '@angular/core';
 import { DslHighlightPipe } from '../../shared/dsl-highlight-pipe';
 
 import { MatCardModule } from '@angular/material/card';
@@ -39,9 +40,11 @@ export class Clauses {
 
   clauses: Signal<Array<DslOutput> | undefined> = signal(undefined);
 
-
   ngOnInit() {
-    this.clauses = this.getClauses();
+    const rawClauses = this.getClauses();
+    this.clauses = computed(() =>
+      rawClauses()?.sort((a, b) => a.name.localeCompare(b.name))
+    );
   }
 
   onRowClick(row: DslOutput): void {
