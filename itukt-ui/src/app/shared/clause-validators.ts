@@ -17,17 +17,13 @@ class Required implements ClauseValidator {
 }
 
 class MaxLength implements ClauseValidator {
-    private maxLength: number;
-    constructor(maxLength: number) {
-        this.maxLength = maxLength;
-    }
-
     name = 'maxlength';
-    get validator() {
-        return Validators.maxLength(this.maxLength);
-    }
-    get errorMessage() {
-        return `Maksimal længde er ${this.maxLength} tegn`;
+    validator: (control: AbstractControl<string>) => ValidationErrors | null;
+    errorMessage: string;
+    
+    constructor(maxLength: number) {
+        this.validator = Validators.maxLength(maxLength);
+        this.errorMessage = `Maksimal længde er ${maxLength} tegn`;
     }
 }
 
