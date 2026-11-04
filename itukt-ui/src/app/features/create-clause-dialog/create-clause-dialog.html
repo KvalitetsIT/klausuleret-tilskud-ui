@@ -5,14 +5,19 @@
       <mat-label>Klausulkode</mat-label>
       <textarea matInput formControlName="name" cdkTextareaAutosize cdkAutosizeMinRows="1" (blur)="onNameBlur()"></textarea>
       <drugs-count-chip matSuffix [clauseName]="name" />
-      @if (form.get('name')?.hasError('required')) {
+      @if (form.get('name')?.hasError(requiredValidator.name)) {
       <mat-error>
-        Påkrævet
+        {{ requiredValidator.errorMessage }}
       </mat-error>
       }
-      @if (form.get('name')?.hasError('nameInUseByActiveClause')) {
+      @if (form.get('name')?.hasError(nameInUseValidator.name)) {
       <mat-error>
-        Klausulkode allerede i brug
+        {{nameInUseValidator.errorMessage}}
+      </mat-error>
+      }
+      @if (form.get('name')?.hasError(nameLengthValidator.name)) {
+      <mat-error>
+        {{ nameLengthValidator.errorMessage }}
       </mat-error>
       }
     </mat-form-field>
@@ -23,9 +28,9 @@
         <mat-icon>{{editMode ? 'edit_off' : 'edit'}}</mat-icon>
       </button>
       <dsl-tooltip matSuffix />
-      @if (form.get('dsl')?.hasError('required')) {
+      @if (form.get('dsl')?.hasError(requiredValidator.name)) {
       <mat-error>
-        Påkrævet
+        {{ requiredValidator.errorMessage }}
       </mat-error>
       }
     </mat-form-field>
@@ -35,9 +40,14 @@
     <mat-form-field>
       <mat-label>Fejlbesked</mat-label>
       <textarea matInput formControlName="error" cdkTextareaAutosize cdkAutosizeMinRows="1"></textarea>
-      @if (form.get('error')?.hasError('required')) {
+      @if (form.get('error')?.hasError(requiredValidator.name)) {
       <mat-error>
-        Påkrævet
+        {{ requiredValidator.errorMessage }}
+      </mat-error>
+      }
+      @if (form.get('error')?.hasError(errorLengthValidator.name)) {
+      <mat-error>
+        {{ errorLengthValidator.errorMessage }}
       </mat-error>
       }
     </mat-form-field>

@@ -40,12 +40,17 @@ import { MatIconModule } from "@angular/material/icon";
 })
 export class CreateClauseDialog {
     private service = inject(ClauseService);
-    private clauseValidators = inject(ClauseValidators);
     private fb = inject(FormBuilder)
     private clauseDialogService = inject(ClauseDialogService);
     private confirmationDialogService = inject(ConfirmationDialogService);
 
     readonly dialogRef = inject(MatDialogRef<CreateClauseDialog>);
+    
+    readonly requiredValidator = ClauseValidators.Required;
+    readonly nameInUseValidator = ClauseValidators.NameInUse;
+    readonly nameLengthValidator = ClauseValidators.NameMaxLength;
+    readonly errorLengthValidator = ClauseValidators.ErrorMaxLength;
+    
     loading = false;
     name = '';
     editMode = false;
@@ -53,12 +58,18 @@ export class CreateClauseDialog {
     form = this.fb.group({
         name: ['',
             [
-                Validators.required,
-                this.clauseValidators.clauseNameInUseValidator
+                this.requiredValidator.validator,
+                this.nameInUseValidator.validator,
+                this.nameLengthValidator.validator
             ]
         ],
-        dsl: ['', Validators.required],
-        error: ['', Validators.required]
+        dsl: ['', this.requiredValidator.validator],
+        error: ['',
+            [
+                this.requiredValidator.validator,
+                this.errorLengthValidator.validator
+            ]
+        ]
     });
 
     editModeOnOff() {
