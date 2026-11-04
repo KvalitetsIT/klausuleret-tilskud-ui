@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { GatewayService } from '@gateway/api/api';
 import { environment } from '../environments/environment';
@@ -10,16 +10,35 @@ import { environment } from '../environments/environment';
   imports: [RouterOutlet],
   templateUrl: './app.html',
 })
-export class App {
+export class App implements OnInit, OnDestroy {
   public readonly title = signal('itukt-ui');
   public readonly userLoggedIn = signal<boolean | undefined>(undefined);
   public readonly userAuthorized = signal<boolean | undefined>(undefined);
+  private readonly gatewayService: GatewayService;
 
-  public constructor(gatewayService: GatewayService) {
+  private intervalId: any;
+
+  ngOnInit(): void {
     console.debug('App initialized');
     console.debug('Auth Gateway URL:', environment.authGatewayUrl);
 
-    gatewayService.authCheck().subscribe({
+    this.intervalId = setInterval(() => {
+      // Checks if the user is still authenticated
+      this.checkAuth();
+    }, 5000);   
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalId)
+  }
+
+  public constructor(gatewayService: GatewayService) {
+    this.gatewayService = gatewayService
+  }
+
+  private checkAuth() {
+    console.debug('Checking authentication status');
+    this.gatewayService.authCheck().subscribe({
       next: () => {
         console.debug('Successfully authorized user');
         this.userLoggedIn.set(true);
