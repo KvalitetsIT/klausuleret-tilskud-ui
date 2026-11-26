@@ -1,6 +1,6 @@
 <mat-card class="builder">
     <mat-card-content>
-        @if (departmentSpecialities === undefined || doctorSpecialities === undefined || indicationCodes === undefined || atcCodes === undefined || formCodes === undefined || routeCodes === undefined) {
+        @if (departmentSpecialities === undefined || doctorSpecialities === undefined || indications === undefined || atcCodes === undefined || formCodes === undefined || routeCodes === undefined) {
         <mat-spinner [diameter]="30"></mat-spinner>
         } @else {
 
@@ -47,8 +47,8 @@
         }
 
         @if (selectedExpressionType === ExpressionType.INDICATION) {
-        <expression [action]="appendSimpleStringExpression">
-            <input-autocomplete class="value-input" label="Indikation" [values]="indicationCodes" [(value)]="simpleValue"></input-autocomplete>
+        <expression [action]="appendIndicationExpression">
+            <input-autocomplete class="value-input" label="Indikation" [values]="indications" [(value)]="indication" [renderOption]="renderIndication"></input-autocomplete>
         </expression>
         }
 

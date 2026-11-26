@@ -1,4 +1,4 @@
-import { ClauseStatus, ClauseStatusInput, DslInput, DslOutput, DslUpdateInput } from "@api/index";
+import { ClauseStatus, ClauseStatusInput, DslInput, DslOutput, DslUpdateInput, Indication } from "@api/index";
 import { Observable } from "rxjs/internal/Observable";
 
 export abstract class ClauseService {
@@ -14,6 +14,6 @@ export abstract class ClauseService {
     abstract getMedicationFormCodes(): Observable<Set<string>>;
     abstract getMedicationAtcCodes(): Observable<Set<string>>;
     abstract getMedicationRouteCodes(): Observable<Set<string>>;
-    abstract getIndicationCodes(): Observable<Set<number>>;
+    abstract getIndications(): Observable<Set<Indication>>;
     abstract getDoctorSpecialities(): Observable<Set<string>>;
 } 

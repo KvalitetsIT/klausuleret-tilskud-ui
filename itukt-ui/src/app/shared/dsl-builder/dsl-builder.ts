@@ -13,6 +13,7 @@ import { DslHighlightPipe } from '../dsl-highlight-pipe';
 import { ExpressionType } from '../expression-types';
 import { InputAutocomplete } from '../input-autocomplete/input-autocomplete';
 import { Expression } from './expression/expression';
+import { Indication } from '@api/model/indication';
 
 @Component({
     standalone: true,
@@ -48,15 +49,18 @@ export class DslBuilder {
 
     departmentSpecialities: string[] | undefined;
     doctorSpecialities: string[] | undefined;
-    indicationCodes: string[] | undefined;
+    indications: Indication[] | undefined;
     atcCodes: string[] | undefined;
     formCodes: string[] | undefined;
     routeCodes: string[] | undefined;
     
-    simpleValue = '';
-    atcCode = '';
-    formCode = '';
-    routeCode = '';
+    simpleValue: string | undefined = undefined;
+    atcCode: string | undefined = undefined;
+    formCode: string | undefined = undefined;
+    routeCode: string | undefined = undefined;
+    indication: Indication | string | undefined = undefined;
+
+    renderIndication = (option: Indication | undefined) => option ? `${option.text} (${option.code})` : '';
 
     ngOnInit(): void {
         this.clauseService.getDepartmentSpecialities()
@@ -67,9 +71,9 @@ export class DslBuilder {
             .subscribe({
                 next: (doctorSpecialities) => this.doctorSpecialities = Array.from(doctorSpecialities).sort(),
             });
-        this.clauseService.getIndicationCodes()
+        this.clauseService.getIndications()
             .subscribe({
-                next: (indications) => this.indicationCodes = Array.from(indications).sort((a, b) => Number(a) - Number(b)).map(String),
+                next: (indications) => this.indications = Array.from(indications).sort((a, b) => a.text.localeCompare(b.text)),
             });
         this.clauseService.getMedicationFormCodes()
             .subscribe({
@@ -91,9 +95,9 @@ export class DslBuilder {
     }
 
     appendExistingDrugMedicationExpression = () => {
-        const atcValue = this.atcCode != '' ? `ATC = "${this.atcCode}"` : undefined;
-        const formValue = this.formCode != '' ? `FORM = "${this.formCode}"` : undefined;
-        const routeValue = this.routeCode != '' ? `ROUTE = "${this.routeCode}"` : undefined;
+        const atcValue = (this.atcCode ?? '') != '' ? `ATC = "${this.atcCode}"` : undefined;
+        const formValue = (this.formCode ?? '') != '' ? `FORM = "${this.formCode}"` : undefined;
+        const routeValue = (this.routeCode ?? '') != '' ? `ROUTE = "${this.routeCode}"` : undefined;
         const values = [atcValue, formValue, routeValue].filter(v => v !== undefined);
         this.append([ExpressionType.EXISTING_DRUG_MEDICATION, "=", `{${values.join(', ')}}`]);
     }
@@ -102,13 +106,18 @@ export class DslBuilder {
         this.appendExpression(this.selectedAgeOperator, this.simpleValue);
     }
 
-    appendSimpleStringExpression = () => {
-        this.appendExpression('=', `"${this.simpleValue}"`);
+    appendIndicationExpression = () => {
+        const indicationCode = this.indication == undefined ? '' : (typeof this.indication === 'string' ? this.indication : this.indication?.code);
+        this.appendExpression('=', `"${indicationCode}"`);
     }
 
-    appendExpression(operator: string, value: string) {
+    appendSimpleStringExpression = () => {
+        this.appendExpression('=', `"${this.simpleValue ?? ''}"`);
+    }
+
+    appendExpression(operator: string, value?: string) {
         if (this.selectedExpressionType === undefined) return;
-        this.append([this.selectedExpressionType.valueOf(), operator, value]);
+        this.append([this.selectedExpressionType.valueOf(), operator, value ?? ""]);
     }
 
     append(values: string[]) {
@@ -120,9 +129,10 @@ export class DslBuilder {
 
     resetOperatorAndValues() {
         this.selectedAgeOperator = this.ageOperators[0];
-        this.formCode = "";
-        this.atcCode = "";
-        this.routeCode = "";
-        this.simpleValue = "";
+        this.formCode = undefined;
+        this.atcCode = undefined;
+        this.routeCode = undefined;
+        this.simpleValue = undefined;
+        this.indication = undefined;
     }
 }

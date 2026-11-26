@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagementService } from '@api/api/management.service';
-import { ClauseStatus, ClauseStatusInput, DetailedError, DraftClauseStatusInput, DslInput, DslUpdateInput } from '@api/index';
+import { ClauseStatus, ClauseStatusInput, DetailedError, DraftClauseStatusInput, DslInput, DslUpdateInput, Indication } from '@api/index';
 import { DslOutput } from '@api/model/dslOutput';
 import { ClauseService } from './clause-service';
 
@@ -67,8 +67,8 @@ export class ConcreteClauseService implements ClauseService {
     return this.api.getMedicationRouteCodesV20250801();
   }
 
-  getIndicationCodes(): Observable<Set<number>> {
-    return this.api.getIndicationCodesV20250801();
+  getIndications(): Observable<Set<Indication>> {
+    return this.api.getIndicationsV20250801();
   }
 
   getDoctorSpecialities(): Observable<Set<string>> {
