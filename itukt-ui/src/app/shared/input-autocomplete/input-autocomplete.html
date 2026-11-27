@@ -1,10 +1,10 @@
 <mat-form-field>
     <mat-label>{{label}}</mat-label>
     <input matInput [matAutocomplete]="auto" [formControl]="formControl" (blur)="onInputBlur()" />
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="renderOption">
         @for (value of filteredValues | async; let i = $index; track value) {
             @if (i < maxOptions) {
-                <mat-option [value]="value">{{value}}</mat-option>
+                <mat-option [value]="value">{{renderOption(value)}}</mat-option>
             }
         }
         @if (((filteredValues | async)?.length ?? 0) > maxOptions) {

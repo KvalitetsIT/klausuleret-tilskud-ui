@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { ClauseService } from "./clause-service";
-import { ClauseStatus, DslOutput, DslInput, ClauseStatusInput, DslUpdateInput } from "@api/index";
+import { ClauseStatus, DslOutput, DslInput, ClauseStatusInput, DslUpdateInput, Indication } from "@api/index";
 import { BehaviorSubject, Observable, shareReplay, switchMap, tap } from "rxjs";
 import { ConcreteClauseService } from "./concrete-clause-service";
 
@@ -57,8 +57,8 @@ export class CachedClauseService implements ClauseService {
         return this.cache.get<Set<string>>(() => this.concreteClauseService.getMedicationRouteCodes(), "getMedicationRouteCodes");
     }
 
-    getIndicationCodes(): Observable<Set<number>> {
-        return this.cache.get<Set<number>>(() => this.concreteClauseService.getIndicationCodes(), "getIndicationCodes");
+    getIndications(): Observable<Set<Indication>> {
+        return this.cache.get<Set<Indication>>(() => this.concreteClauseService.getIndications(), "getIndications");
     }
 
     getDoctorSpecialities(): Observable<Set<string>> {

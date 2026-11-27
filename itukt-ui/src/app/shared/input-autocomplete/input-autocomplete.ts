@@ -25,22 +25,23 @@ import { Observable } from 'rxjs/internal/Observable';
         ReactiveFormsModule,
     ],
 })
-export class InputAutocomplete {
-    @Input({ required: true }) values!: string[];
+export class InputAutocomplete<T> {
+    @Input({ required: true }) values!: T[];
     @Input() label?: string;
-    @Input() value: string = '';
-    @Output() valueChange = new EventEmitter<string>();
+    @Input() value: T | string | undefined = undefined;
+    @Input() renderOption: (option?: T) => string = (option?: T) => option ? String(option) : '';
+    @Output() valueChange = new EventEmitter<T | undefined>();
 
     initialMaxOptions = 200;
     maxOptions = this.initialMaxOptions;
 
     formControl = new FormControl();
-    filteredValues: Observable<string[]> | undefined;
+    filteredValues: Observable<T[]> | undefined;
 
     ngOnInit(): void {
         this.formControl.setValue(this.value, { emitEvent: false });
         this.formControl.valueChanges.subscribe(val => {
-            this.valueChange.emit(val || '');
+            this.valueChange.emit(val || undefined);
             this.maxOptions = this.initialMaxOptions;
         });
         this.filteredValues = this._createFilteredValues(this.formControl, this.values)
@@ -54,15 +55,16 @@ export class InputAutocomplete {
         this.maxOptions = this.initialMaxOptions;
     }
 
-    private _createFilteredValues(formControl: FormControl, values: string[]): Observable<string[]> {
+    private _createFilteredValues(formControl: FormControl, values: T[]): Observable<T[]> {
         return formControl.valueChanges.pipe(
             startWith(''),
             map(value => this._filter(value || '', values)),
         );
     }
 
-    private _filter(value: string, options: string[]): string[] {
+    private _filter(value: T | string | undefined, options: T[]): T[] {
+        const stringValue = value === undefined ? '' : (typeof value === 'string' ? value : this.renderOption(value));
         return options
-            .filter(option => option.toLowerCase().includes(value.toLowerCase()));
+            .filter(option => this.renderOption(option).toLowerCase().includes(stringValue.toLowerCase()));
     }
 }
